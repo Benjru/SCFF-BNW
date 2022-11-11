@@ -57,6 +57,7 @@ class SelectCat extends Component{
                         {
                             playerNum: prevState.currPlayerSelecting,
                             cat,
+                            currPlanet: cat.homePlanet,
                             hand
                         }
                     ],
@@ -163,4 +164,37 @@ class TravelAction extends Component{
     }
 }
 
-export {SelectCat, RestockAction, TravelAction};
+class FightFascismAction extends Component{
+
+    fightFascism = () => { // change to API call
+        console.log("fighting fascism");
+        const player = this.props.players[this.props.playerIndex]; // add curr planet property to cat
+        this.props.boardSquares.map((boardSquare, i) => {
+            console.log(boardSquare.playerOnSquare.currPlanet)
+            console.log(player.currPlanet);
+            if (boardSquare.playerOnSquare.currPlanet === player.currPlanet){
+                // Then update fascism level
+                console.log("boardSquare position: " + i)
+                if (boardSquare.fascismLevel > 0){
+                    this.props.updateFascismLevel(i, boardSquare.fascismLevel - 1);
+                    this.props.useAction();
+                }
+                else{
+                    alert("There is no fascism to fight on this planet!")
+                }
+            }
+            return 0;
+        });
+    }
+
+    render(){
+        return(
+            <div>
+                <button onClick={this.fightFascism} className="actionButton">Fight Fascism</button>
+            </div>
+        );
+    }
+}
+
+
+export {SelectCat, RestockAction, TravelAction, FightFascismAction};

@@ -110,11 +110,11 @@
   position: relative;
   height: 120px;
   width: 280px;
-  background-color: rgb(0, 8, 122);
+  background-color: rgb(0, 0, 0);
   opacity: 0.7;
   color: white;
   padding: 20px;
-  border: 8px solid rgb(0, 8, 122);
+  border: 8px solid rgb(0, 0, 0);
   border-radius: 20px;
   font-family: 'Oswald', sans-serif;
   font-size: 30px;
@@ -201,11 +201,14 @@
   display: flex;
   flex-direction: row;
   /* outline: 3px solid black; */
-  padding: 10%;
+  padding-top: 1%;
+  padding-bottom: 20%;
   justify-content: space-between;
 }
 
 .actionButton{
+  
+  margin-bottom: 5px;
   margin-left: 10px;
   margin-right: 10px;
   text-align: center;
@@ -272,4 +275,32 @@
   width: 100px;
   height: 140px;
   
+}
+
+.fascismLevelBar{
+  margin-left: 29.5%;
+  display: grid;
+  width: 10%;
+  height: 4%;
+  grid-template-columns: repeat(8, 1fr);
+  grid-column-gap: 2px;
+}
+
+.fascistSquare{
+  outline: 1.6px solid rgb(0, 0, 0);
+  background-color: rgb(0, 179, 255);
+}
+
+.liberationSquare{
+  outline: 1.6px solid rgb(0, 0, 0);
+  background-color: rgb(255, 153, 0);
+}
+
+.emptySquare{
+  outline: 1.6px solid black;
+}
+
+.empty{
+  height: 10px;
+  width: 10px;
 }
