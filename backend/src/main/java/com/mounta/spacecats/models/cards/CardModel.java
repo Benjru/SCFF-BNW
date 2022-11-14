@@ -2,15 +2,15 @@ package com.mounta.spacecats.models.cards;
 
 import java.util.List;
 
-import com.mounta.spacecats.controllers.EffectController;
+import com.mounta.spacecats.models.effects.EffectModel;
 
 public abstract class CardModel {
 
     private String cardId;
 
-    private List<EffectController> cardEffects;
+    private List<EffectModel> cardEffects;
 
-    public CardModel(String cardId, List<EffectController> cardEffects){
+    public CardModel(String cardId, List<EffectModel> cardEffects){
         this.cardId = cardId;
         this.cardEffects = cardEffects;
     }
@@ -19,7 +19,7 @@ public abstract class CardModel {
         return this.cardId;
     }
 
-    public List<EffectController> getCardEffects() {
+    public List<EffectModel> getCardEffects() {
         return this.cardEffects;
     }
     
