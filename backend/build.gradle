@@ -11,11 +11,22 @@ sourceCompatibility = '17'
 repositories {
 	mavenCentral()
 }
-
+ext{
+    mapstructVersion = "1.5.3.Final"
+}
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	// --- Mapstruct ---------------------------------
+    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+}
+compileJava {
+    options.annotationProcessorPath = configurations.annotationProcessor
+	options.setAnnotationProcessorGeneratedSourcesDirectory( file("$projectDir/src/generated/java"))
+    // if you need to configure mapstruct component model
+    options.compilerArgs << "-Amapstruct.defaultComponentModel=spring" 
 }
 
 tasks.named('test') {
