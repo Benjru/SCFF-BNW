@@ -1,26 +1,24 @@
 package com.mounta.spacecats.models.cards;
 
-import java.util.List;
-
 import com.mounta.spacecats.models.effects.EffectModel;
 
 public abstract class CardModel {
 
     private String cardId;
 
-    private List<EffectModel> cardEffects;
+    private EffectModel cardEffect;
 
-    public CardModel(String cardId, List<EffectModel> cardEffects){
+    public CardModel(String cardId, EffectModel cardEffects){
         this.cardId = cardId;
-        this.cardEffects = cardEffects;
+        this.cardEffect = cardEffects;
     }
 
     public String getCardId() {
         return this.cardId;
     }
 
-    public List<EffectModel> getCardEffects() {
-        return this.cardEffects;
+    public EffectModel getCardEffect() {
+        return this.cardEffect;
     }
     
 }

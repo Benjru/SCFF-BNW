@@ -14,23 +14,23 @@ import com.mounta.spacecats.models.planets.Symbol;
 public class CardConstants {
 
     public static GalaxyNewsCard GalaxyCard_A(){
-        return new GalaxyNewsCard("GalaxyCard_A", List.of(new GalaxyNewsEffect_A()));
+        return new GalaxyNewsCard("GalaxyCard_A", new GalaxyNewsEffect_A());
     }
 
     public static GalaxyNewsCard GalaxyCard_B(){
-        return new GalaxyNewsCard("GalaxyCard_B", List.of(new GalaxyNewsEffect_B()));
+        return new GalaxyNewsCard("GalaxyCard_B", new GalaxyNewsEffect_B());
     }
 
     public static GalaxyNewsCard GalaxyCard_C(){
-        return new GalaxyNewsCard("GalaxyCard_C", List.of(new GalaxyNewsEffect_C()));
+        return new GalaxyNewsCard("GalaxyCard_C", new GalaxyNewsEffect_C());
     }
 
     public static GalaxyNewsCard GalaxyCard_D(){
-        return new GalaxyNewsCard("GalaxyCard_D", List.of(new GalaxyNewsEffect_D()));
+        return new GalaxyNewsCard("GalaxyCard_D", new GalaxyNewsEffect_D());
     }
 
     public static GalaxyNewsCard GalaxyCard_E(){
-        return new GalaxyNewsCard("GalaxyCard_E", List.of(new GalaxyNewsEffect_E()));
+        return new GalaxyNewsCard("GalaxyCard_E", new GalaxyNewsEffect_E());
     }
 
     public static ArrayDeque<GalaxyNewsCard> newGalaxyDeck(){
@@ -58,27 +58,27 @@ public class CardConstants {
     }
 
     public static ResistCard ResistCard_A(){
-        return new ResistCard("ResistCard_A", List.of(new ResistEffect_A()));
+        return new ResistCard("ResistCard_A", new ResistEffect_A());
     }
 
     public static ResistCard ResistCard_B(){
-        return new ResistCard("ResistCard_B", List.of(new ResistEffect_B()));
+        return new ResistCard("ResistCard_B", new ResistEffect_B());
     }
 
     public static ResistCard ResistCard_C(){
-        return new ResistCard("ResistCard_C", List.of(new ResistEffect_C()));
+        return new ResistCard("ResistCard_C", new ResistEffect_C());
     }
 
     public static ResistCard ResistCard_D(){
-        return new ResistCard("ResistCard_D", List.of(new ResistEffect_D()));
+        return new ResistCard("ResistCard_D", new ResistEffect_D());
     }
 
     public static ResistCard ResistCard_E(){
-        return new ResistCard("ResistCard_E", List.of(new ResistEffect_E()));
+        return new ResistCard("ResistCard_E", new ResistEffect_E());
     }
 
     public static ResistCard ResistCard_F(Symbol symbol){
-        return new ResistCard("ResistCard_F", List.of(new ResistEffect_F(symbol)));
+        return new ResistCard("ResistCard_F", new ResistEffect_F(symbol));
     }
 
     public static ArrayDeque<ResistCard> newResistDeck(){

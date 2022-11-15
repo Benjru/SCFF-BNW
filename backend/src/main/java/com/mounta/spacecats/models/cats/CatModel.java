@@ -7,6 +7,9 @@ import com.mounta.spacecats.models.effects.EffectModel;
 import com.mounta.spacecats.models.planets.PlanetModel;
 
 public class CatModel {
+
+    public static final int MAX_CARDS = 3;
+
     private String name;
 
     private List<EffectModel> abilities;
@@ -20,6 +23,8 @@ public class CatModel {
     private long playerId;
 
     private List<ResistCard> hand;
+
+    private static final int MAX_SCRATCHES = 2;
 
 
     public CatModel(String name, List<EffectModel> abilities, int scratches, PlanetModel homePlanet, PlanetModel currPlanet, long playerId, List<ResistCard> hand) {
@@ -60,8 +65,17 @@ public class CatModel {
         return this.hand;
     }
 
-    public void removeCard(ResistCard card){
-        this.hand.remove(card);
+    public boolean removeCard(ResistCard card){
+        return this.hand.remove(card);
+    }
+
+    public void giveCard(ResistCard card) {
+        if(this.hand.size() < MAX_CARDS){
+            this.hand.add(card);
+        }
+        else{
+            throw new IllegalStateException("This player already has " + MAX_CARDS + " cards!");
+        }
     }
 
     public void addAbility(EffectModel ability){
@@ -77,10 +91,10 @@ public class CatModel {
     }
 
     public int updateScratches(int scratches){
-        this.scratches -= scratches;
-        if(this.scratches < 0){
-            int rollover = Math.abs(this.scratches);
-            this.scratches = 0;
+        this.scratches += scratches;
+        if(this.scratches > MAX_SCRATCHES){
+            int rollover = this.scratches - MAX_SCRATCHES;
+            this.scratches = MAX_SCRATCHES;
             return rollover;
         }
         return 0;

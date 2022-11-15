@@ -6,8 +6,8 @@ import com.mounta.spacecats.models.effects.EffectModel;
 
 public class ResistCard extends CardModel {
 
-    public ResistCard(String cardId, List<EffectModel> cardEffects) {
-        super(cardId, cardEffects);
+    public ResistCard(String cardId, EffectModel cardEffect) {
+        super(cardId, cardEffect);
     }
     
 }
