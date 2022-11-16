@@ -1,11 +1,9 @@
 //FrontendCatController 
 import React, { Component } from "react";
-import Players from "./Players";
 import { allResistCards } from "../constants";
 
 class SelectCat extends Component{
 
-    
     setCat = (cat) => {
         this.props.setCat(cat);
     }
@@ -21,6 +19,7 @@ class SelectCat extends Component{
     render() {
         return (
             <div className="catSelect">
+                {console.log("CatComponents getting props state: " + JSON.stringify(this.props.state))}
                 {
                     this.props.state.readyToStart ? 
                     <div>
@@ -47,7 +46,6 @@ class SelectCat extends Component{
                     </React.Fragment>
                 }
                 <div className="break"/>
-                <Players players={this.props.state.players}/>
             </div>
         );
     }
