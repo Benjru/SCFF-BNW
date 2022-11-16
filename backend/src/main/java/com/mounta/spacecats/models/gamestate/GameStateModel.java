@@ -103,6 +103,14 @@ public class GameStateModel {
         return this.globalFascismScale;
     }
 
+    public List<ResistCard> getResistCardDiscard() {
+        return this.resistCardDiscard;
+    }
+
+    public List<GalaxyNewsCard> getGalaxyNewsDiscard() {
+        return this.galaxyNewsDiscard;
+    }
+
     public void updateGlobalFascismScale(int update){
         this.globalFascismScale += update;
     }
@@ -148,6 +156,21 @@ public class GameStateModel {
 
     public void setActionsLeft(int actionsLeft){
         this.actionsLeft = actionsLeft;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+            " galaxyNewsDeck='" + getGalaxyNewsDeck() + "'" +
+            ", resistCardDeck='" + getResistCardDeck() + "'" +
+            ", resistCardDiscard='" + getResistCardDiscard() + "'" +
+            ", galaxyNewsDiscard='" + getGalaxyNewsDiscard() + "'" +
+            ", cats='" + getCats() + "'" +
+            ", planets='" + getPlanets() + "'" +
+            ", currTurn='" + getCurrTurn() + "'" +
+            ", actionsLeft='" + getActionsLeft() + "'" +
+            ", globalFascismScale='" + getGlobalFascismScale() + "'" +
+            "}";
     }
     
 }
