@@ -255,6 +255,11 @@
   width: 320px;
 }
 
+.catOnSquare{
+  height: 60px;
+  width: 100px;
+}
+
 .card {
   border-radius: 15px;
   margin-left: 20px;

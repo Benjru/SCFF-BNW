@@ -13,6 +13,7 @@ class GameBoard extends Component{ // with backend: remove planets from state va
                 {
                     this.props.boardSquares.map(boardSquare => (
                         <div className="boardSquare" key={boardSquare.planet}>
+                            <p className="planetLabel">{boardSquare.planet}</p> 
                             {/* component should take board square */}
                             <Planet boardSquare={boardSquare}/>
                             <FascismBar fascismLevel={boardSquare.fascismLevel}/>
@@ -92,12 +93,16 @@ class TurnDisplay extends Component { // Knows current turn and renders current 
         this.useAction();
     }
 
-    removeItemFromArray = (array, item) => { 
-        for(var i in array){
+    removeItemFromArray = (array, item) => {
+        let removed = false;
+        let i = 0;
+        while (i < array.length && !removed){
             if(array[i]===item){
                 array.splice(i,1);
                 i--;
+                removed = true;
             }
+            i++;
         }
         return array;
     }

@@ -70,7 +70,7 @@ class SelectCat extends Component{
 
     createHand = () => { // change to get hand from backend
         const hand = [];
-        for (let j = 0; j < 3; j++){
+        for (let j = 0; j < 2; j++){
             const randomPosition = Math.floor(Math.random() * allResistCards.length);
             console.log(randomPosition)
             const card = allResistCards[randomPosition];
@@ -124,11 +124,11 @@ class RestockAction extends Component{
 
     restock = () => { // change to API call
         let hand = this.props.players[this.props.playerIndex].hand;
-        if (hand.length === 3){
+        if (hand.length === 4){
             alert("You cannot restock");
         }
         else{
-            while (hand.length < 3){
+            while (hand.length < 4){
                 const randomPosition = Math.floor(Math.random() * allResistCards.length);
                 console.log(randomPosition)
                 const card = allResistCards[randomPosition];

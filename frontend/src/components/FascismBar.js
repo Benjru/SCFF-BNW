@@ -13,7 +13,7 @@ const FascismBar = (props) => { // if fascism level negative, loop through absol
             barSquares.push(<div className="fascistSquare" key={i}><div className="empty"/> </div>);
         }
     }
-    const remaining = barSquares.length;
+    const remaining = barSquares.length; 
     for (let i = 0; i < 4-remaining; i++){
         barSquares.push(<div className="emptySquare" key={Math.random()}><div className="empty"/> </div>)
     }
