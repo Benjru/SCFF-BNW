@@ -3,7 +3,6 @@ import React from "react";
 
 const Planet = (props) => ( // Planet image + cat image on top
     <div>
-        {/* {console.log("CAT ON SQUARE!!!!: " + props.boardSquare.playerOnSquare.cat.name)} */}
         {
             props.boardSquare.playerOnSquare === ""?
             <React.Fragment>
@@ -23,7 +22,6 @@ const Planet = (props) => ( // Planet image + cat image on top
                         alt={props.boardSquare.catOnSquare}
                     />
                 </ImageBackground> */}
-                {console.log("CAT ON SQUARE!!!!: " + props.boardSquare.playerOnSquare.cat.name)}
             </React.Fragment>
         }
     </div>

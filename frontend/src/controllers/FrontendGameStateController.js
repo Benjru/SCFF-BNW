@@ -1,144 +1,134 @@
-//FrontendGameStateController 
 import React, { Component } from "react";
-import {RestockAction, TravelAction, FightFascismAction} from './FrontendCatController';
-import Planet from "../components/Planet";
-import FascismBar from "../components/FascismBar";
+import GameView from "../GameView";
+import {Client} from '@stomp/stompjs';
 
-class GameBoard extends Component{ // with backend: remove planets from state variable and then in componentDidMount make API call to get planets, add to setState
+const SOCKET_URL = 'ws://localhost:8080';
 
-
-    render() {
-        return (
-            <div className="gameBoard">
-                {
-                    this.props.boardSquares.map(boardSquare => (
-                        <div className="boardSquare" key={boardSquare.planet}>
-                            <p className="planetLabel">{boardSquare.planet}</p> 
-                            {/* component should take board square */}
-                            <Planet boardSquare={boardSquare}/>
-                            <FascismBar fascismLevel={boardSquare.fascismLevel}/>
-                        </div>
-                    ))
-                }
-            </div>
-        );
-    }
-}
-
-class TurnDisplay extends Component { // Knows current turn and renders current player's hand, and actions
-
-    actionCount = 0;
-    currTurn = 1;
-    hand = this.props.players[this.currTurn-1].hand;
-
-    // Pass up to parent component 
-    updateHand = (playerIndex, hand) => {
-        this.props.updateHand(playerIndex, hand)
+class FrontendGameStateController extends Component {
+    state = {
+        planets: ['cold-bath', 'dustbunny', 'fishbowl', 'frostnip', 'hairball', 'hotrock', 'laserlight', 'litterbox', 'scratchpost', 'scratchstone', 'space-vet', 'waterdish'],
+        boardSquares: [],
+        players: [],
+        gameStarted: false
+    };
+    
+    startGame = (players) => {
+        // generate game board
+        this.setState({
+            players,
+            gameStarted: true,
+            currTurn: 1
+        }, () => {
+        this.setState({boardSquares:  this.createBoardSquares()})
+        })
     }
 
-    // Pass up to parent component
-    updateFascismLevel = (index, fascismLevel) => {
-        this.props.updateFascismLevel(index, fascismLevel);
-    }
-
-    // Uses an action, if 3 have been used, update turn by calling function from parent
-    useAction = () => {
-        this.actionCount++;
-        if (this.actionCount===3){ // Max actions per turn
-            this.props.updateTurn();
-            this.actionCount = 0;
-            if (this.currTurn === 1){ //Figure out a better way to check turn
-                this.currTurn = 2;
-            }
-            else{
-                this.currTurn = 1;
-            }
-            this.hand = this.props.players[this.currTurn-1].hand;
-            this.props.updateTurn(this.currTurn); // not that important
+    updateTurn = (turn) => {
+        this.setState((prevState) => {
+        return {
+            currTurn: turn
         }
+        });
+    }
+
+    updateHand = (playerIndex, hand) => {
+        // 1. Make a shallow copy of the players arr
+        let players = [...this.state.players];
+        // 2. Make a shallow copy of the player
+        let player = {...players[playerIndex]};
+        // 3. Replace the player's hand property
+        player.hand = hand;
+        // 4. Put it back into our array.
+        players[playerIndex] = player;
+        // 5. Set the state to our new copy
+        this.setState({players});
+    }
+
+    updateFascismLevel = (boardSquareIndex, fascismLevel) => {
+        let boardSquares = [...this.state.boardSquares];
+        let boardSquare = {...this.state.boardSquares[boardSquareIndex]};
+
+        boardSquare.fascismLevel = fascismLevel;
+        boardSquares[boardSquareIndex] = boardSquare;
+
+        this.setState({boardSquares: boardSquares});
     }
 
     
-    // Uses a card, and then uses an action using function above
-    useCard = (card) => {
-        //map card to appropriate card handling function. 
-        if (this.hand.length === 0){
-            alert("Your hand is empty!");
-        }
-        else{
-            console.log("used: " + card)
-            this.hand = this.removeItemFromArray(this.hand, card);
-            this.props.updateHand(this.currTurn-1, this.hand);
-            const player = this.props.players[this.currTurn-1];
-            if (card === '+1 liberation'){
-                this.props.boardSquares.map((boardSquare, i) => {
-                    if (boardSquare.playerOnSquare.currPlanet === player.currPlanet){
-                        // Then update fascism level
-                        this.updateFascismLevel(i, boardSquare.fascismLevel - 1);
-                    }
-                    return 0;
-                });
+    createBoardSquares() {
+        // generate board and set state
+        const players = this.state.players;
+        const player1 = players[0];
+        const player2 = players[1];
+
+        const boardSquares = [];
+
+        for (let i = 0; i < this.state.planets.length; i++){
+            //const randomPlanet = this.state.planets[Math.floor(Math.random() * Array.length)];
+            const planet = this.state.planets[i];
+            let playerOnSquare = "";
+            let fascismLevel = 0;
+            
+            
+            if (i%2 === 0){
+                fascismLevel++;
             }
-            else if (card === 'ears' || card === 'paw' || card === 'tail' || card === 'whiskers'){
-                this.props.boardSquares.map((boardSquare, i) => {
-                    if (boardSquare.playerOnSquare.currPlanet === player.currPlanet){
-                        // Then update fascism level
-                        this.updateFascismLevel(i, boardSquare.fascismLevel - 2);
-                    }
-                    return 0;
-                });
+            if (player1.cat.homePlanet === planet){
+                console.log("player1 home planet: " + planet); // start their cat here
+                playerOnSquare = player1;
+                fascismLevel++;
             }
-            console.log(this.hand)
+            if (player2.cat.homePlanet === planet){
+                console.log("player2 home planet: " + planet) // start their cat here
+                playerOnSquare = player2;
+                fascismLevel++;
+            }
+
+            const boardSquare = {
+                planet: planet,
+                playerOnSquare: playerOnSquare,
+                fascismLevel: fascismLevel
+            }
+            console.log(boardSquare);
+            boardSquares.push(boardSquare);
         }
-        this.useAction();
+
+        return boardSquares;
+
     }
 
-    removeItemFromArray = (array, item) => {
-        let removed = false;
-        let i = 0;
-        while (i < array.length && !removed){
-            if(array[i]===item){
-                array.splice(i,1);
-                i--;
-                removed = true;
-            }
-            i++;
+    componentDidMount(){
+        let onConnected = () => {
+            console.log("connected");
+            client.subscribe('/startGame', this.startGame());
+            client.subscribe('/game/catInfo', (res)=>{
+                console.log(res);
+            });
         }
-        return array;
+        let onDisconnected = () => {
+            console.log("disconnected");
+        }
+      
+        const client = new Client({
+            brokerURL: SOCKET_URL,
+            reconnectDelay: 5000,
+            heartbeatIncoming: 4000,
+            heartbeatOutgoing: 4000,
+            onConnect: onConnected,
+            onDisconnect: onDisconnected
+        });
+    
+        client.activate();
     }
 
     render(){
-        const player = this.props.players[this.currTurn-1];
-        return(
-            <div className="turnContainer">
-                <p className="centeredText">P{player.playerNum}</p>
-                <img
-                    className="currentTurnCat"
-                    src={`/cats/${player.cat.name}-cat.png`}
-                    alt={player.cat}
-                />
-                <div className="turnHandContainer">
-                    {player.hand.map(card => (
-                        <img
-                            src={`/resist_cards/${card}-card.jpg`}
-                            onClick={() => this.useCard(card)}
-                            alt={card}
-                            key={Math.random()}
-                            className="card"
-                        />
-                    ))}
-                </div>
-                <div className="break"/>
-                <div className="turnActionContainer">
-                    <RestockAction useAction={this.useAction} updateHand={this.updateHand} players={this.props.players} playerIndex={this.currTurn-1}/>
-                    <TravelAction useAction={this.useAction}/>
-                    <FightFascismAction useAction={this.useAction} boardSquares={this.props.boardSquares} players={this.props.players} playerIndex={this.currTurn-1} updateFascismLevel={this.updateFascismLevel}/>
-                </div>
+        return (
+            <div>
+                <GameView state={this.state} startGame={this.startGame} updateFascismLevel={this.updateFascismLevel} updateHand={this.updateHand} updateTurn={this.updateTurn}/>
             </div>
         );
     }
-
 }
 
-export {GameBoard, TurnDisplay};
+export default FrontendGameStateController;
 
