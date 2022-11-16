@@ -27,7 +27,7 @@ public class CatModel {
     private static final int MAX_SCRATCHES = 2;
 
 
-    public CatModel(String name, List<EffectModel> abilities, int scratches, PlanetModel homePlanet, PlanetModel currPlanet, long playerId, List<ResistCard> hand) {
+    private CatModel(String name, List<EffectModel> abilities, int scratches, PlanetModel homePlanet, PlanetModel currPlanet, long playerId, List<ResistCard> hand) {
         this.name = name;
         this.abilities = abilities;
         this.scratches = scratches;
@@ -35,6 +35,10 @@ public class CatModel {
         this.currPlanet = currPlanet;
         this.playerId = playerId;
         this.hand = hand;
+    }
+
+    public static CatModel create(String name, long playerId){
+        return new CatModel(name, List.of(), 0, null, null, playerId, List.of());
     }
 
     public String getName() {
@@ -98,6 +102,10 @@ public class CatModel {
             return rollover;
         }
         return 0;
+    }
+
+    public void setHomePlanet(PlanetModel planet){
+        this.homePlanet = planet;
     }
 
 

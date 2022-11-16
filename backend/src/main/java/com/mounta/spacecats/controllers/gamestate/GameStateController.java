@@ -6,7 +6,9 @@ import com.mounta.spacecats.models.cards.GalaxyNewsCard;
 import com.mounta.spacecats.models.cards.ResistCard;
 import com.mounta.spacecats.models.cats.CatModel;
 import com.mounta.spacecats.models.gamestate.GameStateModel;
+import com.mounta.spacecats.models.lobby.LobbyModel;
 import com.mounta.spacecats.models.planets.PlanetModel;
+import com.mounta.spacecats.util.CardConstants;
 import com.mounta.spacecats.util.PlayStateInfo;
 
 import java.util.List;
@@ -24,6 +26,12 @@ public class GameStateController {
 
     @Autowired
     private CatController catController;
+
+    private LobbyModel lobby;
+
+    public GameStateController(){
+        this.lobby = new LobbyModel();
+    }
 
     public void setCatController(CatController catController){
         this.catController = catController;
@@ -67,6 +75,21 @@ public class GameStateController {
     }
 
     public void setupGame(){
-        //TODO: Implement
+        if(gameState == null){
+            gameState = GameStateModel.create(lobby.getCats());
+        }
+    }
+
+    public CatModel joinGame(String catName){
+        if(this.lobby.getCats().size() < 2 && lobby.getCats().stream().filter(cat -> cat.getName().equals(catName)).toList().size() == 0)
+        {
+            CatModel cat = CatModel.create(catName, this.lobby.getCats().size());
+            this.lobby.addCat(cat);
+            if(this.lobby.getCats().size() == 2){
+                setupGame();
+            }
+            return cat;
+        }
+        return null;
     }
 }
