@@ -48,6 +48,8 @@ public class PlanetModel {
         return this.adjacentPlanets;
     }
 
+    public boolean getIsStronghold(){ return this.isStronghold; }
+
     public void setAdjacentPlanets(Set<PlanetModel> adjacentPlanets) { this.adjacentPlanets = adjacentPlanets; }
 
     public int getPosition() {

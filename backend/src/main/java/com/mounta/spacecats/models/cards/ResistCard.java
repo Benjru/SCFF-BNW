@@ -1,6 +1,5 @@
 package com.mounta.spacecats.models.cards;
 
-import java.util.List;
 
 import com.mounta.spacecats.models.effects.EffectModel;
 

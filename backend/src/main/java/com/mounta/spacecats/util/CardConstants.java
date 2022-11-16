@@ -3,7 +3,6 @@ package com.mounta.spacecats.util;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 import com.mounta.spacecats.models.cards.GalaxyNewsCard;
 import com.mounta.spacecats.models.cards.ResistCard;

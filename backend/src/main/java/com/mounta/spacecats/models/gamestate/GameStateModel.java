@@ -1,8 +1,8 @@
 package com.mounta.spacecats.models.gamestate;
 
 import java.util.ArrayDeque;
+import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import com.mounta.spacecats.models.cards.GalaxyNewsCard;
@@ -49,7 +49,7 @@ public class GameStateModel {
         this.galaxyNewsDiscard = List.of();
     }
 
-    public GameStateModel create(List<CatModel> cats){
+    public static GameStateModel create(List<CatModel> cats){
         return new GameStateModel(CardConstants.newGalaxyDeck(),
                 CardConstants.newResistDeck(),
                 cats,
@@ -66,14 +66,16 @@ public class GameStateModel {
 
     public GalaxyNewsCard drawGalaxyNewsCard() { return galaxyNewsDeck.pop(); }
 
-    public void drawResistCard(CatModel cat) {
+    public ResistCard drawResistCard(CatModel cat) {
         ResistCard card = resistCardDeck.pop();
         try{
             cat.giveCard(card);
+            return card;
         }
         catch(IllegalStateException e){
             resistCardDeck.add(card);
             System.out.println("Error! Cat (" + cat.getName() + ") already has 4 cards");
+            return null;
         }
     }
 
@@ -116,7 +118,35 @@ public class GameStateModel {
         galaxyNewsDiscard.add(card);
     }
 
-    public void setActions(int actionsLeft){
+    public void refillNewsDeck()
+    {
+        if(galaxyNewsDeck.isEmpty())
+        {
+            Collections.shuffle(galaxyNewsDiscard);
+            galaxyNewsDeck = new ArrayDeque<>(galaxyNewsDiscard);
+            galaxyNewsDiscard = List.of();
+        }
+        else
+        {
+            throw new IllegalStateException("Cannot reshuffle deck with cards already in it!");
+        }
+    }
+
+    public void refillResistDeck()
+    {
+        if(resistCardDeck.isEmpty())
+        {
+            Collections.shuffle(resistCardDiscard);
+            resistCardDeck = new ArrayDeque<>(resistCardDeck);
+            resistCardDiscard = List.of();
+        }
+        else
+        {
+            throw new IllegalStateException("Cannot reshuffle deck with cards already in it!");
+        }
+    }
+
+    public void setActionsLeft(int actionsLeft){
         this.actionsLeft = actionsLeft;
     }
     
