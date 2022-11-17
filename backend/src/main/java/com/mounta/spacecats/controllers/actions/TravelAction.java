@@ -1,7 +1,6 @@
 package com.mounta.spacecats.controllers.actions;
 
 import com.mounta.spacecats.models.cats.CatModel;
-import com.mounta.spacecats.models.planets.PlanetModel;
 import com.mounta.spacecats.util.PlayStateInfo;
 
 public class TravelAction implements Action {

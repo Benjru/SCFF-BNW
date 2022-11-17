@@ -1,9 +1,13 @@
 package com.mounta.spacecats.models.cats;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.mounta.spacecats.models.cards.ResistCard;
 import com.mounta.spacecats.models.effects.EffectModel;
 import com.mounta.spacecats.models.planets.PlanetModel;
@@ -18,8 +22,10 @@ public class CatModel {
 
     private int scratches;
 
+    @JsonSerialize(using = PlanetSerializer.class)
     private PlanetModel homePlanet;
 
+    @JsonSerialize(using = PlanetSerializer.class)
     private PlanetModel currPlanet;
 
     private long playerId;
@@ -37,6 +43,16 @@ public class CatModel {
     "sc", 3,
     "sky", 5
     );
+
+    private static class PlanetSerializer extends JsonSerializer<PlanetModel> {
+
+        @Override
+        public void serialize(PlanetModel value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+            gen.writeObject(value.getPosition());
+        }
+        
+    }
+
 
 
     private CatModel(String name, ArrayList<EffectModel> abilities, int scratches, PlanetModel homePlanet, PlanetModel currPlanet, long playerId, ArrayList<ResistCard> hand) {

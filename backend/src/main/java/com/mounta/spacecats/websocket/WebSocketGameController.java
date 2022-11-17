@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mounta.spacecats.controllers.gamestate.GameStateController;
 import com.mounta.spacecats.models.cats.CatModel;
 import com.mounta.spacecats.models.gamestate.GameStateModel;
-import com.mounta.spacecats.util.PlayStateInfo;
 import com.mounta.spacecats.websocket.DTOs.ActionInfo;
 import com.mounta.spacecats.websocket.DTOs.CatInfo;
 
@@ -47,7 +46,7 @@ public class WebSocketGameController {
     @GetMapping("/gamestate")
     public ResponseEntity<GameStateModel> getGameState() {
         GameStateModel gameState = gameStateController.getGameState();
-        System.out.println(gameState);
+        //System.out.println(gameState);
         return ResponseEntity.ok().body(gameState);
     }
 
@@ -59,6 +58,7 @@ public class WebSocketGameController {
             return new ResponseEntity<>(HttpStatus.OK);
         }
         catch(Exception e){
+            System.out.println("Error: " + e.toString());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

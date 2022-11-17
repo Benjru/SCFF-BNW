@@ -1,7 +1,6 @@
 package com.mounta.spacecats.models.planets;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.mounta.spacecats.models.cats.CatModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -75,7 +74,7 @@ public class PlanetModel {
     }
 
     private static ArrayList<PlanetModel> generateDefaultPlanetList(){
-        Symbol[] symbols = {Symbol.EARS_SYMBOL, Symbol.WHISKERS_SYMBOL, Symbol.PAW_SYMBOL, Symbol.PAW_SYMBOL};
+        Symbol[] symbols = {Symbol.EARS_SYMBOL, Symbol.WHISKERS_SYMBOL, Symbol.PAW_SYMBOL, Symbol.TAIL_SYMBOL};
         ArrayList<PlanetModel> planets = new ArrayList<>();
         for(int i = 0; i<12; i++){
             planets.add(create(i+1, symbols[i%4], i>7));

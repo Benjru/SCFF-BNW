@@ -1,5 +1,6 @@
 package com.mounta.spacecats.models.gamestate;
 
+import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,6 +8,10 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.mounta.spacecats.models.cards.GalaxyNewsCard;
 import com.mounta.spacecats.models.cards.ResistCard;
 import com.mounta.spacecats.models.cats.CatModel;
@@ -30,6 +35,7 @@ public class GameStateModel {
 
     private ArrayList<PlanetModel> planets;
 
+    @JsonSerialize(using = CatSerializer.class)
     private CatModel currTurn;
 
     private int actionsLeft;
@@ -37,6 +43,17 @@ public class GameStateModel {
     private int globalFascismScale;
 
     private ArrayList<String> actionsTaken;
+
+    private String gameStatus;
+
+    private static class CatSerializer extends JsonSerializer<CatModel> {
+
+        @Override
+        public void serialize(CatModel value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+            gen.writeObject(value.getPlayerId());
+        }
+        
+    }
 
 
     private GameStateModel(ArrayDeque<GalaxyNewsCard> galaxyNewsDeck,
@@ -56,6 +73,7 @@ public class GameStateModel {
         this.resistCardDiscard = new ArrayList<>();
         this.galaxyNewsDiscard = new ArrayList<>();
         this.actionsTaken = new ArrayList<>();
+        this.gameStatus = "inProgress";
     }
 
     public static GameStateModel create(ArrayList<CatModel> cats){
@@ -192,6 +210,16 @@ public class GameStateModel {
 
     public void clearActions(){
         this.actionsTaken = new ArrayList<>();
+    }
+
+    public void setCurrTurn(CatModel cat){
+        if(cats.contains(cat)){
+            currTurn = cat;
+        }
+    }
+
+    public void setGameStatus(String gameStatus){
+        this.gameStatus = gameStatus;
     }
 
     @Override

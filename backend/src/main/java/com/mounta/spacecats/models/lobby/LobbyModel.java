@@ -1,7 +1,6 @@
 package com.mounta.spacecats.models.lobby;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import com.mounta.spacecats.models.cats.CatModel;
 

@@ -5,14 +5,15 @@ import com.mounta.spacecats.controllers.actions.FightFascismAction;
 import com.mounta.spacecats.controllers.actions.PlayCardAction;
 import com.mounta.spacecats.controllers.actions.RestockAction;
 import com.mounta.spacecats.controllers.actions.TravelAction;
-import com.mounta.spacecats.controllers.card.CardController;
-import com.mounta.spacecats.controllers.cat.CatController;
+import com.mounta.spacecats.mappers.SymbolMapper;
 import com.mounta.spacecats.models.cards.GalaxyNewsCard;
 import com.mounta.spacecats.models.cards.ResistCard;
 import com.mounta.spacecats.models.cats.CatModel;
+import com.mounta.spacecats.models.effects.ResistEffects.ResistEffect_F;
 import com.mounta.spacecats.models.gamestate.GameStateModel;
 import com.mounta.spacecats.models.lobby.LobbyModel;
 import com.mounta.spacecats.models.planets.PlanetModel;
+import com.mounta.spacecats.models.planets.Symbol;
 import com.mounta.spacecats.util.PlayStateInfo;
 import com.mounta.spacecats.websocket.DTOs.ActionInfo;
 
@@ -21,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -29,24 +30,13 @@ public class GameStateController {
 
     private GameStateModel gameState;
 
-    @Autowired
-    private CardController cardController;
-
-    @Autowired
-    private CatController catController;
+    private SymbolMapper symbolMapper;
 
     private LobbyModel lobby;
 
     public GameStateController(){
         this.lobby = new LobbyModel();
-    }
-
-    public void setCatController(CatController catController){
-        this.catController = catController;
-    }
-
-    public void setCardController(CardController cardController){
-        this.cardController = cardController;
+        this.symbolMapper = Mappers.getMapper(SymbolMapper.class);
     }
 
     public ArrayList<CatModel> getPlayers(){
@@ -89,6 +79,7 @@ public class GameStateController {
             lobby.getCats().stream().forEach(cat -> {
                 drawFromResistDeck(cat);
                 drawFromResistDeck(cat);
+                cat.getHomePlanet().updateFascismLevel(1);
             });
         }
     }
@@ -111,14 +102,48 @@ public class GameStateController {
     }
 
     public void takeAction(ActionInfo actionInfo){
-        CatModel cat = gameState.getCats().stream().filter(thisCat -> thisCat.getPlayerId() == actionInfo.playerId()).findFirst().orElseThrow(IllegalArgumentException::new);
+        CatModel cat = gameState.getCats()
+                                .stream()
+                                .filter(thisCat -> thisCat.getPlayerId() == actionInfo.playerId())
+                                .findFirst()
+                                .orElseThrow(IllegalArgumentException::new);
+        if(!cat.equals(gameState.getCurrTurn())){
+            throw new IllegalArgumentException("You are not the current player!");
+        }
         PlanetModel planet = null;
         if(actionInfo.planetPosition() > 0){
-            planet = gameState.getPlanets().stream().filter(thisPlanet -> thisPlanet.getPosition() == actionInfo.planetPosition()).findFirst().orElseThrow(IllegalArgumentException::new);
+            planet = gameState.getPlanets()
+            .stream()
+            .filter(thisPlanet -> thisPlanet.getPosition() == actionInfo.planetPosition())
+            .findFirst()
+            .orElseThrow(IllegalArgumentException::new);
         }
         ResistCard playedCard = null;
         if(actionInfo.cardName() != null){
-            playedCard = cat.getHand().stream().filter(card -> card.getCardId().equals(actionInfo.cardName())).findFirst().orElseThrow(IllegalArgumentException::new);
+            if(actionInfo.cardName().equals("ResistCard_F")){
+                if(actionInfo.symbol() != null){    
+                    Symbol symbol = symbolMapper.toSymbol(actionInfo.symbol());
+                    playedCard = cat.getHand()
+                                .stream()
+                                .filter(card -> card.getCardId().equals(actionInfo.cardName()))
+                                .filter(card -> {
+                                    ResistEffect_F effect = (ResistEffect_F)card.getCardEffect();
+                                    return effect.getSymbol().equals(symbol);
+                                })
+                                .findFirst()
+                                .orElseThrow(IllegalArgumentException::new);
+                }
+                else{
+                    throw new IllegalArgumentException("Must provide a symbol with a symbol card");
+                }
+            }
+            else{
+                playedCard = cat.getHand()
+                                .stream()
+                                .filter(card -> card.getCardId().equals(actionInfo.cardName()))
+                                .findFirst()
+                                .orElseThrow(IllegalArgumentException::new);
+            }
         }
         PlayStateInfo playStateInfo = new PlayStateInfo(cat, null, planet, gameState, playedCard);
 
@@ -133,11 +158,11 @@ public class GameStateController {
                 action.resolveAction(playStateInfo);
                 gameState.takeAction(actionInfo.actionName());
                 if(gameState.getActionsLeft() <= 0){
-                    rollFascistDice(playStateInfo);
+                    endTurn(playStateInfo);
                 }
             }
             else{
-                throw new IllegalArgumentException("Planet chosen is not adjacent to current planet");
+                throw new IllegalArgumentException("Condition could not be verified for playState " + playStateInfo.toString());
             }
         }
         else{
@@ -147,11 +172,22 @@ public class GameStateController {
     }
 
     private List<String> rollFascistDice(PlayStateInfo playStateInfo){
-        int dice = Math.max((gameState.getGlobalFascismScale() > 6 ? 3 : 2) - ((int)gameState.getActionsTaken().stream().filter(action -> action.equals("fightFascism")).count()), 1);
+        int dice = Math.max((gameState.getGlobalFascismScale() > 6 ? 3 : 2) - 
+                    ((int)gameState.getActionsTaken()
+                                    .stream()
+                                    .filter(action -> action.equals("fightFascism"))
+                                    .count()), 1);
+
         ArrayList<String> cardsDrawn = new ArrayList<>();
+
         for(int i = 0; i<dice; i++){
             int planetNum = ThreadLocalRandom.current().nextInt(1, 13);
-            PlanetModel planet = gameState.getPlanets().stream().filter(thisPlanet -> thisPlanet.getNumber() == planetNum).findFirst().get();
+            PlanetModel planet = gameState.getPlanets()
+            .stream()
+            .filter(thisPlanet -> thisPlanet.getNumber() == planetNum)
+            .findFirst()
+            .get();
+
             System.out.println("Adding fascism to planet #" + planetNum);
             planet.updateFascismLevel(1);
             if(planetNum >= 9){
@@ -162,6 +198,28 @@ public class GameStateController {
         }
         return cardsDrawn;
     }
+
+    private void endTurn(PlayStateInfo playStateInfo){
+        rollFascistDice(playStateInfo);
+        gameState.clearActions();
+        gameState.setActionsLeft(3);
+        List<CatModel> cats = gameState.getCats();
+        int currTurnPos = cats.indexOf(gameState.getCurrTurn()) + 1;
+        gameState.setCurrTurn(cats.get(currTurnPos % cats.size()));
+        checkForLose();
+    }
+
+    private void checkForLose(){
+        if(gameState.getPlanets().stream().filter(planet -> planet.getFascismLevel() >= 4).count() >= 3 ||
+        gameState.getGlobalFascismScale() >= 13 ||
+        gameState.getPlanets().stream().mapToInt(PlanetModel::getFascismLevel).sum() >= 20
+        ){
+            gameState.setGameStatus("lose");
+        }
+    }
+    
+
+
 
     public GameStateModel getGameState(){
         return gameState;

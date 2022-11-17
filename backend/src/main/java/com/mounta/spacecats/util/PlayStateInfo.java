@@ -9,4 +9,13 @@ import com.mounta.spacecats.models.planets.PlanetModel;
 
 public record PlayStateInfo(CatModel cat, List<CatModel> targetCats, PlanetModel targetPlanet, GameStateModel gameState, ResistCard playedCard) {
     
+    @Override
+    public String toString(){
+        return "{" +
+            " cat='" + cat.getName() + "'" + 
+            " targetCats='" +  targetCats.stream().map(CatModel::getName).toList().toString() + "'" +
+            " targetPlanet='" + targetPlanet.getPosition() + "'" +
+            " playedCard=" + playedCard.toString() + "'" +
+            "}";
+    }
 }
