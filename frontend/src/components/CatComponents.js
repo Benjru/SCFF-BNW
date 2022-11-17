@@ -1,6 +1,6 @@
 //FrontendCatController 
 import React, { Component } from "react";
-import { allResistCards, allCats } from "../constants";
+import { allResistCards } from "../constants";
 
 class SelectCat extends Component{
 
@@ -21,18 +21,23 @@ class SelectCat extends Component{
             <div className="catSelect">
                 {console.log("SelectCat getting props state: " + JSON.stringify(this.props.state))}
                 {
-                    this.props.state.readyToStart ? 
+                    this.props.state.catSelected ? 
                     <div>
-                        <p className="centeredText">Let your fight begin</p>
+                        <p className="centeredText">Waiting for other players</p>
                         <div className="break"/>
-                        <button onClick={this.startGame} className="startButton">Begin</button>
+                        {console.log("readyToStart: " + this.props.state.readyToStart)}
+                        {
+                            this.props.state.readyToStart?
+                            <button onClick={this.startGame} className="startButton">Begin</button>:
+                            <React.Fragment/>
+                        }
                     </div> :
                     <React.Fragment>
-                        <p className="centeredText">PLAYER {this.props.state.currCatSelecting}</p> 
+                        <p className="centeredText">SELECT CAT</p> 
                         <br/>
                         <div className="catSelectContainer">
                             {
-                                allCats.map(cat => (
+                                this.props.state.allCats.map(cat => (
                                     <img 
                                         onClick={() => this.setCat(cat)}
                                         key={cat.name}

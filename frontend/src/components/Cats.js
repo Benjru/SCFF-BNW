@@ -5,7 +5,7 @@ const Cats = (props) => (
         {
             props.cats.map(cat => (
                 <div key={cat.catNum}>
-                    <p className="centeredText">P{cat.catNum}</p>
+                    <p className="centeredText">SELECTED CAT</p>
                     <img 
                         className="selectedCat"
                         src={`/cats/${cat.name}-cat.png`} 

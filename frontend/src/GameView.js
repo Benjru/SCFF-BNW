@@ -7,22 +7,10 @@ import FrontendCatController from './controllers/FrontendCatController';
 
 class GameView extends Component {
 
-  updateFascismLevel = (boardSquareIndex, fascismLevel) => {
-    this.props.updateFascismLevel(boardSquareIndex, fascismLevel);
-  }
 
-  updateTurn = (turn) => {
-    this.props.updateTurn(turn);
+  startGame = () => {
+    this.props.startGame();
   }
-
-  updateHand = (catIndex, hand) => {
-    this.props.updateHand(catIndex, hand);
-  }
-
-  startGame = (cats) => {
-    this.props.startGame(cats);
-  }
-
 
   render() {
     return (
@@ -30,10 +18,10 @@ class GameView extends Component {
         {
           this.props.state.gameStarted ?
           <React.Fragment>
-              <p className='turnText'>P{this.props.state.currTurn}'s turn</p>
+              <p className='turnText'>P{this.props.state.currTurn.playerId + 1}'s turn</p>
             <div className='gameViewContainer'>
-              <GameBoard cats={this.props.state.cats} boardSquares={this.props.state.boardSquares} updateFascismLevel={this.updateFascismLevel}/>
-              <TurnDisplay cats={this.props.state.cats} boardSquares={this.props.state.boardSquares} updateTurn={this.updateTurn} updateHand={this.updateHand.bind(this.props)} updateFascismLevel={this.updateFascismLevel}/>
+              <GameBoard state={this.props.state}/>
+              {/* <TurnDisplay cats={this.props.state.cats} useAction={this.useAction}/> */}
             </div>
           </React.Fragment>:
           <FrontendCatController startGame={this.startGame}/>

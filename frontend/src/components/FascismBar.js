@@ -1,7 +1,7 @@
 import React from "react";
 
 const FascismBar = (props) => { // if fascism level negative, loop through absolute value times, otherwise loop through regular amount
-    console.log("props: " + props.fascismLevel)
+    console.log("FascismBar props: " + props.fascismLevel)
     const barSquares = [];
     if (props.fascismLevel < 0){
         for (let i = 0; i < -props.fascismLevel; i++) {
