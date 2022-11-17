@@ -82,8 +82,7 @@ public class GameStateModel {
             PlanetModel homePlanet = planets
             .stream()
             .filter(planet -> planet.getNumber() == CatModel.homePlanets.get(cat.getName()).intValue())
-            .toList()
-            .get(0);
+            .findFirst().get();
             cat.setHomePlanet(homePlanet);
             cat.moveToPlanet(homePlanet);
         });
