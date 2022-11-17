@@ -103,19 +103,6 @@ public class GameStateModel {
 
     public GalaxyNewsCard drawGalaxyNewsCard() { return galaxyNewsDeck.pop(); }
 
-    public ResistCard drawResistCard(CatModel cat) {
-        ResistCard card = resistCardDeck.pop();
-        try{
-            cat.giveCard(card);
-            return card;
-        }
-        catch(IllegalStateException e){
-            resistCardDeck.add(card);
-            System.out.println("Error! Cat (" + cat.getName() + ") already has 4 cards");
-            return null;
-        }
-    }
-
     public ArrayDeque<ResistCard> getResistCardDeck() {
         return this.resistCardDeck;
     }
@@ -148,6 +135,26 @@ public class GameStateModel {
         return this.galaxyNewsDiscard;
     }
 
+    public List<String> getActionsTaken(){
+        return actionsTaken;
+    }
+
+    public void setCurrTurn(CatModel cat){
+        if(cats.contains(cat)){
+            currTurn = cat;
+        }
+    }
+
+    public void setGameStatus(String gameStatus){
+        this.gameStatus = gameStatus;
+    }
+
+    public void setActionsLeft(int actionsLeft){
+        if(actionsLeft > 0){
+            this.actionsLeft = actionsLeft;
+        }
+    }
+
     public void updateGlobalFascismScale(int update){
         this.globalFascismScale += update;
     }
@@ -163,6 +170,33 @@ public class GameStateModel {
         galaxyNewsDiscard.add(card);
     }
 
+    
+/**
+ * The drawResistCard function draws a card from the resistCardDeck and gives it to the cat.
+ * 
+ *
+ * @param cat The ccat drawing the card
+ *
+ * @return The card that was drawn
+ *
+ */
+public ResistCard drawResistCard(CatModel cat) {
+    ResistCard card = resistCardDeck.pop();
+    try{
+        cat.giveCard(card);
+        return card;
+    }
+    catch(IllegalStateException e){
+        resistCardDeck.add(card);
+        System.out.println("Error! Cat (" + cat.getName() + ") already has max cards");
+        return null;
+    }
+}
+
+/**
+ * The refillNewsDeck function is used to shuffle the discard pile back into the deck when it becomes empty.
+ *
+ */
     public void refillNewsDeck()
     {
         if(galaxyNewsDeck.isEmpty())
@@ -177,6 +211,10 @@ public class GameStateModel {
         }
     }
 
+/**
+ *  It is used to reshuffle the discard pile of resist cards back into the deck when it becomes empty.
+ * 
+ */
     public void refillResistDeck()
     {
         if(resistCardDeck.isEmpty())
@@ -191,12 +229,6 @@ public class GameStateModel {
         }
     }
 
-    public void setActionsLeft(int actionsLeft){
-        if(actionsLeft > 0){
-            this.actionsLeft = actionsLeft;
-        }
-    }
-
     public void takeAction(String actionName){
         if(this.actionsLeft > 0){
             actionsTaken.add(actionName);
@@ -204,22 +236,8 @@ public class GameStateModel {
         }
     }
 
-    public List<String> getActionsTaken(){
-        return actionsTaken;
-    }
-
     public void clearActions(){
         this.actionsTaken = new ArrayList<>();
-    }
-
-    public void setCurrTurn(CatModel cat){
-        if(cats.contains(cat)){
-            currTurn = cat;
-        }
-    }
-
-    public void setGameStatus(String gameStatus){
-        this.gameStatus = gameStatus;
     }
 
     @Override

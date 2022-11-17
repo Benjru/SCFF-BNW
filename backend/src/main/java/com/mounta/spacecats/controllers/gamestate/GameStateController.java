@@ -55,6 +55,16 @@ public class GameStateController {
         return gameState.getGlobalFascismScale();
     }
 
+/**
+ * The drawFromNewsDeck function draws a card from the news deck and executes its effects, and then discards it
+ * If the news deck is empty, it refills it.
+ * 
+ *
+ * @param playStateInfo Pass information about the state of the game to the card effect
+ *
+ * @return The cardid of the galaxynewscard that was drawn
+ *
+ */
     public String drawFromNewsDeck(PlayStateInfo playStateInfo){
         GalaxyNewsCard card = gameState.drawGalaxyNewsCard();
         if(gameState.getGalaxyNewsDeck().isEmpty()){
@@ -65,6 +75,16 @@ public class GameStateController {
         return card.getCardId();
     }
 
+/**
+ * The drawFromResistDeck function draws a card from the resist deck and returns its id.
+ * If the resist deck is empty, it refills it.
+ 
+ *
+ * @param cat Determine which cat is drawing the card
+ *
+ * @return A string of the cardid that was drawn from the resist deck
+ * 
+ */
     public String drawFromResistDeck(CatModel cat){
         ResistCard card = gameState.drawResistCard(cat);
         if(gameState.getResistCardDeck().isEmpty()){
@@ -73,6 +93,14 @@ public class GameStateController {
         return card.getCardId();
     }
 
+/**
+ * The setupGame function sets up the game by creating a GameStateModel object and setting it to the global variable gameState.
+ * It also draws two cards for each cat from the resist deck, and updates their home planet's fascism level to 1.
+ 
+ * @return A gamestatemodel
+ *
+ * @docauthor Trelent
+ */
     public void setupGame(){
         if(gameState == null){
             gameState = GameStateModel.create(lobby.getCats());
@@ -84,8 +112,16 @@ public class GameStateController {
         }
     }
 
+/**
+ * The joinGame function adds a cat to the lobby, and if the game is full, starts the game
+ * 
+ * @param catName Name of the cat attempting to join
+ *
+ * @return The created cat
+ *
+ */
     public CatModel joinGame(String catName){
-        if(this.lobby.getCats().size() < 2 && lobby.getCats().stream().filter(cat -> cat.getName().equals(catName)).toList().size() == 0)
+        if(this.lobby.getCats().size() < 2 && lobby.getCats().stream().filter(cat -> cat.getName().equals(catName)).count() == 0)
         {
             try{
                 CatModel cat = CatModel.create(catName, this.lobby.getCats().size());
@@ -101,7 +137,52 @@ public class GameStateController {
         return null;
     }
 
+/**
+ * The takeAction function takes an ActionInfo object and uses it to take the appropriate action.
+ *
+ * @param actionInfo Pass in the action that was taken by the player
+ *
+ */
     public void takeAction(ActionInfo actionInfo){
+        PlayStateInfo playStateInfo = makePlayStateInfo(actionInfo);
+
+        Map<String, Action> actions = Map.of("playCard", new PlayCardAction(),
+        "fightFascism", new FightFascismAction(),
+        "restock", new RestockAction(),
+        "travel", new TravelAction());
+
+        if(actions.keySet().contains(actionInfo.actionName())){
+            Action action = actions.get(actionInfo.actionName());
+            if(action.condition(playStateInfo)){
+                action.resolveAction(playStateInfo);
+                gameState.takeAction(actionInfo.actionName());
+                if(gameState.getActionsLeft() <= 0){
+                    endTurn(playStateInfo);
+                }
+            }
+            else{
+                throw new IllegalArgumentException("Condition could not be verified for playState " + playStateInfo.toString());
+            }
+        }
+        else{
+            throw new IllegalArgumentException(actionInfo.actionName() + " is not a valid action");
+        }
+
+    }
+
+/**
+ * The makePlayStateInfo function takes in an ActionInfo object and returns a PlayStateInfo object.
+ * The ActionInfo contains information about the player, planet, card played, etc.
+ * This function will check to make sure that the player is indeed the current turn's player and that they have not already played their turn. 
+ * If they have not yet played their turn then it will return a PlayStateInfo with all of this information filled out for you! 
+ 
+ *
+ * @param actionInfo Action request information
+ *
+ * @return A playstateinfo object
+ * 
+ */
+    private PlayStateInfo makePlayStateInfo(ActionInfo actionInfo){
         CatModel cat = gameState.getCats()
                                 .stream()
                                 .filter(thisCat -> thisCat.getPlayerId() == actionInfo.playerId())
@@ -145,32 +226,16 @@ public class GameStateController {
                                 .orElseThrow(IllegalArgumentException::new);
             }
         }
-        PlayStateInfo playStateInfo = new PlayStateInfo(cat, null, planet, gameState, playedCard);
-
-        Map<String, Action> actions = Map.of("playCard", new PlayCardAction(),
-        "fightFascism", new FightFascismAction(),
-        "restock", new RestockAction(),
-        "travel", new TravelAction());
-
-        if(actions.keySet().contains(actionInfo.actionName())){
-            Action action = actions.get(actionInfo.actionName());
-            if(action.condition(playStateInfo)){
-                action.resolveAction(playStateInfo);
-                gameState.takeAction(actionInfo.actionName());
-                if(gameState.getActionsLeft() <= 0){
-                    endTurn(playStateInfo);
-                }
-            }
-            else{
-                throw new IllegalArgumentException("Condition could not be verified for playState " + playStateInfo.toString());
-            }
-        }
-        else{
-            throw new IllegalArgumentException(actionInfo.actionName() + " is not a valid action");
-        }
-
+        return new PlayStateInfo(cat, null, planet, gameState, playedCard);
     }
 
+/**
+ * The rollFascistDice function rolls dice for the fascist track, and draws galaxy news cards if 
+ * a stronghold was rolled
+ *
+ * @return A list of cards that were drawn from the news deck
+ *
+ */
     private List<String> rollFascistDice(PlayStateInfo playStateInfo){
         int dice = Math.max((gameState.getGlobalFascismScale() > 6 ? 3 : 2) - 
                     ((int)gameState.getActionsTaken()
@@ -199,6 +264,14 @@ public class GameStateController {
         return cardsDrawn;
     }
 
+/**
+ * The endTurn function is called when a player ends their turn. It rolls the fascist die, clears the actions
+ * list and sets the number of actions left to 3. Finally it changes whose turn it is by finding out who's next in line after 
+ * currTurnPos % cats.size() (which will be either 0 or 1).  then we go to checkForLose().
+ *
+ * @param playStateInfo Pass information about the current state of the game
+ *
+ */
     private void endTurn(PlayStateInfo playStateInfo){
         rollFascistDice(playStateInfo);
         gameState.clearActions();
@@ -209,6 +282,10 @@ public class GameStateController {
         checkForLose();
     }
 
+/**
+ * The checkForLose function checks if the game has been lost.
+ *
+ */
     private void checkForLose(){
         if(gameState.getPlanets().stream().filter(planet -> planet.getFascismLevel() >= 4).count() >= 3 ||
         gameState.getGlobalFascismScale() >= 13 ||
@@ -218,9 +295,6 @@ public class GameStateController {
         }
     }
     
-
-
-
     public GameStateModel getGameState(){
         return gameState;
     }
