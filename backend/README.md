@@ -1,22 +1,22 @@
-#Spring Boot Backend
+# Spring Boot Backend
 
 Wyatt Stagg, Nathan Kimball, Ben Hallihan
 
-##Running the backend
+## Running the backend
 
-###Requirements
+### Requirements
 JDK 17
 
-###Running the backend
+### Running the backend
 
 In the backend directory, run the command `./gradlew bootRun`
 this will create an instance of the backend hosted on `localhost:8080`
 
-##Endpoints
+## Endpoints
 
-###POST Endpoints
+### POST Endpoints
 
-####/join
+#### /join
 
 The join endpoint lets cats join the game, you must provide a message body matching the following syntax:
 
@@ -24,7 +24,7 @@ The join endpoint lets cats join the game, you must provide a message body match
   "catName": "*Insert Cat Name*"
 }
 
-####/action
+#### /action
 
 The action endpoint allows a player to take an action, you must provide a message body matching the following syntax:
 
@@ -36,9 +36,9 @@ The action endpoint allows a player to take an action, you must provide a messag
   "symbol": "Symbol of the played card if it is a symbol card"
 }
 
-###GET Endpoints
+### GET Endpoints
 
-####/gameState
+#### /gameState
 
 Provides a copy of the gamestate, example given below
 
