@@ -40,7 +40,7 @@ public class WebSocketGameController {
         }
 		return new ResponseEntity<>(HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 
     @SendTo("/game/catinfo")
