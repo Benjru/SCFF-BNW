@@ -22,7 +22,8 @@ The join endpoint lets cats join the game, you must provide a message body match
 
 ```{
   "catName": "*Insert Cat Name*"
-}```
+}
+```
 
 #### /action
 
@@ -34,7 +35,8 @@ The action endpoint allows a player to take an action, you must provide a messag
   "cardName": "ID of card that has been played if applicable",
   "actionName": "fightFascism"/"playCard"/"travel"/"restock",
   "symbol": "Symbol of the played card if it is a symbol card"
-}```
+}
+```
 
 ### GET Endpoints
 
@@ -149,4 +151,5 @@ Provides a copy of the gamestate, example given below
     "actionsLeft": 3,
     "globalFascismScale": 1,
     "actionsTaken": []
-}```
+}
+```
