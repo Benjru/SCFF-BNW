@@ -1,4 +1,4 @@
-package com.mounta.spacecats.websocket;
+package com.mounta.spacecats.controllers.websocket;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;

@@ -5,6 +5,7 @@ import com.mounta.spacecats.controllers.actions.FightFascismAction;
 import com.mounta.spacecats.controllers.actions.PlayCardAction;
 import com.mounta.spacecats.controllers.actions.RestockAction;
 import com.mounta.spacecats.controllers.actions.TravelAction;
+import com.mounta.spacecats.controllers.websocket.DTOs.ActionInfo;
 import com.mounta.spacecats.mappers.SymbolMapper;
 import com.mounta.spacecats.models.cards.GalaxyNewsCard;
 import com.mounta.spacecats.models.cards.ResistCard;
@@ -15,7 +16,6 @@ import com.mounta.spacecats.models.lobby.LobbyModel;
 import com.mounta.spacecats.models.planets.PlanetModel;
 import com.mounta.spacecats.models.planets.Symbol;
 import com.mounta.spacecats.util.PlayStateInfo;
-import com.mounta.spacecats.websocket.DTOs.ActionInfo;
 
 import java.util.ArrayList;
 import java.util.List;
