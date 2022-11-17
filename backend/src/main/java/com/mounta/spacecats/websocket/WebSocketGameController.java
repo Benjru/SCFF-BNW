@@ -28,10 +28,16 @@ public class WebSocketGameController {
 
     @PostMapping("/join")
 	public ResponseEntity<Void> joinGame(@RequestBody CatInfo catName) {
+        if(gameStateController.getGameState() != null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         CatModel cat = gameStateController.joinGame(catName.catName());
         if(cat != null){
             System.out.println(cat.toString());
-        template.convertAndSend("/game/catInfo", catName);
+        template.convertAndSend("/game/catInfo", cat);
+        if(gameStateController.getGameState() != null){
+            template.convertAndSend("/game/gameState", gameStateController.getGameState());
+        }
 		return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
