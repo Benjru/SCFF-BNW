@@ -3,10 +3,10 @@ package com.mounta.spacecats.models.effects.ResistEffects;
 import java.util.List;
 
 import com.mounta.spacecats.models.cats.CatModel;
-import com.mounta.spacecats.models.effects.EffectModel;
+import com.mounta.spacecats.models.effects.ConditionalEffect;
 import com.mounta.spacecats.util.PlayStateInfo;
 
-public class ResistEffect_C implements EffectModel {
+public class ResistEffect_C implements ConditionalEffect {
 
     @Override
     public boolean condition(PlayStateInfo playState) {

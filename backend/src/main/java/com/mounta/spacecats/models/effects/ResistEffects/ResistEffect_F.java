@@ -1,11 +1,11 @@
 package com.mounta.spacecats.models.effects.ResistEffects;
 
-import com.mounta.spacecats.models.effects.EffectModel;
+import com.mounta.spacecats.models.effects.ConditionalEffect;
 import com.mounta.spacecats.models.planets.PlanetModel;
 import com.mounta.spacecats.models.planets.Symbol;
 import com.mounta.spacecats.util.PlayStateInfo;
 
-public class ResistEffect_F implements EffectModel {
+public class ResistEffect_F implements ConditionalEffect {
 
     private Symbol symbol;
 

@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.mounta.spacecats.models.cards.ResistCard;
-import com.mounta.spacecats.models.effects.EffectModel;
+import com.mounta.spacecats.models.effects.ConditionalEffect;
 import com.mounta.spacecats.models.planets.PlanetModel;
 
 public class CatModel {
@@ -18,7 +18,7 @@ public class CatModel {
 
     private String name;
 
-    private ArrayList<EffectModel> abilities;
+    private ArrayList<ConditionalEffect> abilities;
 
     private int scratches;
 
@@ -34,7 +34,7 @@ public class CatModel {
 
     private static final int MAX_SCRATCHES = 2;
 
-    public static Map<String, Integer> homePlanets = Map.of("cj", 7,
+    public static final Map<String, Integer> homePlanets = Map.of("cj", 7,
     "jasper", 6,
     "nikita", 1,
     "ophelia", 4,
@@ -55,7 +55,7 @@ public class CatModel {
 
 
 
-    private CatModel(String name, ArrayList<EffectModel> abilities, int scratches, PlanetModel homePlanet, PlanetModel currPlanet, long playerId, ArrayList<ResistCard> hand) {
+    private CatModel(String name, ArrayList<ConditionalEffect> abilities, int scratches, PlanetModel homePlanet, PlanetModel currPlanet, long playerId, ArrayList<ResistCard> hand) {
         this.name = name;
         this.abilities = abilities;
         this.scratches = scratches;
@@ -76,7 +76,7 @@ public class CatModel {
         return this.name;
     }
 
-    public ArrayList<EffectModel> getAbilities() {
+    public ArrayList<ConditionalEffect> getAbilities() {
         return this.abilities;
     }
 
@@ -113,7 +113,7 @@ public class CatModel {
         }
     }
 
-    public void addAbility(EffectModel ability){
+    public void addAbility(ConditionalEffect ability){
         this.abilities.add(ability);
     }
 
@@ -121,7 +121,7 @@ public class CatModel {
         this.currPlanet = planet;
     }
 
-    public void removeAbility(EffectModel ability){
+    public void removeAbility(ConditionalEffect ability){
         abilities.remove(ability);
     }
 

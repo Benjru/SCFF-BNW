@@ -1,10 +1,10 @@
 package com.mounta.spacecats.models.effects.ResistEffects;
 
-import com.mounta.spacecats.models.effects.EffectModel;
+import com.mounta.spacecats.models.effects.ConditionalEffect;
 import com.mounta.spacecats.models.planets.PlanetModel;
 import com.mounta.spacecats.util.PlayStateInfo;
 
-public class ResistEffect_A implements EffectModel {
+public class ResistEffect_A implements ConditionalEffect {
 
     @Override
     public boolean condition(PlayStateInfo playState) {
