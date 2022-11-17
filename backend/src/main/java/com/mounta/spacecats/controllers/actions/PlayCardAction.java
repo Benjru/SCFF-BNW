@@ -13,7 +13,7 @@ public class PlayCardAction implements Action {
 
     @Override
     public boolean condition(PlayStateInfo playStateInfo) {
-        return playStateInfo.playedCard().getCardEffect().condition(playStateInfo);
+        return playStateInfo.playedCard().effectCondition(playStateInfo);
     }
 
 }
