@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
-import {SelectCat} from './components/CatComponents';
 import {GameBoard, TurnDisplay} from './controllers/ComponentController';
-import Players from './components/Players';
+import FrontendCatController from './controllers/FrontendCatController';
 
 // get state from fe gamestate controller?
 
@@ -37,10 +36,7 @@ class GameView extends Component {
               <TurnDisplay players={this.props.state.players} boardSquares={this.props.state.boardSquares} updateTurn={this.updateTurn} updateHand={this.updateHand.bind(this.props)} updateFascismLevel={this.updateFascismLevel}/>
             </div>
           </React.Fragment>:
-          <React.Fragment>
-            <Players players={this.props.state.players}/>
-            <SelectCat startGame={this.startGame}/> 
-          </React.Fragment>
+          <FrontendCatController startGame={this.startGame}/>
 
         }
       </div>

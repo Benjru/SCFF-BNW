@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import CatComponents from "../components/CatComponents"
+import CatView from "../CatView";
+import { allResistCards } from "../constants";
 
 class FrontendCatController extends Component{
     state = {
@@ -84,7 +85,7 @@ class FrontendCatController extends Component{
 
     render(){
         return(
-            <CatComponents state={this.state} createHand={this.createHand} startGame={this.startGame} setCat={this.setCat}/>
+            <CatView state={this.state} createHand={this.createHand} startGame={this.startGame} setCat={this.setCat}/>
         );
     }
 }
