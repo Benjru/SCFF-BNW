@@ -164,11 +164,29 @@
 
 .planetImage:hover, 
 .planetImage:focus{
+  /* position: relative; */
   opacity: 0.9;
   height: 75%;
   width: 90%;
   border-color: #ff049f;
   color: red
+}
+
+.playerPlanetIndicator{
+  position: absolute;
+  color: #ffffff;
+  background-color:#000000;
+  border-radius: 15%;
+  border-width: 20%;
+  align-self: center;
+  font-size: 70%;
+  
+}
+
+.ppiContainer{
+  position: relative;
+  display: flex;
+  justify-content: center;
 }
 
 .gameViewContainer{
@@ -283,7 +301,9 @@
 }
 
 .fascismLevelBar{
-  margin-left: 29.5%;
+  /* margin-left: 29.5%; */
+  margin-left: 35%;
+  margin-top: 5%;
   display: grid;
   width: 10%;
   height: 4%;

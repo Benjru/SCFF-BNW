@@ -6,25 +6,27 @@ const Planet = (props) => ( // Planet image + cat image on top
         {/* {console.log("CAT ON SQUARE!!!!: " + props.boardSquare.playerOnSquare.cat.name)} */}
         {
             props.boardSquare.playerOnSquare === ""?
-            <React.Fragment>
+            <div>
                 <img className="planetImage"
                     src={`/planets/${props.boardSquare.planet}-planet.jpg`} 
                     alt={props.boardSquare.planet}
                 />
-            </React.Fragment> :
-            <React.Fragment>
+            </div> :
+
+            <div className="ppiContainer">
+
+                <div className="playerPlanetIndicator">
+                    <h1>{props.boardSquare.playerOnSquare.cat.name}</h1>
+                </div>
+
                 <img className="planetImage"
                     src={`/planets/${props.boardSquare.planet}-planet.jpg`} 
                     alt={props.boardSquare.planet}
                 /> 
-                {/* <ImageBackground source={`/planets/${props.boardSquare.planet}-planet.jpg`} className="planetImage">    
-                    <img className="catOnSquare"
-                        src={`/cats/${props.boardSquare.playerOnSquare.cat.name}-cat.png`}
-                        alt={props.boardSquare.catOnSquare}
-                    />
-                </ImageBackground> */}
+
                 {console.log("CAT ON SQUARE!!!!: " + props.boardSquare.playerOnSquare.cat.name)}
-            </React.Fragment>
+                
+            </div>
         }
     </div>
 );
