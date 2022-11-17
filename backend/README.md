@@ -20,21 +20,21 @@ this will create an instance of the backend hosted on `localhost:8080`
 
 The join endpoint lets cats join the game, you must provide a message body matching the following syntax:
 
-{
+`{
   "catName": "*Insert Cat Name*"
-}
+}`
 
 #### /action
 
 The action endpoint allows a player to take an action, you must provide a message body matching the following syntax:
 
-{
+`{
   "playerId": PlayerId(INTEGER),
   "planetPosition": PositionOOfPlanet(INTEGER),
   "cardName": "ID of card that has been played if applicable",
   "actionName": "fightFascism"/"playCard"/"travel"/"restock",
   "symbol": "Symbol of the played card if it is a symbol card"
-}
+}`
 
 ### GET Endpoints
 
@@ -42,7 +42,7 @@ The action endpoint allows a player to take an action, you must provide a messag
 
 Provides a copy of the gamestate, example given below
 
-{
+`{
     "resistCardDiscard": [],
     "galaxyNewsDiscard": [],
     "cats": [
@@ -149,4 +149,4 @@ Provides a copy of the gamestate, example given below
     "actionsLeft": 3,
     "globalFascismScale": 1,
     "actionsTaken": []
-}
+}`
