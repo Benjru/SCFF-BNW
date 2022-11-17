@@ -42,7 +42,7 @@ The action endpoint allows a player to take an action, you must provide a messag
 
 Provides a copy of the gamestate, example given below
 
-`{
+```{
     "resistCardDiscard": [],
     "galaxyNewsDiscard": [],
     "cats": [
@@ -149,4 +149,4 @@ Provides a copy of the gamestate, example given below
     "actionsLeft": 3,
     "globalFascismScale": 1,
     "actionsTaken": []
-}`
+}```
