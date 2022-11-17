@@ -3,6 +3,7 @@ package com.mounta.spacecats.models.gamestate;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -35,6 +36,8 @@ public class GameStateModel {
 
     private int globalFascismScale;
 
+    private ArrayList<String> actionsTaken;
+
 
     private GameStateModel(ArrayDeque<GalaxyNewsCard> galaxyNewsDeck,
                            ArrayDeque<ResistCard> resistCardDeck,
@@ -52,6 +55,7 @@ public class GameStateModel {
         this.globalFascismScale = globalFascismScale;
         this.resistCardDiscard = new ArrayList<>();
         this.galaxyNewsDiscard = new ArrayList<>();
+        this.actionsTaken = new ArrayList<>();
     }
 
     public static GameStateModel create(ArrayList<CatModel> cats){
@@ -170,7 +174,24 @@ public class GameStateModel {
     }
 
     public void setActionsLeft(int actionsLeft){
-        this.actionsLeft = actionsLeft;
+        if(actionsLeft > 0){
+            this.actionsLeft = actionsLeft;
+        }
+    }
+
+    public void takeAction(String actionName){
+        if(this.actionsLeft > 0){
+            actionsTaken.add(actionName);
+            this.actionsLeft--;
+        }
+    }
+
+    public List<String> getActionsTaken(){
+        return actionsTaken;
+    }
+
+    public void clearActions(){
+        this.actionsTaken = new ArrayList<>();
     }
 
     @Override

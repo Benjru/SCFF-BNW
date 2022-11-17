@@ -1,5 +1,7 @@
 package com.mounta.spacecats.models.effects.ResistEffects;
 
+import java.util.List;
+
 import com.mounta.spacecats.models.cats.CatModel;
 import com.mounta.spacecats.models.effects.EffectModel;
 import com.mounta.spacecats.util.PlayStateInfo;
@@ -10,17 +12,17 @@ public class ResistEffect_C implements EffectModel {
     public boolean condition(PlayStateInfo playState) {
         // TODO Auto-generated method stub
         CatModel cat = playState.cat();
-        CatModel target = playState.targetCat();
+        List<CatModel> targets = playState.targetCats();
 
-        return cat.getCurrPlanet().equals(target.getCurrPlanet());
+        return targets.stream().allMatch(target -> target.getCurrPlanet().equals(cat.getCurrPlanet())) && targets.size() == 2;
     }
 
     @Override
     public void resolve(PlayStateInfo playState) {
         // TODO Auto-generated method stub
-        CatModel target = playState.targetCat();
-
-        target.updateScratches(-2);
+        for(CatModel target : playState.targetCats()){
+        target.updateScratches(-1);
+        }
     }
     
 }

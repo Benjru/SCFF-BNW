@@ -1,6 +1,7 @@
 package com.mounta.spacecats.controllers.actions;
 
 import com.mounta.spacecats.models.cats.CatModel;
+import com.mounta.spacecats.models.planets.PlanetModel;
 import com.mounta.spacecats.util.PlayStateInfo;
 
 public class TravelAction implements Action {
@@ -13,7 +14,8 @@ public class TravelAction implements Action {
 
     @Override
     public boolean condition(PlayStateInfo playStateInfo) {
-        return true;
+
+        return playStateInfo.cat().getCurrPlanet().getAdjacentPlanets().contains(playStateInfo.targetPlanet());
     }
 
 }

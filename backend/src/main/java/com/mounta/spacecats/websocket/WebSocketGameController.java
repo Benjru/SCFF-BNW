@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mounta.spacecats.controllers.gamestate.GameStateController;
 import com.mounta.spacecats.models.cats.CatModel;
 import com.mounta.spacecats.models.gamestate.GameStateModel;
+import com.mounta.spacecats.util.PlayStateInfo;
+import com.mounta.spacecats.websocket.DTOs.ActionInfo;
 import com.mounta.spacecats.websocket.DTOs.CatInfo;
 
 @RestController
@@ -26,7 +28,7 @@ public class WebSocketGameController {
     GameStateController gameStateController;
 
     @PostMapping("/join")
-	public ResponseEntity<Void> sendMessage(@RequestBody CatInfo catName) {
+	public ResponseEntity<Void> joinGame(@RequestBody CatInfo catName) {
         CatModel cat = gameStateController.joinGame(catName.catName());
         if(cat != null){
             System.out.println(cat.toString());
@@ -49,6 +51,16 @@ public class WebSocketGameController {
         return ResponseEntity.ok().body(gameState);
     }
 
-    
+    @PostMapping("/action")
+    public ResponseEntity<Void> takeAction(@RequestBody ActionInfo actionInfo){
+        try{
+            gameStateController.takeAction(actionInfo);
+
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
     
 }
