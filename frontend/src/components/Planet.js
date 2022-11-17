@@ -4,7 +4,7 @@ import React from "react";
 const Planet = (props) => ( // Planet image + cat image on top
     <div>
         {
-            props.boardSquare.playerOnSquare === ""?
+            props.boardSquare.catOnSquare === ""?
             <React.Fragment>
                 <img className="planetImage"
                     src={`/planets/${props.boardSquare.planet}-planet.jpg`} 
@@ -12,16 +12,18 @@ const Planet = (props) => ( // Planet image + cat image on top
                 />
             </React.Fragment> :
             <React.Fragment>
-                <img className="planetImage"
-                    src={`/planets/${props.boardSquare.planet}-planet.jpg`} 
-                    alt={props.boardSquare.planet}
-                /> 
-                {/* <ImageBackground source={`/planets/${props.boardSquare.planet}-planet.jpg`} className="planetImage">    
-                    <img className="catOnSquare"
-                        src={`/cats/${props.boardSquare.playerOnSquare.cat.name}-cat.png`}
-                        alt={props.boardSquare.catOnSquare}
-                    />
-                </ImageBackground> */}
+                <div className="ppiContainer">
+
+                    <div className="catPlanetIndicator">
+                        <h1>{props.boardSquare.catOnSquare.name}</h1>
+                    </div>
+
+                    <img className="planetImage"
+                        src={`/planets/${props.boardSquare.planet}-planet.jpg`} 
+                        alt={props.boardSquare.planet}
+                    /> 
+
+                </div>
             </React.Fragment>
         }
     </div>

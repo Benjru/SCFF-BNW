@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Players from "./components/Players";
+import Cats from "./components/Cats";
 import { SelectCat } from "./components/CatComponents";
 
 class CatView extends Component{
@@ -13,7 +13,7 @@ class CatView extends Component{
     }
 
     startGame = () => {
-        this.props.startGame(this.props.state.players);
+        this.props.startGame(this.props.state.cats);
     }
 
     render(){
@@ -21,7 +21,7 @@ class CatView extends Component{
         return(
             <React.Fragment>
                 <SelectCat state={this.props.state} setCat={this.setCat} startGame={this.startGame}/> 
-                <Players players={this.props.state.players}/>
+                <Cats cats={this.props.state.cats}/>
             </React.Fragment>
         );
     }

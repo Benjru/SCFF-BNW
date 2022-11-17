@@ -1,6 +1,6 @@
 //FrontendCatController 
 import React, { Component } from "react";
-import { allResistCards } from "../constants";
+import { allResistCards, allCats } from "../constants";
 
 class SelectCat extends Component{
 
@@ -13,13 +13,13 @@ class SelectCat extends Component{
     }
 
     startGame = () => {
-        this.props.startGame(this.props.state.players);
+        this.props.startGame(this.props.state.cats);
     }
 
     render() {
         return (
             <div className="catSelect">
-                {console.log("CatComponents getting props state: " + JSON.stringify(this.props.state))}
+                {console.log("SelectCat getting props state: " + JSON.stringify(this.props.state))}
                 {
                     this.props.state.readyToStart ? 
                     <div>
@@ -28,11 +28,11 @@ class SelectCat extends Component{
                         <button onClick={this.startGame} className="startButton">Begin</button>
                     </div> :
                     <React.Fragment>
-                        <p className="centeredText">PLAYER {this.props.state.currPlayerSelecting}</p> 
+                        <p className="centeredText">PLAYER {this.props.state.currCatSelecting}</p> 
                         <br/>
                         <div className="catSelectContainer">
                             {
-                                this.props.state.cats.map(cat => (
+                                allCats.map(cat => (
                                     <img 
                                         onClick={() => this.setCat(cat)}
                                         key={cat.name}
@@ -56,7 +56,7 @@ class SelectCat extends Component{
 class RestockAction extends Component{
 
     restock = () => { // change to API call
-        let hand = this.props.players[this.props.playerIndex].hand;
+        let hand = this.props.cats[this.props.catIndex].hand;
         if (hand.length === 4){
             alert("You cannot restock");
         }
@@ -66,7 +66,7 @@ class RestockAction extends Component{
                 console.log(randomPosition)
                 const card = allResistCards[randomPosition];
                 hand.push(card);
-                this.props.updateHand(this.props.playerIndex, hand)
+                this.props.updateHand(this.props.catIndex, hand)
             }
             this.props.useAction();
         }
@@ -101,11 +101,11 @@ class FightFascismAction extends Component{
 
     fightFascism = () => { // change to API call
         console.log("fighting fascism");
-        const player = this.props.players[this.props.playerIndex]; // add curr planet property to cat
+        const cat = this.props.cats[this.props.catIndex]; // add curr planet property to cat
         this.props.boardSquares.map((boardSquare, i) => {
-            console.log(boardSquare.playerOnSquare.currPlanet)
-            console.log(player.currPlanet);
-            if (boardSquare.playerOnSquare.currPlanet === player.currPlanet){
+            console.log(boardSquare.catOnSquare.currPlanet)
+            console.log(cat.currPlanet);
+            if (boardSquare.catOnSquare.currPlanet === cat.currPlanet){
                 // Then update fascism level
                 console.log("boardSquare position: " + i)
                 if (boardSquare.fascismLevel > 0){

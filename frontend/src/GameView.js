@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import {GameBoard, TurnDisplay} from './controllers/ComponentController';
+import {GameBoard, TurnDisplay} from './components/GameComponents';
 import FrontendCatController from './controllers/FrontendCatController';
 
 // get state from fe gamestate controller?
@@ -15,12 +15,12 @@ class GameView extends Component {
     this.props.updateTurn(turn);
   }
 
-  updateHand = (playerIndex, hand) => {
-    this.props.updateHand(playerIndex, hand);
+  updateHand = (catIndex, hand) => {
+    this.props.updateHand(catIndex, hand);
   }
 
-  startGame = (players) => {
-    this.props.startGame(players);
+  startGame = (cats) => {
+    this.props.startGame(cats);
   }
 
 
@@ -32,8 +32,8 @@ class GameView extends Component {
           <React.Fragment>
               <p className='turnText'>P{this.props.state.currTurn}'s turn</p>
             <div className='gameViewContainer'>
-              <GameBoard players={this.props.state.players} boardSquares={this.props.state.boardSquares} updateFascismLevel={this.updateFascismLevel}/>
-              <TurnDisplay players={this.props.state.players} boardSquares={this.props.state.boardSquares} updateTurn={this.updateTurn} updateHand={this.updateHand.bind(this.props)} updateFascismLevel={this.updateFascismLevel}/>
+              <GameBoard cats={this.props.state.cats} boardSquares={this.props.state.boardSquares} updateFascismLevel={this.updateFascismLevel}/>
+              <TurnDisplay cats={this.props.state.cats} boardSquares={this.props.state.boardSquares} updateTurn={this.updateTurn} updateHand={this.updateHand.bind(this.props)} updateFascismLevel={this.updateFascismLevel}/>
             </div>
           </React.Fragment>:
           <FrontendCatController startGame={this.startGame}/>
