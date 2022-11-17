@@ -1,8 +1,8 @@
 //FrontendGameStateController 
 import React, { Component } from "react";
-import {RestockAction, TravelAction, FightFascismAction} from '../components/CatComponents';
-import Planet from "../components/Planet";
-import FascismBar from "../components/FascismBar";
+import {RestockAction, TravelAction, FightFascismAction} from './CatComponents';
+import Planet from "./Planet";
+import FascismBar from "./FascismBar";
 
 class GameBoard extends Component{ // with backend: remove planets from state variable and then in componentDidMount make API call to get planets, add to setState
 
@@ -25,15 +25,15 @@ class GameBoard extends Component{ // with backend: remove planets from state va
     }
 }
 
-class TurnDisplay extends Component { // Knows current turn and renders current player's hand, and actions
+class TurnDisplay extends Component { // Knows current turn and renders current cat's hand, and actions
 
     actionCount = 0;
     currTurn = 1;
-    hand = this.props.players[this.currTurn-1].hand;
+    hand = this.props.cats[this.currTurn-1].hand;
 
     // Pass up to parent component 
-    updateHand = (playerIndex, hand) => {
-        this.props.updateHand(playerIndex, hand)
+    updateHand = (catIndex, hand) => {
+        this.props.updateHand(catIndex, hand)
     }
 
     // Pass up to parent component
@@ -53,7 +53,7 @@ class TurnDisplay extends Component { // Knows current turn and renders current 
             else{
                 this.currTurn = 1;
             }
-            this.hand = this.props.players[this.currTurn-1].hand;
+            this.hand = this.props.cats[this.currTurn-1].hand;
             this.props.updateTurn(this.currTurn); // not that important
         }
     }
@@ -69,10 +69,10 @@ class TurnDisplay extends Component { // Knows current turn and renders current 
             console.log("used: " + card)
             this.hand = this.removeItemFromArray(this.hand, card);
             this.props.updateHand(this.currTurn-1, this.hand);
-            const player = this.props.players[this.currTurn-1];
+            const cat = this.props.cats[this.currTurn-1];
             if (card === '+1 liberation'){
                 this.props.boardSquares.map((boardSquare, i) => {
-                    if (boardSquare.playerOnSquare.currPlanet === player.currPlanet){
+                    if (boardSquare.catOnSquare.currPlanet === cat.currPlanet){
                         // Then update fascism level
                         this.updateFascismLevel(i, boardSquare.fascismLevel - 1);
                     }
@@ -81,7 +81,7 @@ class TurnDisplay extends Component { // Knows current turn and renders current 
             }
             else if (card === 'ears' || card === 'paw' || card === 'tail' || card === 'whiskers'){
                 this.props.boardSquares.map((boardSquare, i) => {
-                    if (boardSquare.playerOnSquare.currPlanet === player.currPlanet){
+                    if (boardSquare.catOnSquare.currPlanet === cat.currPlanet){
                         // Then update fascism level
                         this.updateFascismLevel(i, boardSquare.fascismLevel - 2);
                     }
@@ -108,17 +108,17 @@ class TurnDisplay extends Component { // Knows current turn and renders current 
     }
 
     render(){
-        const player = this.props.players[this.currTurn-1];
+        const cat = this.props.cats[this.currTurn-1];
         return(
             <div className="turnContainer">
-                <p className="centeredText">P{player.playerNum}</p>
+                <p className="centeredText">P{cat.catNum}</p>
                 <img
                     className="currentTurnCat"
-                    src={`/cats/${player.cat.name}-cat.png`}
-                    alt={player.cat}
+                    src={`/cats/${cat.name}-cat.png`}
+                    alt={cat}
                 />
                 <div className="turnHandContainer">
-                    {player.hand.map(card => (
+                    {cat.hand.map(card => (
                         <img
                             src={`/resist_cards/${card}-card.jpg`}
                             onClick={() => this.useCard(card)}
@@ -130,9 +130,9 @@ class TurnDisplay extends Component { // Knows current turn and renders current 
                 </div>
                 <div className="break"/>
                 <div className="turnActionContainer">
-                    <RestockAction useAction={this.useAction} updateHand={this.updateHand} players={this.props.players} playerIndex={this.currTurn-1}/>
+                    <RestockAction useAction={this.useAction} updateHand={this.updateHand} cats={this.props.cats} catIndex={this.currTurn-1}/>
                     <TravelAction useAction={this.useAction}/>
-                    <FightFascismAction useAction={this.useAction} boardSquares={this.props.boardSquares} players={this.props.players} playerIndex={this.currTurn-1} updateFascismLevel={this.updateFascismLevel}/>
+                    <FightFascismAction useAction={this.useAction} boardSquares={this.props.boardSquares} cats={this.props.cats} catIndex={this.currTurn-1} updateFascismLevel={this.updateFascismLevel}/>
                 </div>
             </div>
         );

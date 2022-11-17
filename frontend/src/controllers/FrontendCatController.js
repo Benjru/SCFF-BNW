@@ -4,64 +4,40 @@ import { allResistCards } from "../constants";
 
 class FrontendCatController extends Component{
     state = {
-        cats: [{
-            name: 'cj',
-            homePlanet: 'scratchstone'
-        }, 
-        {
-            name: 'jasper',
-            homePlanet: 'fishbowl'
-        }, 
-        {
-            name: 'nikita',
-            homePlanet: 'scratchpost'
-        }, 
-        {
-            name: 'ophelia',
-            homePlanet: 'frostnip'
-        }, 
-        {
-            name: 'pepper',
-            homePlanet: 'litterbox'
-        }, 
-        {
-            name: 'pip',
-            homePlanet: 'hotrock'
-        }, 
-        {
-            name: 'sc',
-            homePlanet: 'waterdish'
-        }, 
-        {
-            name: 'sky',
-            homePlanet: 'dustbunny'
-        }],
-        currPlayerSelecting: 1,
-        players: []
+        cats: [],
+        currCatSelecting: 1
     };
 
-    setCat = (cat) => {
-        if (this.state.players.find(player => player.cat.name === cat.name)){
-            // Tell user that two players cannot have the same cat
+    setCat = (inCat) => {
+        if (this.state.cats.find(cat => cat.name === inCat.name)){
+            // Tell user that two cats cannot have the same cat
             alert("You must select a different cat!")
         }
         else{
             const hand = this.createHand();
             this.setState((prevState) => { 
                 return {
-                    currPlayerSelecting: prevState.currPlayerSelecting + 1,
-                    players: [
-                        ...prevState.players, 
+                    currCatSelecting: prevState.currCatSelecting + 1,
+                    cats: [
+                        ...prevState.cats, 
                         {
-                            playerNum: prevState.currPlayerSelecting,
-                            cat,
-                            currPlanet: cat.homePlanet,
+                            name: inCat.name,
+                            homePlanet: inCat.homePlanet,
+                            catNum: prevState.currCatSelecting,
+                            currPlanet: inCat.homePlanet,
                             hand
                         }
                     ],
-                    readyToStart: prevState.currPlayerSelecting === 2 ? true: false
+                    readyToStart: prevState.currCatSelecting === 2 ? true: false
                 }
             });
+
+            // const requestOptions = {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify({ catName: inCat.name })
+            // };
+            // fetch('http://localhost:8080/join', requestOptions);
         }
 
     }
@@ -80,7 +56,7 @@ class FrontendCatController extends Component{
     }
 
     startGame = () => {
-        this.props.startGame(this.state.players);
+        this.props.startGame(this.state.cats);
     }
 
     render(){

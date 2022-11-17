@@ -47,6 +47,39 @@ const allResistCards = [
     'whiskers',
 ]
 
-const player = 1;
+const allPlanets=['cold-bath', 'dustbunny', 'fishbowl', 'frostnip', 'hairball', 'hotrock', 'laserlight', 'litterbox', 'scratchpost', 'scratchstone', 'space-vet', 'waterdish']
 
-export {allResistCards, player};
+const allCats= [{
+    name: 'cj',
+    homePlanet: 'scratchstone'
+}, 
+{
+    name: 'jasper',
+    homePlanet: 'fishbowl'
+}, 
+{
+    name: 'nikita',
+    homePlanet: 'scratchpost'
+}, 
+{
+    name: 'ophelia',
+    homePlanet: 'frostnip'
+}, 
+{
+    name: 'pepper',
+    homePlanet: 'litterbox'
+}, 
+{
+    name: 'pip',
+    homePlanet: 'hotrock'
+}, 
+{
+    name: 'sc',
+    homePlanet: 'waterdish'
+}, 
+{
+    name: 'sky',
+    homePlanet: 'dustbunny'
+}];
+
+export {allResistCards, allPlanets, allCats};
