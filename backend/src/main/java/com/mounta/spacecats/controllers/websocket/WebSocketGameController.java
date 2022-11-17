@@ -1,4 +1,4 @@
-package com.mounta.spacecats.websocket;
+package com.mounta.spacecats.controllers.websocket;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mounta.spacecats.controllers.gamestate.GameStateController;
+import com.mounta.spacecats.controllers.websocket.DTOs.ActionInfo;
+import com.mounta.spacecats.controllers.websocket.DTOs.CatInfo;
 import com.mounta.spacecats.models.cats.CatModel;
 import com.mounta.spacecats.models.gamestate.GameStateModel;
-import com.mounta.spacecats.websocket.DTOs.ActionInfo;
-import com.mounta.spacecats.websocket.DTOs.CatInfo;
 
 @RestController
 public class WebSocketGameController {
