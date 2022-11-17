@@ -30,4 +30,8 @@ public class ResistEffect_F implements EffectModel {
         planet.updateFascismLevel(-2);
     }
     
+    public Symbol getSymbol(){
+        return symbol;
+    }
+    
 }

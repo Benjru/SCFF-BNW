@@ -1,11 +1,17 @@
 package com.mounta.spacecats.models.planets;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mounta.spacecats.models.cats.CatModel;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.HashSet;
 
+@JsonIgnoreProperties(value = {
+    "adjacentPlanets",
+    "isStronghold",
+    "symbol"
+})
 public class PlanetModel {
     private int number;
     
@@ -13,13 +19,13 @@ public class PlanetModel {
     
     private Symbol symbol;
 
-    private Set<PlanetModel> adjacentPlanets;
+    private HashSet<PlanetModel> adjacentPlanets;
 
     private int position;
 
     private boolean isStronghold;
 
-    private PlanetModel(int number, int fascismLevel, Symbol symbol, Set<PlanetModel> adjacentPlanets, int position, boolean isStronghold) {
+    private PlanetModel(int number, int fascismLevel, Symbol symbol, HashSet<PlanetModel> adjacentPlanets, int position, boolean isStronghold) {
         this.number = number;
         this.fascismLevel = fascismLevel;
         this.symbol = symbol;
@@ -29,7 +35,7 @@ public class PlanetModel {
     }
 
     public static PlanetModel create(int number, Symbol symbol, boolean isStronghold){
-        return new PlanetModel(number, 0, symbol, Set.of(), -1, isStronghold);
+        return new PlanetModel(number, 0, symbol, new HashSet<>(), -1, isStronghold);
     }
 
     public int getNumber() {
@@ -44,13 +50,13 @@ public class PlanetModel {
         return this.symbol;
     }
 
-    public Set<PlanetModel> getAdjacentPlanets() {
+    public HashSet<PlanetModel> getAdjacentPlanets() {
         return this.adjacentPlanets;
     }
 
     public boolean getIsStronghold(){ return this.isStronghold; }
 
-    public void setAdjacentPlanets(Set<PlanetModel> adjacentPlanets) { this.adjacentPlanets = adjacentPlanets; }
+    public void setAdjacentPlanets(HashSet<PlanetModel> adjacentPlanets) { this.adjacentPlanets = adjacentPlanets; }
 
     public int getPosition() {
         return this.position;
@@ -62,27 +68,27 @@ public class PlanetModel {
         this.fascismLevel += value;
     }
 
-    public static List<PlanetModel> generateNewPlanets(List<CatModel> cats){
-        List<PlanetModel> planets = generateDefaultPlanetList();
+    public static ArrayList<PlanetModel> generateNewPlanets(){
+        ArrayList<PlanetModel> planets = generateDefaultPlanetList();
         shufflePlanetPositions(planets);
         return planets;
     }
 
-    private static List<PlanetModel> generateDefaultPlanetList(){
+    private static ArrayList<PlanetModel> generateDefaultPlanetList(){
         Symbol[] symbols = {Symbol.EARS_SYMBOL, Symbol.WHISKERS_SYMBOL, Symbol.PAW_SYMBOL, Symbol.PAW_SYMBOL};
-        List<PlanetModel> planets = List.of();
+        ArrayList<PlanetModel> planets = new ArrayList<>();
         for(int i = 0; i<12; i++){
-            planets.add(create(i, symbols[i%4], i>7));
+            planets.add(create(i+1, symbols[i%4], i>7));
         }
         return planets;
     }
 
-    private static void shufflePlanetPositions(List<PlanetModel> planets){
+    private static void shufflePlanetPositions(ArrayList<PlanetModel> planets){
         Collections.shuffle(planets);
         for(int i = 0; i<12; i++){
             PlanetModel planet = planets.get(i);
             planet.setPosition(i + 1);
-            Set<PlanetModel> adjacentPlanets = Set.of();
+            HashSet<PlanetModel> adjacentPlanets = new HashSet<>();
             if(i%4 > 0){
                 adjacentPlanets.add(planets.get(i-1));
             }
@@ -98,4 +104,16 @@ public class PlanetModel {
             planet.setAdjacentPlanets(adjacentPlanets);
         }
     }
+
+
+    @Override
+    public String toString() {
+        return "{" +
+            " number='" + getNumber() + "'" +
+            ", fascismLevel='" + getFascismLevel() + "'" +
+            ", symbol='" + getSymbol() + "'" +
+            ", position='" + getPosition() + "'" +
+            "}";
+    }
+
 }

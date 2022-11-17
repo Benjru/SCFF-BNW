@@ -6,16 +6,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mounta.spacecats.controllers.gamestate.GameStateController;
 import com.mounta.spacecats.models.cats.CatModel;
+import com.mounta.spacecats.models.gamestate.GameStateModel;
 import com.mounta.spacecats.websocket.DTOs.CatInfo;
 
 @RestController
 public class WebSocketGameController {
+
     @Autowired
     SimpMessagingTemplate template;
 
@@ -24,15 +27,28 @@ public class WebSocketGameController {
 
     @PostMapping("/join")
 	public ResponseEntity<Void> sendMessage(@RequestBody CatInfo catName) {
-        template.convertAndSend("/game/catInfo", gameStateController.joinGame(catName.catName()));
+        CatModel cat = gameStateController.joinGame(catName.catName());
+        if(cat != null){
+            System.out.println(cat.toString());
+        template.convertAndSend("/game/catInfo", catName);
 		return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-    @SendTo("/game/catInfo")
-    public CatModel broadcastCatModle(@Payload CatModel catModel){
-        return catModel;
+    @SendTo("/game/catinfo")
+    public CatInfo broadcastCatModle(@Payload CatInfo catName){
+        return catName;
     }
 
+    @SendTo("/game/gameState")
+    @GetMapping("/gamestate")
+    public ResponseEntity<GameStateModel> getGameState() {
+        GameStateModel gameState = gameStateController.getGameState();
+        System.out.println(gameState);
+        return ResponseEntity.ok().body(gameState);
+    }
 
+    
     
 }

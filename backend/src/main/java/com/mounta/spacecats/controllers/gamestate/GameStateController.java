@@ -8,10 +8,9 @@ import com.mounta.spacecats.models.cats.CatModel;
 import com.mounta.spacecats.models.gamestate.GameStateModel;
 import com.mounta.spacecats.models.lobby.LobbyModel;
 import com.mounta.spacecats.models.planets.PlanetModel;
-import com.mounta.spacecats.util.CardConstants;
 import com.mounta.spacecats.util.PlayStateInfo;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -41,11 +40,11 @@ public class GameStateController {
         this.cardController = cardController;
     }
 
-    public List<CatModel> getPlayers(){
+    public ArrayList<CatModel> getPlayers(){
         return gameState.getCats();
     }
 
-    public List<PlanetModel> getPlanets(){
+    public ArrayList<PlanetModel> getPlanets(){
         return gameState.getPlanets();
     }
 
@@ -66,8 +65,8 @@ public class GameStateController {
         return card.getCardId();
     }
 
-    public String drawFromResistDeck(PlayStateInfo playStateInfo){
-        ResistCard card = gameState.drawResistCard(playStateInfo.cat());
+    public String drawFromResistDeck(CatModel cat){
+        ResistCard card = gameState.drawResistCard(cat);
         if(gameState.getResistCardDeck().isEmpty()){
             gameState.refillResistDeck();
         }
@@ -77,19 +76,31 @@ public class GameStateController {
     public void setupGame(){
         if(gameState == null){
             gameState = GameStateModel.create(lobby.getCats());
+            lobby.getCats().stream().forEach(cat -> {
+                drawFromResistDeck(cat);
+                drawFromResistDeck(cat);
+            });
         }
     }
 
     public CatModel joinGame(String catName){
         if(this.lobby.getCats().size() < 2 && lobby.getCats().stream().filter(cat -> cat.getName().equals(catName)).toList().size() == 0)
         {
-            CatModel cat = CatModel.create(catName, this.lobby.getCats().size());
-            this.lobby.addCat(cat);
-            if(this.lobby.getCats().size() == 2){
-                setupGame();
+            try{
+                CatModel cat = CatModel.create(catName, this.lobby.getCats().size());
+                this.lobby.addCat(cat);
+                if(this.lobby.getCats().size() == 2){
+                    setupGame();
+                }
+                return cat;
+            } catch(IllegalArgumentException e){
+                System.out.println("Invalid cat name " + catName + " provided");
             }
-            return cat;
         }
         return null;
+    }
+
+    public GameStateModel getGameState(){
+        return gameState;
     }
 }

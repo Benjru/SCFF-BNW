@@ -1,28 +1,33 @@
 package com.mounta.spacecats.models.gamestate;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mounta.spacecats.models.cards.GalaxyNewsCard;
 import com.mounta.spacecats.models.cards.ResistCard;
 import com.mounta.spacecats.models.cats.CatModel;
 import com.mounta.spacecats.models.planets.PlanetModel;
 import com.mounta.spacecats.util.CardConstants;
 
+@JsonIgnoreProperties(value = {
+    "galaxyNewsDeck",
+    "resistCardDeck"
+})
 public class GameStateModel {
     private ArrayDeque<GalaxyNewsCard> galaxyNewsDeck;
 
     private ArrayDeque<ResistCard> resistCardDeck;
 
-    private List<ResistCard> resistCardDiscard;
+    private ArrayList<ResistCard> resistCardDiscard;
 
-    private List<GalaxyNewsCard> galaxyNewsDiscard;
+    private ArrayList<GalaxyNewsCard> galaxyNewsDiscard;
 
-    private List<CatModel> cats;
+    private ArrayList<CatModel> cats;
 
-    private List<PlanetModel> planets;
+    private ArrayList<PlanetModel> planets;
 
     private CatModel currTurn;
 
@@ -33,8 +38,8 @@ public class GameStateModel {
 
     private GameStateModel(ArrayDeque<GalaxyNewsCard> galaxyNewsDeck,
                            ArrayDeque<ResistCard> resistCardDeck,
-                           List<CatModel> cats,
-                           List<PlanetModel> planets,
+                           ArrayList<CatModel> cats,
+                           ArrayList<PlanetModel> planets,
                            CatModel currTurn,
                            int actionsLeft,
                            int globalFascismScale) {
@@ -45,15 +50,25 @@ public class GameStateModel {
         this.currTurn = currTurn;
         this.actionsLeft = actionsLeft;
         this.globalFascismScale = globalFascismScale;
-        this.resistCardDiscard = List.of();
-        this.galaxyNewsDiscard = List.of();
+        this.resistCardDiscard = new ArrayList<>();
+        this.galaxyNewsDiscard = new ArrayList<>();
     }
 
-    public static GameStateModel create(List<CatModel> cats){
+    public static GameStateModel create(ArrayList<CatModel> cats){
+        ArrayList<PlanetModel> planets = PlanetModel.generateNewPlanets();
+        cats.stream().forEach(cat -> {
+            PlanetModel homePlanet = planets
+            .stream()
+            .filter(planet -> planet.getNumber() == CatModel.homePlanets.get(cat.getName()).intValue())
+            .toList()
+            .get(0);
+            cat.setHomePlanet(homePlanet);
+            cat.moveToPlanet(homePlanet);
+        });
         return new GameStateModel(CardConstants.newGalaxyDeck(),
                 CardConstants.newResistDeck(),
                 cats,
-                PlanetModel.generateNewPlanets(cats),
+                planets,
                 cats.get(ThreadLocalRandom.current().nextInt(0, cats.size())),
                 3,
                 1);
@@ -83,11 +98,11 @@ public class GameStateModel {
         return this.resistCardDeck;
     }
 
-    public List<CatModel> getCats() {
+    public ArrayList<CatModel> getCats() {
         return this.cats;
     }
 
-    public List<PlanetModel> getPlanets() {
+    public ArrayList<PlanetModel> getPlanets() {
         return this.planets;
     }
 
@@ -103,11 +118,11 @@ public class GameStateModel {
         return this.globalFascismScale;
     }
 
-    public List<ResistCard> getResistCardDiscard() {
+    public ArrayList<ResistCard> getResistCardDiscard() {
         return this.resistCardDiscard;
     }
 
-    public List<GalaxyNewsCard> getGalaxyNewsDiscard() {
+    public ArrayList<GalaxyNewsCard> getGalaxyNewsDiscard() {
         return this.galaxyNewsDiscard;
     }
 
@@ -132,7 +147,7 @@ public class GameStateModel {
         {
             Collections.shuffle(galaxyNewsDiscard);
             galaxyNewsDeck = new ArrayDeque<>(galaxyNewsDiscard);
-            galaxyNewsDiscard = List.of();
+            galaxyNewsDiscard = new ArrayList<>();
         }
         else
         {
@@ -146,7 +161,7 @@ public class GameStateModel {
         {
             Collections.shuffle(resistCardDiscard);
             resistCardDeck = new ArrayDeque<>(resistCardDeck);
-            resistCardDiscard = List.of();
+            resistCardDiscard = new ArrayList<>();
         }
         else
         {

@@ -1,6 +1,8 @@
 package com.mounta.spacecats.models.cats;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.mounta.spacecats.models.cards.ResistCard;
 import com.mounta.spacecats.models.effects.EffectModel;
@@ -12,7 +14,7 @@ public class CatModel {
 
     private String name;
 
-    private List<EffectModel> abilities;
+    private ArrayList<EffectModel> abilities;
 
     private int scratches;
 
@@ -22,12 +24,22 @@ public class CatModel {
 
     private long playerId;
 
-    private List<ResistCard> hand;
+    private ArrayList<ResistCard> hand;
 
     private static final int MAX_SCRATCHES = 2;
 
+    public static Map<String, Integer> homePlanets = Map.of("cj", 7,
+    "jasper", 6,
+    "nikita", 1,
+    "ophelia", 4,
+    "pepper", 2,
+    "pip", 8,
+    "sc", 3,
+    "sky", 5
+    );
 
-    private CatModel(String name, List<EffectModel> abilities, int scratches, PlanetModel homePlanet, PlanetModel currPlanet, long playerId, List<ResistCard> hand) {
+
+    private CatModel(String name, ArrayList<EffectModel> abilities, int scratches, PlanetModel homePlanet, PlanetModel currPlanet, long playerId, ArrayList<ResistCard> hand) {
         this.name = name;
         this.abilities = abilities;
         this.scratches = scratches;
@@ -38,14 +50,17 @@ public class CatModel {
     }
 
     public static CatModel create(String name, long playerId){
-        return new CatModel(name, List.of(), 0, null, null, playerId, List.of());
+        if(homePlanets.keySet().contains(name)){
+            return new CatModel(name, new ArrayList<>(), 0, null, null, playerId, new ArrayList<>());
+        }
+        throw new IllegalArgumentException("This is an invalid cat name!");
     }
 
     public String getName() {
         return this.name;
     }
 
-    public List<EffectModel> getAbilities() {
+    public ArrayList<EffectModel> getAbilities() {
         return this.abilities;
     }
 
@@ -65,7 +80,7 @@ public class CatModel {
         return this.playerId;
     }
 
-    public List<ResistCard> getHand(){
+    public ArrayList<ResistCard> getHand(){
         return this.hand;
     }
 
@@ -106,6 +121,19 @@ public class CatModel {
 
     public void setHomePlanet(PlanetModel planet){
         this.homePlanet = planet;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+            " name='" + getName() + "'" +
+            ", abilities='" + getAbilities() + "'" +
+            ", scratches='" + getScratches() + "'" +
+            ", homePlanet='" + getHomePlanet() + "'" +
+            ", currPlanet='" + getCurrPlanet() + "'" +
+            ", playerId='" + getPlayerId() + "'" +
+            ", hand='" + getHand() + "'" +
+            "}";
     }
 
 

@@ -1,5 +1,6 @@
 package com.mounta.spacecats.models.effects.GalaxyEffects;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.mounta.spacecats.models.cats.CatModel;
@@ -20,7 +21,7 @@ public class GalaxyNewsEffect_B implements EffectModel {
         // TODO Auto-generated method stub
         CatModel cat = playState.cat();
         PlanetModel planet = cat.getCurrPlanet();
-        List<CatModel> cats = playState.gameState().getCats();
+        ArrayList<CatModel> cats = playState.gameState().getCats();
 
         planet.updateFascismLevel(1);
 

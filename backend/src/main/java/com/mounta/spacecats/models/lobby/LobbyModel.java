@@ -1,14 +1,15 @@
 package com.mounta.spacecats.models.lobby;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.mounta.spacecats.models.cats.CatModel;
 
 public class LobbyModel {
-    private List<CatModel> cats;
+    private ArrayList<CatModel> cats;
 
     public LobbyModel(){
-        this.cats = List.of();
+        this.cats = new ArrayList<>();
     }
 
     public void addCat(CatModel cat){
@@ -17,7 +18,7 @@ public class LobbyModel {
         }
     }
 
-    public List<CatModel> getCats(){
+    public ArrayList<CatModel> getCats(){
         return cats;
     }
 }
