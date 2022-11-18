@@ -10,7 +10,7 @@ export default class ResistCard_F_Body extends ActionBody{
 
     getBody(state){
         // let cat = state.cats[state.currTurn];
-        let cat = state.myCat[0];
+        let cat = state.myCat;
         let body = {
             playerId: cat.playerId,
             planetPosition: -1,

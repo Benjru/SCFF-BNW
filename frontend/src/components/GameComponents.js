@@ -73,8 +73,8 @@ class TurnDisplay extends Component { // Knows current turn and renders current 
 
     render(){
         console.log(this.props.state.myCat);
-        //console.log("myCat hand (in TurnDisplay): " +  JSON.stringify(this.props.state.myCat[0].hand));
-        const myCat = this.props.state.myCat[0];
+        //console.log("myCat hand (in TurnDisplay): " +  JSON.stringify(this.props.state.myCat.hand));
+        const myCat = this.props.state.myCat;
         return(
             this.props.state. myCat.travelling?
             <div>

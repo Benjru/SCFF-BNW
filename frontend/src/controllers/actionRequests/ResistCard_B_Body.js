@@ -9,7 +9,7 @@ export default class ResistCard_B_Body extends ActionBody{
 
     getBody(state){
         // let cat = state.cats[state.currTurn]
-        let cat = state.myCat[0];
+        let cat = state.myCat;
         let targetCats = [cat.name];
         let body = {
             playerId: cat.playerId,

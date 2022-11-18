@@ -90,7 +90,7 @@ class FrontendGameStateController extends Component {
         })
         console.log("myCat name before setting: " + this.state.myCat.name);
         const myCat = resBody.cats.filter(thisCat => thisCat.name === this.state.myCat.name);
-        this.setMyCat(myCat);
+        this.setMyCat(myCat[0]);
         this.setState((prevState) => {
             return{
                 ...prevState,
