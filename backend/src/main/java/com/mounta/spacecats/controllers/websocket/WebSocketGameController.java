@@ -45,7 +45,7 @@ public class WebSocketGameController {
 	}
 
     @SendTo("/game/catinfo")
-    public CatInfo broadcastCatModle(@Payload CatInfo catName){
+    public CatInfo broadcastCatModel(@Payload CatInfo catName){
         return catName;
     }
 
