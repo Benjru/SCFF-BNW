@@ -157,7 +157,7 @@ public class GameStateController {
 
         if(actions.keySet().contains(actionInfo.actionName())){
             Action action = actions.get(actionInfo.actionName());
-            if(action.condition(playStateInfo)){
+            if(action.condition(playStateInfo) && gameState.getCurrTurn().equals(playStateInfo.cat())){
                 action.resolveAction(playStateInfo);
                 gameState.takeAction(actionInfo.actionName());
                 if(gameState.getActionsLeft() <= 0){
