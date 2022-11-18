@@ -54,6 +54,9 @@ public class WebSocketGameController {
     public ResponseEntity<GameStateModel> getGameState() {
         GameStateModel gameState = gameStateController.getGameState();
         //System.out.println(gameState);
+        if(gameState == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         return ResponseEntity.ok().body(gameState);
     }
 
