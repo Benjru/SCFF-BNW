@@ -123,16 +123,9 @@ class FrontendGameStateController extends Component {
                         globalFascismScale: resBody.globalFascismScale,
                         gameStarted: true
                     }, () => {
-                        this.state.planets.map((planet, i) => {
-                            const catOnPlanet = this.state.cats.find(cat => cat.currPlanet.number === planet.number);
-                            if (catOnPlanet){
-                                let planets = [...this.state.cats];
-                                let planet = {...this.state.planets[i]};
-                                planet.catOnPlanet = catOnPlanet;
-                                planets[i] = planet;
-                                this.setState({planets: planets});
-                            }
-                            return catOnPlanet;
+                        this.state.planets.forEach(planet => {
+                            const cats = this.state.cats.filter(cat => cat.currPlanet == i);
+                            planet.cats = cats;
                         })
                     }) // need a planet to know if a cat is on it
                 }
