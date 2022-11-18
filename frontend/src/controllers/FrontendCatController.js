@@ -11,10 +11,6 @@ class FrontendCatController extends Component{
         currCatSelecting: 1
     };
 
-    setMyCat = (cat) => {
-        this.props.setMyCat(cat);
-    }
-
     setCat = (inCat) => {
         const requestOptions = {
             method: 'POST',
@@ -27,31 +23,24 @@ class FrontendCatController extends Component{
                     alert("Another player has already selected this cat!");
                 }
                 else if (response.status === 200){
-                    fetch(`http://localhost:8080/cat/${inCat.name}`).then(thisCat => {
-                        this.setMyCat(thisCat);
-                        inCat = thisCat;
-                    }).then(resp => {
-                        this.setState((prevState) => { 
-                            return {
-                                allCats: removeItemFromArray(prevState.allCats, inCat),
-                                catSelected: true,
-                                currCatSelecting: prevState.currCatSelecting + 1,
-                                cats: [
-                                    ...prevState.cats, 
-                                    {
-                                        name: inCat.name,
-                                        playerId: prevState.currCatSelecting,
-                                        homePlanet: inCat.homePlanet,
-                                        currPlanet: inCat.homePlanet
-                                    }
-                                ],
-                                readyToStart: prevState.currCatSelecting === 2 ? true: false
-                            }
-                        });
-                    })
+                    this.setState((prevState) => { 
+                        return {
+                            allCats: removeItemFromArray(prevState.allCats, inCat),
+                            catSelected: true,
+                            currCatSelecting: prevState.currCatSelecting + 1,
+                            cats: [
+                                ...prevState.cats, 
+                                {
+                                    name: inCat.name,
+                                    homePlanet: inCat.homePlanet,
+                                    currPlanet: inCat.homePlanet
+                                }
+                            ],
+                            readyToStart: prevState.currCatSelecting === 2 ? true: false
+                        }
+                    });
                 }
             })
-        
         
     }
 
