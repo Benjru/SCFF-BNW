@@ -75,15 +75,17 @@ class RestockAction extends Component{
 
 class TravelAction extends Component{
 
-    travel = () => { // change to API call
-        console.log("traveling");
-        this.props.useAction('travel');
+    travel = (travelType) => { 
+        console.log("traveling with travelType: " + travelType);
+        if (this.props.state.currTurn === this.props.state.myCat.playerId){
+            this.props.travel(travelType);
+        }
     }
 
     render(){
         return(
             <div>
-                <button onClick={this.travel} className="actionButton">Travel</button>
+                <button onClick={() => {this.travel('travel')}} className="actionButton">Travel</button>
             </div>
         );
     }

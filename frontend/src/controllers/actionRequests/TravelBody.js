@@ -2,15 +2,17 @@ import ActionBody from "./ActionBody";
 
 export default class TravelBody extends ActionBody{
 
-    constructor(){
+    planetPosition;
+    constructor(planetPosition){
         super();
+        this.planetPosition = planetPosition
     }
 
     getBody(state){
         let cat = state.myCat;
         let body = {
             playerId: cat.playerId,
-            planetPosition: -1,
+            planetPosition: this.planetPosition,
             cardName: null,
             actionName: 'travel',
             symbol: null,

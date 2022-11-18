@@ -20,9 +20,9 @@ class GameBoard extends Component{ // with backend: remove planets from state va
                 {
                     this.props.state.planets.map(planet => (
                         <div className="boardSquare" key={planet} onClick={()=>{this.selectPlanet(planet.position)}}>
-                            <p className="planetLabel">{allPlanets[planet.number-1]}</p> 
+                            <p className="planetLabel">{`#${planet.number}`} {allPlanets[planet.number-1].name}</p> 
                             {/* component should take board square */}
-                            <Planet state={this.props.state} planet={planet} planetName={allPlanets[planet.number-1]}/>
+                            <Planet state={this.props.state} planet={planet} planetSymbol={allPlanets[planet.number-1].symbol} planetName={allPlanets[planet.number-1].name}/>
                             {console.log("planet.fascismLevel (in GameBoard): " + planet.fascismLevel)}
                             <FascismBar fascismLevel={planet.fascismLevel}/>
                         </div>
@@ -35,40 +35,20 @@ class GameBoard extends Component{ // with backend: remove planets from state va
 }
 
 class TurnDisplay extends Component { // Knows current turn and renders current cat's hand, and actions
-//     // Pass up to parent component 
-//     // updateHand = (catIndex, hand) => {
-//     //     this.props.updateHand(catIndex, hand)
-//     // }
 
-//     // // Pass up to parent component
-//     // updateFascismLevel = (index, fascismLevel) => {
-//     //     this.props.updateFascismLevel(index, fascismLevel);
-//     // }
-
-//     // Uses an action, if 3 have been used, update turn by calling function from parent
-    useAction = (action) => {
-        this.props.useAction(action);
+    useAction = (cardFromDeck) => {
+        if (cardFromDeck.name === 'teleport'){
+            this.travel('teleport')
+        }
+        else{
+            this.props.useAction(cardFromDeck);
+        }
     }
 
-    // checkPlanetSelected = () => {
-    //     if (!this.props.state.planetSelected){
-    //         window.setTimeout(this.checkPlanetSelected, 100);
-    //     }
-    //     else{
-    //         return true
-    //     }
-    // }
 
-    // useCard = (cardFromDeck) => {
-    //     if (cardFromDeck.name === 'teleport'){
-    //         this.props.travel();
-    //         if (this.checkPlanetSelected()){
-    //             console.log("calling useCard function")
-    //             this.props.useCard(cardFromDeck);
-    //         }
-    //     }
-    //     this.props.useCard(cardFromDeck);
-    // }
+    travel = (travelType) => {
+        this.props.travel(travelType);
+    }
 
 
     render(){
@@ -76,7 +56,7 @@ class TurnDisplay extends Component { // Knows current turn and renders current 
         //console.log("myCat hand (in TurnDisplay): " +  JSON.stringify(this.props.state.myCat.hand));
         const myCat = this.props.state.myCat;
         return(
-            this.props.state. myCat.travelling?
+            this.props.state.myCat.travelling?
             <div>
                 <h1 className="turnText">Select planet to travel to</h1>
             </div>:
@@ -114,8 +94,8 @@ class TurnDisplay extends Component { // Knows current turn and renders current 
                 <div className="break"/>
                 <div className="turnActionContainer">
                     <RestockAction state={this.props.state} useAction={this.useAction}/>
-                    <TravelAction state={this.props.state} useAction={this.useAction}/>
-                    <FightFascismAction state={this.props.state} useAction={this.useAction} />
+                    <TravelAction state={this.props.state} travel={this.travel}/>
+                    <FightFascismAction state={this.props.state} useAction={this.useAction}/>
                 </div>
             </div>
         );

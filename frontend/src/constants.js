@@ -36,7 +36,57 @@ const allResistCards = [{
     }
 ]
 
-const allPlanets=['scratchpost', 'litterbox', 'waterdish', 'frostnip', 'dustbunny', 'fishbowl', 'scratchstone', 'hotrock', 'hairball', 'cold-bath', 'laserlight', 'space-vet']
+const allPlanets=[
+    {
+        name: 'scratchpost',
+        symbol: 'EARS'
+    }, 
+    {
+        name: 'litterbox',
+        symbol: 'WHISKERS'
+    }, 
+    {
+        name: 'waterdish',
+        symbol:'PAW'
+    }, 
+    {
+        name: 'frostnip',
+        symbol:'TAIL'
+    }, 
+    {
+        name: 'dustbunny',
+        symbol:'EARS'
+    },
+    {
+        name: 'fishbowl'  ,
+        symbol: 'WHISKERS'
+    },
+    {
+        name: 'scratchstone',
+        symbol:'PAW'
+    }, 
+    {
+        name: 'hotrock',
+        symbol: 'TAIL'
+    },
+    {
+        name: 'hairball',
+        symbol: 'EARS'
+    },
+    {
+        name: 'cold-bath',
+        symbol: 'WHISKERS'
+    }, 
+    {
+        name: 'laserlight',
+        symbol: 'PAW'
+    }, 
+    {
+        name: 'space-vet',
+        symbol: 'TAIL'
+    }]
+
+        
 
 const allCats= [{
     name: 'cj',

@@ -27,17 +27,9 @@ class FrontendGameStateController extends Component {
     }
 
     selectPlanet = (planetPosition) => {
-        this.setState({travelling: false, planetSelected: planetPosition})
-    }
-
-    useAction = (action) => {
-        let body;
-        if (action.cardId){
-            body = this.getActionRequestBody(action.name);
-        } 
-        else{
-            body = this.getActionRequestBody(action);
-        }
+        console.log("selected planet at position: " + planetPosition)
+        let body = this.getActionRequestBody(this.state.myCat.travelType, planetPosition);
+        console.log("in selectPlanet. Request body: "  + body);
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -50,33 +42,70 @@ class FrontendGameStateController extends Component {
                     console.log(res)
                 }
             })
+        this.setState((prevState) => {
+            return{
+                myCat: {
+                    ...prevState.myCat,
+                    travelling: false
+                },
+                planetSelected: planetPosition
+            }
+        });
     }
 
-    travel = () => {
+    useAction = (action) => {
+        let body;
+        if (action.cardId){
+            body = this.getActionRequestBody(action.name);
+        } 
+        else{
+            body = this.getActionRequestBody(action);
+        }
+        if (action.name !== 'teleport' || action !== 'travel'){
+            const requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body
+            };
+            console.log("request body: " + body);
+            fetch("http://localhost:8080/action", requestOptions)
+                .then(res => {
+                    if (res.status === 400){
+                        console.log(res)
+                    }
+                })
+        }
+    }
+
+    travel = (travelType) => {
         // this.setState({travelling: true, planetSelected: false});
+        console.log("traveling with travelType: " + travelType);
         this.setState(prevState => {
             return{
                 myCat: {
                     ...prevState.myCat,
-                    travelling: true
+                    travelling: true,
+                    travelType: travelType
                 }
             }
+        }, () => {
+            console.log("travelType: " + this.state.myCat.travelType);
         })
     }
 
-    getActionRequestBody = (actionName) => {
+    getActionRequestBody = (actionName, planetPosition) => {
         const actionMap = new Map();
         actionMap.set('+1 liberation', new ResistCard_A_Body());
         actionMap.set('heal 1', new ResistCard_B_Body());
         actionMap.set('heal 2', new ResistCard_C_Body());
         actionMap.set('-2 fascists', new ResistCard_D_Body());
-        actionMap.set('teleport', new ResistCard_E_Body(this.state.planetSelected));
+        actionMap.set('teleport', new ResistCard_E_Body(planetPosition));
         actionMap.set('ears', new ResistCard_F_Body('Ears'));
         actionMap.set('paw', new ResistCard_F_Body('Paw'));
         actionMap.set('tail', new ResistCard_F_Body('Tail'));
         actionMap.set('whiskers', new ResistCard_F_Body('Whiskers'));
         actionMap.set('restock', new RestockBody());
-        actionMap.set('travel', new TravelBody());
+        actionMap.set('travel', new TravelBody(planetPosition));
         actionMap.set('fightFascism', new FightFascismBody());
         return actionMap.get(actionName).getBody(this.state);
     }
