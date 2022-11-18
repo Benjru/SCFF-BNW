@@ -44,8 +44,8 @@ class FrontendCatController extends Component{
                             readyToStart: prevState.currCatSelecting === 2 ? true: false
                         }
                     });
-                    fetch(`http://localhost:8080/cat/${inCat.name}`).then(response => {
-                        this.setMyCat(response);
+                    fetch(`http://localhost:8080/cat/${inCat.name}`).then(thisCat => {
+                        this.setMyCat(thisCat);
                     })
                 }
             })
