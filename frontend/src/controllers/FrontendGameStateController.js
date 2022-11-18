@@ -124,7 +124,7 @@ class FrontendGameStateController extends Component {
                         gameStarted: true
                     }, () => {
                         this.state.planets.forEach(planet => {
-                            const cats = this.state.cats.filter(cat => cat.currPlanet == i);
+                            const cats = this.state.cats.filter(cat => cat.currPlanet == planet.position);
                             planet.cats = cats;
                         })
                     }) // need a planet to know if a cat is on it
