@@ -72,12 +72,8 @@ public class WebSocketGameController {
 
     @GetMapping("/cat/{catName}")
     public ResponseEntity<CatModel> getCat(@PathVariable(value = "catName") String catName){
-        GameStateModel gameState = gameStateController.getGameState();
-        if(gameState == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
         try{
-            CatModel cat = gameState.getCats().stream().filter(thisCat -> thisCat.getName().equals(catName)).findFirst().orElseThrow(IllegalArgumentException::new);
+            CatModel cat = gameStateController.getLobby().getCats().stream().filter(thisCat -> thisCat.getName().equals(catName)).findFirst().orElseThrow(IllegalArgumentException::new);
             return ResponseEntity.ok().body(cat);
         }
         catch(IllegalArgumentException e){

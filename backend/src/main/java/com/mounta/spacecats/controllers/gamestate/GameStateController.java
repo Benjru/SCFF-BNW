@@ -55,6 +55,10 @@ public class GameStateController {
         return gameState.getGlobalFascismScale();
     }
 
+    public LobbyModel getLobby(){
+        return this.lobby;
+    }
+
 /**
  * The drawFromNewsDeck function draws a card from the news deck and executes its effects, and then discards it
  * If the news deck is empty, it refills it.
