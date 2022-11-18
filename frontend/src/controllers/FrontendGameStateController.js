@@ -105,8 +105,7 @@ class FrontendGameStateController extends Component {
 
     }
 
-    setGameState = (res) => {
-        const resBody = JSON.parse(res.body);
+    setGameState = (resBody) => {
         console.log("/game/gameState sent: " + resBody);
         console.log("resBody.planets: " + resBody.planets)
         resBody.planets.forEach(planet => {
@@ -139,7 +138,7 @@ class FrontendGameStateController extends Component {
             // });
             client.subscribe("/game/gameState", (res) => {
                 if (res.body && this.state.myCat){
-                    this.setGameState(res);
+                    this.setGameState(JSON.parse(res.body));
                 }
                 else{
                     console.log("No response");

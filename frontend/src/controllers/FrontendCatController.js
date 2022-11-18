@@ -47,13 +47,12 @@ class FrontendCatController extends Component{
                     
                     fetch('http://localhost:8080/gamestate')
                         .then(res => {
-                            return res.json();
-                        }).then(parsedRes => {
-                            if (parsedRes.status === 404){
-                                console.log(parsedRes);
+                            if (res.status === 404){
+                                console.log(res);
+                                return null;
                             }
-                            else if (parsedRes.status === 200){
-                                this.props.setGameState(parsedRes);
+                            else if (res.ok){
+                                res.json().then(body => this.props.setGameState(body));
                             }
                         })
                 }
