@@ -30,7 +30,7 @@ class FrontendGameStateController extends Component {
         this.setState({travelling: false, planetSelected: planetPosition})
     }
 
-    useCard = (action) => {
+    useAction = (action) => {
         let body;
         if (action.cardId){
             body = this.getActionRequestBody(action.name);
@@ -139,7 +139,7 @@ class FrontendGameStateController extends Component {
     render(){
         return (
             <div>
-                <GameView state={this.state} setGameState={this.setGameState} useCard={this.useCard} selectPlanet={this.selectPlanet} setMyCat={this.setMyCat} travel={this.travel}/>
+                <GameView state={this.state} setGameState={this.setGameState} useAction={this.useAction} selectPlanet={this.selectPlanet} setMyCat={this.setMyCat} travel={this.travel}/>
             </div>
         );
     }

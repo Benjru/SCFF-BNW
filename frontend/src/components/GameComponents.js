@@ -46,33 +46,33 @@ class TurnDisplay extends Component { // Knows current turn and renders current 
 //     // }
 
 //     // Uses an action, if 3 have been used, update turn by calling function from parent
-    useAction = (actionName) => {
-        this.props.useAction(actionName);
+    useAction = (action) => {
+        this.props.useAction(action);
     }
 
-    checkPlanetSelected = () => {
-        if (!this.props.state.planetSelected){
-            window.setTimeout(this.checkPlanetSelected, 100);
-        }
-        else{
-            return true
-        }
-    }
+    // checkPlanetSelected = () => {
+    //     if (!this.props.state.planetSelected){
+    //         window.setTimeout(this.checkPlanetSelected, 100);
+    //     }
+    //     else{
+    //         return true
+    //     }
+    // }
 
-    useCard = (cardFromDeck) => {
-        if (cardFromDeck.name === 'teleport'){
-            this.props.travel();
-            if (this.checkPlanetSelected()){
-                console.log("calling useCard function")
-                this.props.useCard(cardFromDeck);
-            }
-        }
-        this.props.useCard(cardFromDeck);
-    }
+    // useCard = (cardFromDeck) => {
+    //     if (cardFromDeck.name === 'teleport'){
+    //         this.props.travel();
+    //         if (this.checkPlanetSelected()){
+    //             console.log("calling useCard function")
+    //             this.props.useCard(cardFromDeck);
+    //         }
+    //     }
+    //     this.props.useCard(cardFromDeck);
+    // }
 
 
     render(){
-        console.log(this.props.state.myCat);
+        console.log("myCat: (in turn display)" + JSON.stringify(this.props.state.myCat));
         console.log("myCat hand (in TurnDisplay): " +  JSON.stringify(this.props.state.myCat[0].hand));
         const myCat = this.props.state.myCat[0];
         return(
@@ -102,7 +102,7 @@ class TurnDisplay extends Component { // Knows current turn and renders current 
                             return(
                                 <img
                                     src={`/resist_cards/${cardName}-card.jpg`}
-                                    onClick={() => this.useCard(cardFromDeck)}
+                                    onClick={() => this.useAction(cardFromDeck)}
                                     alt={card}
                                     key={Math.random()}
                                     className="card"

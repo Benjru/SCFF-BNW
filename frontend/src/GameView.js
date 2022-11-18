@@ -19,12 +19,8 @@ class GameView extends Component {
     this.props.setGameState(res);
   }
 
-  useCard = (cardFromDeck) => {
-    this.props.useCard(cardFromDeck)
-  }
-
-  useAction = (actionName) => {
-    this.props.useAction(actionName);
+  useAction = (action) => {
+    this.props.useAction(action);
   } 
 
   selectPlanet = (planetPosition) => {
@@ -45,7 +41,7 @@ class GameView extends Component {
               <p className='turnText'>P{this.props.state.currTurn+1}'s turn</p>
             <div className='gameViewContainer'>
               <GameBoard state={this.props.state} selectPlanet={this.selectPlanet}/>
-              <TurnDisplay state={this.props.state} useCard={this.useCard} travel={this.travel} useAction={this.useAction}/>
+              <TurnDisplay state={this.props.state} useAction={this.useAction} travel={this.travel}/>
             </div>
           </React.Fragment>:
           <FrontendCatController setMyCat={this.setMyCat} setGameState={this.setGameState} startGame={this.startGame}/>
