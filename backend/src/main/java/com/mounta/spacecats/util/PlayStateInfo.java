@@ -14,8 +14,8 @@ public record PlayStateInfo(CatModel cat, List<CatModel> targetCats, PlanetModel
         return "{" +
             " cat='" + cat.getName() + "'" + 
             " targetCats='" +  ((targetCats == null) ? null : targetCats.stream().map(CatModel::getName).toList().toString()) + "'" +
-            " targetPlanet='" + targetPlanet.getPosition() + "'" +
-            " playedCard=" + playedCard.toString() + "'" +
+            " targetPlanet='" + ((targetPlanet == null) ? null : targetPlanet.getPosition()) + "'" +
+            " playedCard=" + ((playedCard == null) ? null : playedCard.toString()) + "'" +
             "}";
     }
 }
