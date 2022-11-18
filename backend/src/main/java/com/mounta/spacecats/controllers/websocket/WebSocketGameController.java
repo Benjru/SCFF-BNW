@@ -62,8 +62,12 @@ public class WebSocketGameController {
 
     @PostMapping("/action")
     public ResponseEntity<Void> takeAction(@RequestBody ActionInfo actionInfo){
+        if(gameStateController.getGameState() == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         try{
             gameStateController.takeAction(actionInfo);
+            template.convertAndSend("/game/gameState", gameStateController.getGameState());
 
             return new ResponseEntity<>(HttpStatus.OK);
         }
