@@ -4,7 +4,7 @@ import React from "react";
 const Planet = (props) => ( // Planet image + cat image on top
     <div>
         {
-            props.planet.catOnPlanet?
+            props.planet.cats.length === 0?
             <React.Fragment>
                 <img className="planetImage"
                     src={`/planets/${props.planetName}-planet.jpg`} 
@@ -15,8 +15,13 @@ const Planet = (props) => ( // Planet image + cat image on top
                 <div className="ppiContainer">
 
                     <div className="catPlanetIndicator">
-                        {/* <h1>{props.planet.catOnPlanet.name}</h1> */}
-                        <h1>catOnPlanet</h1>
+                        {/* <h1>catOnPlanet</h1> */}
+                        {
+                            props.planet.cats.map(catOnPlanet => (
+                                // console.log("Inside Planet component. catOnPlant: " + catOnPlanet.name)
+                                <h1>{catOnPlanet.name}</h1>
+                            ))
+                        }
                     </div>
 
                     <img className="planetImage"

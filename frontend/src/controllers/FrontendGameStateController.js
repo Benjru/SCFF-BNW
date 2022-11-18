@@ -31,78 +31,66 @@ class FrontendGameStateController extends Component {
         this.setState({myCat: cat});
     }
 
-    updateTurn = (turn) => {
-        this.setState((prevState) => {
-        return {
-            currTurn: turn
-        }
-        });
-    }
-
-    updateHand = (catIndex, hand) => {
-        // 1. Make a shallow copy of the cats arr
-        let cats = [...this.state.cats];
-        // 2. Make a shallow copy of the cat
-        let cat = {...cats[catIndex]};
-        // 3. Replace the cat's hand property
-        cat.hand = hand;
-        // 4. Put it back into our array.
-        cats[catIndex] = cat;
-        // 5. Set the state to our new copy
-        this.setState({cats});
-    }
-
-    updateFascismLevel = (boardSquareIndex, fascismLevel) => {
-        let boardSquares = [...this.state.boardSquares];
-        let boardSquare = {...this.state.boardSquares[boardSquareIndex]};
-
-        boardSquare.fascismLevel = fascismLevel;
-        boardSquares[boardSquareIndex] = boardSquare;
-
-        this.setState({boardSquares: boardSquares});
-    }
-
     
-    createBoardSquares() {
-        // generate board and set state
-        const cats = this.state.cats;
-        const cat1 = cats[0];
-        const cat2 = cats[1];
 
-        const boardSquares = [];
+    useCard = (cardFromDeck) => {
+        let cat = this.state.cats[this.state.currTurn]
+        let planet = this.state.planets.filter(aPlanet => aPlanet.position === cat.currPlanet);
 
-        for (let i = 0; i < this.state.planets.length; i++){
-            //const randomPlanet = this.state.planets[Math.floor(Math.random() * Array.length)];
-            const planet = this.state.planets[i];
-            let catOnSquare = "";
-            let fascismLevel = 0;
-            
-            
-            if (i%2 === 0){
-                fascismLevel++;
-            }
-            if (cat1.homePlanet === planet){
-                console.log("cat1 home planet: " + planet); // start their cat here
-                catOnSquare = cat1;
-                fascismLevel++;
-            }
-            if (cat2.homePlanet === planet){
-                console.log("cat2 home planet: " + planet) // start their cat here
-                catOnSquare = cat2;
-                fascismLevel++;
-            }
-
-            const boardSquare = {
-                planet: planet,
-                catOnSquare: catOnSquare,
-                fascismLevel: fascismLevel
-            }
-            console.log(boardSquare);
-            boardSquares.push(boardSquare);
+        console.log("logging cat: " + JSON.stringify(cat));
+        console.log("logging cat.currPlanet: " + JSON.stringify(cat.currPlanet));
+        console.log("logging this.state.planets.position: " + JSON.stringify(planet.position));
+        let body = {
+            playerId: cat.playerId,
+            planetPosition: -1,
+            cardName: cardFromDeck.name,
+            actionName: 'playCard',
+            targetCats: null
+        };
+        if (cardFromDeck.cardId === 'ResistCard_A'){
+            body.planetPosition = planet.position;
         }
-
-        return boardSquares;
-
+        else if (cardFromDeck.cardId === 'ResistCard_B'){
+            body.targetCats = [cat.name];
+        }
+        else if (cardFromDeck.cardId === 'ResistCard_C'){
+            body.targetCats = [cat.name, cat.name];
+        }
+        else if (cardFromDeck.cardId === 'ResistCard_D'){
+            body.planetPosition = planet.position;
+        }
+        // else if (cardFromDeck.cardId === 'ResistCard_E'){ 
+        //     body.planetPosition = planet.position;
+        // }
+        else if (cardFromDeck.cardId === 'ResistCard_F_EARS'){
+            body.symbol = 'EARS';
+            body.planetPosition = planet.position;
+        }
+        else if (cardFromDeck.cardId === 'ResistCard_F_PAW'){
+            body.symbol = 'PAW'
+            body.planetPosition = planet.position; 
+        }
+        else if (cardFromDeck.cardId === 'ResistCard_F_TAIL'){
+            body.symbol = 'TAIL'
+            body.planetPosition = planet.position;
+        }
+        else if (cardFromDeck.cardId === 'ResistCard_F_WHISKERS'){
+            body.symbol = 'WHISKERS'
+            body.planetPosition = planet.position;
+        }
+        body = JSON.stringify(body);
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body
+        };
+        console.log("request body: " + body);
+        fetch("http://localhost:8080/action", requestOptions)
+            .then(res => {
+                if (res.status === 400){
+                    console.log(res)
+                }
+            })
     }
 
     setGameState = (resBody) => {
@@ -132,10 +120,6 @@ class FrontendGameStateController extends Component {
     componentDidMount(){
         let onConnected = () => {
             console.log("connected");
-            // client.subscribe('/startGame', this.startGame());
-            // client.subscribe('/game/catInfo', (res)=>{
-            //     console.log(res);
-            // });
             client.subscribe("/game/gameState", (res) => {
                 if (res.body && this.state.myCat){
                     this.setGameState(JSON.parse(res.body));
@@ -164,7 +148,7 @@ class FrontendGameStateController extends Component {
     render(){
         return (
             <div>
-                <GameView state={this.state} setGameState={this.setGameState} setMyCat={this.setMyCat}/>
+                <GameView state={this.state} setGameState={this.setGameState} useCard={this.useCard} setMyCat={this.setMyCat}/>
             </div>
         );
     }

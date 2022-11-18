@@ -1,50 +1,39 @@
-const allResistCards = [
-    '+1 liberation',
-    '+1 liberation',
-    '+1 liberation',
-    '+1 liberation',
-    '+1 liberation',
-    '+1 liberation',
-    '+1 liberation',
-    '+1 liberation',
-    'heal 1',
-    'heal 1',
-    'heal 1',
-    'heal 1',
-    'heal 1',
-    'heal 1',
-    'heal 2',
-    'heal 2',
-    'heal 2',
-    'heal 2',
-    '-2 fascists',
-    '-2 fascists',
-    '-2 fascists',
-    '-2 fascists',
-    '-2 fascists',
-    'teleport',
-    'teleport',
-    'teleport',
-    'ears',
-    'paw',
-    'tail',
-    'whiskers',
-    'ears',
-    'paw',
-    'tail',
-    'whiskers',
-    'ears',
-    'paw',
-    'tail',
-    'whiskers',
-    'ears',
-    'paw',
-    'tail',
-    'whiskers',
-    'ears',
-    'paw',
-    'tail',
-    'whiskers',
+const allResistCards = [{
+        cardId: 'ResistCard_A',
+        name: '+1 liberation'
+    },
+    {
+        cardId: 'ResistCard_B',
+        name: 'heal 1'
+    },
+    {
+        cardId: 'ResistCard_C',
+        name: 'heal 2'
+    },
+    {
+        cardId: 'ResistCard_D',
+        name: '-2 fascists'
+    },
+    {
+        cardId: 'ResistCard_E',
+        name: 'teleport'
+    },
+    {
+        cardId: 'ResistCard_F_PAW',
+        name: 'paw'
+    },
+    {
+        cardId: 'ResistCard_F_WHISKERS',
+        name: 'whiskers'
+    },
+    {
+        cardId: 'ResistCard_F_EARS',
+        name: 'ears'
+    },
+    {
+        cardId: 'ResistCard_F_TAIL',
+        name: 'tail'
+    }
 ]
 
 const allPlanets=['cold-bath', 'dustbunny', 'fishbowl', 'frostnip', 'hairball', 'hotrock', 'laserlight', 'litterbox', 'scratchpost', 'scratchstone', 'space-vet', 'waterdish']
