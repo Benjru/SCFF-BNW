@@ -13,7 +13,7 @@ public record PlayStateInfo(CatModel cat, List<CatModel> targetCats, PlanetModel
     public String toString(){
         return "{" +
             " cat='" + cat.getName() + "'" + 
-            " targetCats='" +  targetCats.stream().map(CatModel::getName).toList().toString() + "'" +
+            " targetCats='" +  ((targetCats == null) ? null : targetCats.stream().map(CatModel::getName).toList().toString()) + "'" +
             " targetPlanet='" + targetPlanet.getPosition() + "'" +
             " playedCard=" + playedCard.toString() + "'" +
             "}";

@@ -5,12 +5,12 @@ export default class ResistCard_F_Body extends ActionBody{
     constructor(symbol){
         super();
         this.cardName = "ResistCard_F";
-        this.symbol = symbol;
+        this.symbol = symbol.toUpperCase();
     }
 
     getBody(state){
         // let cat = state.cats[state.currTurn];
-        let cat = state.myCat;
+        let cat = state.myCat[0];
         let body = {
             playerId: cat.playerId,
             planetPosition: -1,
