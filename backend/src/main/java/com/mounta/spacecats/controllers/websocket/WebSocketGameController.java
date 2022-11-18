@@ -29,6 +29,7 @@ public class WebSocketGameController {
 
     @PostMapping("/join")
 	public ResponseEntity<Void> joinGame(@RequestBody CatInfo catName) {
+        System.out.println("Received join request from cat with name " + catName);
         if(gameStateController.getGameState() != null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -39,8 +40,10 @@ public class WebSocketGameController {
         if(gameStateController.getGameState() != null){
             template.convertAndSend("/game/gameState", gameStateController.getGameState());
         }
+        System.out.println("Successfully added cat with name " + catName );
 		return new ResponseEntity<>(HttpStatus.OK);
         }
+        System.out.println("Could not add cat with name " + catName);
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 
@@ -63,9 +66,11 @@ public class WebSocketGameController {
     @PostMapping("/action")
     public ResponseEntity<Void> takeAction(@RequestBody ActionInfo actionInfo){
         if(gameStateController.getGameState() == null){
+            System.out.println("Received request to take action, but the game hasn't started yet");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         try{
+            System.out.println("Received request to take action " + actionInfo.toString());
             gameStateController.takeAction(actionInfo);
             template.convertAndSend("/game/gameState", gameStateController.getGameState());
 
