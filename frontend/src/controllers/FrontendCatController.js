@@ -29,6 +29,7 @@ class FrontendCatController extends Component{
                 else if (response.status === 200){
                     fetch(`http://localhost:8080/cat/${inCat.name}`).then(thisCat => {
                         this.setMyCat(thisCat);
+                        inCat = thisCat;
                     }).then(resp => {
                         this.setState((prevState) => { 
                             return {
