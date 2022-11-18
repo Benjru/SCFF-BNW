@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import CatView from "../views/CatView";
-import { allCats, allResistCards } from "../constants";
+import { allCats } from "../constants";
 import {removeItemFromArray} from "../util/helpers";
 
 class FrontendCatController extends Component{
@@ -59,23 +59,6 @@ class FrontendCatController extends Component{
             })
         
     }
-
-    //readyToStart not working
-
-    // createHand = () => { // change to get hand from backend
-    //     const hand = [];
-    //     for (let j = 0; j < 2; j++){
-    //         const randomPosition = Math.floor(Math.random() * allResistCards.length);
-    //         console.log(randomPosition)
-    //         const card = allResistCards[randomPosition];
-    //         hand.push(card);
-    //     }
-    //     return hand;
-    // }
-
-    // startGame = () => {
-    //     this.props.startGame(this.state.cats);
-    // }
 
     render(){
         return(

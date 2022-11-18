@@ -1,6 +1,5 @@
 //FrontendCatController 
 import React, { Component } from "react";
-import { allResistCards } from "../constants";
 
 class SelectCat extends Component{
 
@@ -56,7 +55,6 @@ class SelectCat extends Component{
     }
 }
 
-//Actions, click card to fight fascism
 
 class RestockAction extends Component{
 

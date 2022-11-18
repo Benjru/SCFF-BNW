@@ -6,10 +6,6 @@ const Planet = (props) => ( // Planet image + cat image on top
         {
             props.planet.cats.length === 0?
             <React.Fragment>
-                {/* <img className="planetImage"
-                    src={`/planets/${props.planetName}-planet.jpg`} 
-                    alt={props.planetName}
-                /> */}
                 {
                     console.log("symbol: " + JSON.stringify(props.planetSymbol))
                 }

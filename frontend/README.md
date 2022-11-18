@@ -1,4 +1,8 @@
-Frontend: Space Cats Fight Fascism
+                                                                            Frontend: Space Cats Fight Fascism
+
+***********
+
+
 
 The frontend is written in Javascript, using the React library. 
 
@@ -32,7 +36,6 @@ The controllers have states. When states are updated, the corresponding componen
 
 //// FrontendCatController: 
 
-Responsible for the SelectCat component, and the RestockAction, TravelAction, and FightFascismAction components. 
+Responsible for the SelectCat component. Cat selection happens exclusively in the frontend. When a cat is selected, a post request is made to the /join endpoint in the backend,
 
-SelectCat: Displays selection screen by mapping through all cats, and creating JSX elements with their corresponding images in the correct layout. SelectCat must know the current turn in order to update.... 
 

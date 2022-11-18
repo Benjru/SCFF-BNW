@@ -134,7 +134,7 @@ class FrontendGameStateController extends Component {
             }
         }, () => {
             console.log(this.state);
-        }); // need a planet to know if a cat is on it
+        }); 
     }
 
     componentDidMount(){
