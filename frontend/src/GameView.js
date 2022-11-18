@@ -23,6 +23,14 @@ class GameView extends Component {
     this.props.useCard(cardFromDeck)
   }
 
+  selectPlanet = (planetPosition) => {
+    this.props.selectPlanet(planetPosition);
+  }
+
+  travel = () => {
+    this.props.travel();
+  }
+
   render() {
     return (
       <div className="App">
@@ -32,8 +40,8 @@ class GameView extends Component {
             {console.log("this.props.state: " + JSON.stringify(this.props.state))}
               <p className='turnText'>P{this.props.state.currTurn+1}'s turn</p>
             <div className='gameViewContainer'>
-              <GameBoard state={this.props.state}/>
-              <TurnDisplay state={this.props.state} useCard={this.useCard} useAction={this.useAction}/>
+              <GameBoard state={this.props.state} selectPlanet={this.selectPlanet}/>
+              <TurnDisplay state={this.props.state} useCard={this.useCard} travel={this.travel} useAction={this.useAction}/>
             </div>
           </React.Fragment>:
           <FrontendCatController setMyCat={this.setMyCat} setGameState={this.setGameState} startGame={this.startGame}/>

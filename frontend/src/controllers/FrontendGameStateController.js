@@ -2,83 +2,33 @@ import React, { Component } from "react";
 import GameView from "../GameView";
 import {Client} from '@stomp/stompjs';
 import { allPlanets } from "../constants";
+import ResistCard_A_Body from "./cardRequests/ResistCard_A_Body";
+import ResistCard_B_Body from "./cardRequests/ResistCard_B_Body";
+import ResistCard_C_Body from "./cardRequests/ResistCard_C_Body";
+import ResistCard_D_Body from "./cardRequests/ResistCard_D_Body";
+import ResistCard_E_Body from "./cardRequests/ResistCard_E_Body";
+import ResistCard_F_Body from "./cardRequests/ResistCard_F_Body";
 
 const SOCKET_URL = 'ws://localhost:8080/ws-message';
 
 class FrontendGameStateController extends Component {
     state = {
         planets: allPlanets,
-        boardSquares: [],
         cats: [],
-        gameStarted: false
+        gameStarted: false,
     };
     
-    // startGame = () => {
-    //     // // generate game board
-    //     // this.setState({
-    //     //     cats,
-    //     //     gameStarted: true,
-    //     //     currTurn: 1
-    //     // }, () => {
-    //     // this.setState({boardSquares:  this.createBoardSquares()})
-    //     // })
-    //     // // fetch('http://localhost:8080/gamestate')
-    //     this.setState({
-    //         gameStarted: true,
-    //     });
-    // }
+    
     setMyCat = (cat) => {
         this.setState({myCat: cat});
     }
 
-    
+    selectPlanet = (planetPosition) => {
+        this.setState({travelling: false, planetSelected: planetPosition})
+    }
 
     useCard = (cardFromDeck) => {
-        let cat = this.state.cats[this.state.currTurn]
-        let planet = this.state.planets.filter(aPlanet => aPlanet.position === cat.currPlanet);
-
-        console.log("logging cat: " + JSON.stringify(cat));
-        console.log("logging cat.currPlanet: " + JSON.stringify(cat.currPlanet));
-        console.log("logging this.state.planets.position: " + JSON.stringify(planet.position));
-        let body = {
-            playerId: cat.playerId,
-            planetPosition: -1,
-            cardName: cardFromDeck.name,
-            actionName: 'playCard',
-            targetCats: null
-        };
-        if (cardFromDeck.cardId === 'ResistCard_A'){
-            body.planetPosition = planet.position;
-        }
-        else if (cardFromDeck.cardId === 'ResistCard_B'){
-            body.targetCats = [cat.name];
-        }
-        else if (cardFromDeck.cardId === 'ResistCard_C'){
-            body.targetCats = [cat.name, cat.name];
-        }
-        else if (cardFromDeck.cardId === 'ResistCard_D'){
-            body.planetPosition = planet.position;
-        }
-        // else if (cardFromDeck.cardId === 'ResistCard_E'){ 
-        //     body.planetPosition = planet.position;
-        // }
-        else if (cardFromDeck.cardId === 'ResistCard_F_EARS'){
-            body.symbol = 'EARS';
-            body.planetPosition = planet.position;
-        }
-        else if (cardFromDeck.cardId === 'ResistCard_F_PAW'){
-            body.symbol = 'PAW'
-            body.planetPosition = planet.position; 
-        }
-        else if (cardFromDeck.cardId === 'ResistCard_F_TAIL'){
-            body.symbol = 'TAIL'
-            body.planetPosition = planet.position;
-        }
-        else if (cardFromDeck.cardId === 'ResistCard_F_WHISKERS'){
-            body.symbol = 'WHISKERS'
-            body.planetPosition = planet.position;
-        }
-        body = JSON.stringify(body);
+        const body = this.getCardRequestBody(cardFromDeck.name);
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -93,6 +43,24 @@ class FrontendGameStateController extends Component {
             })
     }
 
+    travel = () => {
+        this.setState({travelling: true, planetSelected: false});
+    }
+
+    getCardRequestBody = (cardName) => {
+        const cardMap = new Map();
+        cardMap.set('+1 liberation', new ResistCard_A_Body());
+        cardMap.set('heal 1', new ResistCard_B_Body());
+        cardMap.set('heal 2', new ResistCard_C_Body());
+        cardMap.set('-2 fascists', new ResistCard_D_Body());
+        cardMap.set('teleport', new ResistCard_E_Body(this.state.planetSelected));
+        cardMap.set('ears', new ResistCard_F_Body('Ears'));
+        cardMap.set('paw', new ResistCard_F_Body('Paw'));
+        cardMap.set('tail', new ResistCard_F_Body('Tail'));
+        cardMap.set('whiskers', new ResistCard_F_Body('Whiskers'));
+        return cardMap.get(cardName).getBody(this.state);
+    }
+
     setGameState = (resBody) => {
         console.log("/game/gameState sent: " + resBody);
         console.log("resBody.planets: " + resBody.planets)
@@ -103,15 +71,18 @@ class FrontendGameStateController extends Component {
         console.log("myCat name before setting: " + this.state.myCat.name);
         const myCat = resBody.cats.filter(thisCat => thisCat.name === this.state.myCat.name);
         this.setMyCat(myCat);
-        this.setState({
-            resistCardDiscard: resBody.resistCardDiscard,
-            galaxyNewsDiscard: resBody.galaxyNewsDiscard,
-            cats: resBody.cats,
-            planets: resBody.planets,
-            currTurn: resBody.currTurn,
-            actionsLeft: resBody.actionsLeft,
-            globalFascismScale: resBody.globalFascismScale,
-            gameStarted: true
+        this.setState((prevState) => {
+            return{
+                ...prevState,
+                resistCardDiscard: resBody.resistCardDiscard,
+                galaxyNewsDiscard: resBody.galaxyNewsDiscard,
+                cats: resBody.cats,
+                planets: resBody.planets,
+                currTurn: resBody.currTurn,
+                actionsLeft: resBody.actionsLeft,
+                globalFascismScale: resBody.globalFascismScale,
+                gameStarted: true
+            }
         }, () => {
             console.log(this.state);
         }); // need a planet to know if a cat is on it
@@ -148,7 +119,7 @@ class FrontendGameStateController extends Component {
     render(){
         return (
             <div>
-                <GameView state={this.state} setGameState={this.setGameState} useCard={this.useCard} setMyCat={this.setMyCat}/>
+                <GameView state={this.state} setGameState={this.setGameState} useCard={this.useCard} selectPlanet={this.selectPlanet} setMyCat={this.setMyCat} travel={this.travel}/>
             </div>
         );
     }

@@ -7,19 +7,32 @@ import { allPlanets, allResistCards } from "../constants";
 
 class GameBoard extends Component{ // with backend: remove planets from state variable and then in componentDidMount make API call to get planets, add to setState
 
+    selectPlanet = (planetPosition) => {
+        this.props.selectPlanet(planetPosition);
+    }
 
     render() {
         return (
             <div className="gameBoard">
+                {console.log("travelling? -> " + this.props.state.travelling)}
                 {
                     this.props.state.planets.map(planet => (
-                        <div className="boardSquare" key={planet}>
+                        
+                        this.props.state.travelling?
+                        <div className="boardSquare" key={planet} onClick={()=>{this.selectPlanet(planet.position)}}>
                             <p className="planetLabel">{allPlanets[planet.number-1]}</p> 
                             {/* component should take board square */}
                             <Planet state={this.props.state} planet={planet} planetName={allPlanets[planet.number-1]}/>
                             {console.log("planet.fascismLevel (in GameBoard): " + planet.fascismLevel)}
                             <FascismBar fascismLevel={planet.fascismLevel}/>
+                        </div>:
+                        <div className="boardSquare" key={planet}>
+                            <p className="planetLabel">{allPlanets[planet.number-1]}</p> 
+                            {/* component should take board square */}
+                            <Planet state={this.props.state} planet={planet} planetName={allPlanets[planet.number-1]}/>
+                            <FascismBar fascismLevel={planet.fascismLevel}/>
                         </div>
+
                     ))
                 }
             </div>
@@ -91,8 +104,23 @@ class TurnDisplay extends Component { // Knows current turn and renders current 
 //     //     this.useAction();
 //     // }
 
+    checkPlanetSelected = () => {
+        if (!this.props.state.planetSelected){
+            window.setTimeout(this.checkPlanetSelected, 100);
+        }
+        else{
+            return true
+        }
+    }
+
     useCard = (cardFromDeck) => {
-        this.props.useCard(cardFromDeck);
+        if (cardFromDeck.name === 'teleport'){
+            this.props.travel();
+            if (this.checkPlanetSelected()){
+                console.log("calling useCard function")
+                this.props.useCard(cardFromDeck);
+            }
+        }
     }
 
 
@@ -101,6 +129,10 @@ class TurnDisplay extends Component { // Knows current turn and renders current 
         console.log("myCat hand (in TurnDisplay): " +  JSON.stringify(this.props.state.myCat[0].hand));
         const myCat = this.props.state.myCat[0];
         return(
+            this.props.state.travelling?
+            <div>
+                <h1 className="turnText">Select planet to travel to</h1>
+            </div>:
             <div className="turnContainer">
                 <p className="centeredText">P{myCat.playerId+1}</p>
                 <img
