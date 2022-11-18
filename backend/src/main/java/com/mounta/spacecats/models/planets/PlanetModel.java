@@ -34,7 +34,7 @@ public class PlanetModel {
     }
 
     public static PlanetModel create(int number, Symbol symbol, boolean isStronghold){
-        return new PlanetModel(number, 0, symbol, new HashSet<>(), -1, isStronghold);
+        return new PlanetModel(number, 1 - (number % 2), symbol, new HashSet<>(), -1, isStronghold);
     }
 
     public int getNumber() {
