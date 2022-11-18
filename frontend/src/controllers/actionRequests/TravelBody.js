@@ -7,7 +7,7 @@ export default class TravelBody extends ActionBody{
     }
 
     getBody(state){
-        let cat = state.cats[state.currTurn];
+        let cat = state.myCat;
         let body = {
             playerId: cat.playerId,
             planetPosition: -1,

@@ -7,7 +7,7 @@ export default class FightFascismBody extends ActionBody{
     }
 
     getBody(state){
-        let cat = state.cats[state.currTurn];
+        let cat = state.myCat;
         let planet = state.planets.filter(aPlanet => aPlanet.position === cat.currPlanet);
         let body = {
             playerId: cat.playerId,

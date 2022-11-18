@@ -155,9 +155,12 @@ public class GameStateController {
         "restock", new RestockAction(),
         "travel", new TravelAction());
 
+        if(!gameState.getCurrTurn().equals(playStateInfo.cat())){
+            throw new IllegalArgumentException("It is not your turn!");
+        }
         if(actions.keySet().contains(actionInfo.actionName())){
             Action action = actions.get(actionInfo.actionName());
-            if(action.condition(playStateInfo) && gameState.getCurrTurn().equals(playStateInfo.cat())){
+            if(action.condition(playStateInfo)){
                 action.resolveAction(playStateInfo);
                 gameState.takeAction(actionInfo.actionName());
                 if(gameState.getActionsLeft() <= 0){
