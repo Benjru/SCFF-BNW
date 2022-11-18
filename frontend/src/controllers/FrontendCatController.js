@@ -11,6 +11,10 @@ class FrontendCatController extends Component{
         currCatSelecting: 1
     };
 
+    setMyCat = (cat) => {
+        this.props.setMyCat(cat);
+    }
+
     setCat = (inCat) => {
         const requestOptions = {
             method: 'POST',
@@ -39,6 +43,19 @@ class FrontendCatController extends Component{
                             readyToStart: prevState.currCatSelecting === 2 ? true: false
                         }
                     });
+                    this.setMyCat(inCat);
+                    
+                    fetch('http://localhost:8080/gamestate')
+                        .then(res => {
+                            return res.json();
+                        }).then(parsedRes => {
+                            if (parsedRes.status === 404){
+                                console.log(parsedRes);
+                            }
+                            else if (parsedRes.status === 200){
+                                this.props.setGameState(parsedRes);
+                            }
+                        })
                 }
             })
         

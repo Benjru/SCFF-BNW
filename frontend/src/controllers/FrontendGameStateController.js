@@ -28,9 +28,7 @@ class FrontendGameStateController extends Component {
     //     });
     // }
     setMyCat = (cat) => {
-        this.setState(()=>{
-            return {myCat: cat}
-        });
+        this.setState({myCat: cat});
     }
 
     updateTurn = (turn) => {
@@ -107,6 +105,31 @@ class FrontendGameStateController extends Component {
 
     }
 
+    setGameState = (res) => {
+        const resBody = JSON.parse(res.body);
+        console.log("/game/gameState sent: " + resBody);
+        console.log("resBody.planets: " + resBody.planets)
+        resBody.planets.forEach(planet => {
+            const cats = resBody.cats.filter(cat => cat.currPlanet === planet.position);
+            planet.cats = cats;
+        })
+        console.log("myCat name before setting: " + this.state.myCat.name);
+        const myCat = resBody.cats.filter(thisCat => thisCat.name === this.state.myCat.name);
+        this.setMyCat(myCat);
+        this.setState({
+            resistCardDiscard: resBody.resistCardDiscard,
+            galaxyNewsDiscard: resBody.galaxyNewsDiscard,
+            cats: resBody.cats,
+            planets: resBody.planets,
+            currTurn: resBody.currTurn,
+            actionsLeft: resBody.actionsLeft,
+            globalFascismScale: resBody.globalFascismScale,
+            gameStarted: true
+        }, () => {
+            console.log(this.state);
+        }); // need a planet to know if a cat is on it
+    }
+
     componentDidMount(){
         let onConnected = () => {
             console.log("connected");
@@ -115,26 +138,8 @@ class FrontendGameStateController extends Component {
             //     console.log(res);
             // });
             client.subscribe("/game/gameState", (res) => {
-                if (res.body){
-                    const resBody = JSON.parse(res.body);
-                    console.log("/game/gameState sent: " + resBody);
-                    console.log("resBody.planets: " + resBody.planets)
-                    resBody.planets.forEach(planet => {
-                        const cats = resBody.cats.filter(cat => cat.currPlanet == planet.position);
-                        planet.cats = cats;
-                    })
-                    const myCat = resBody.cats.filter(thisCat => thisCat.name == this.state.myCat.name);
-                    this.setMyCat(myCat);
-                    this.setState({
-                        resistCardDiscard: resBody.resistCardDiscard,
-                        galaxyNewsDiscard: resBody.galaxyNewsDiscard,
-                        cats: resBody.cats,
-                        planets: resBody.planets,
-                        currTurn: resBody.currTurn,
-                        actionsLeft: resBody.actionsLeft,
-                        globalFascismScale: resBody.globalFascismScale,
-                        gameStarted: true
-                    }); // need a planet to know if a cat is on it
+                if (res.body && this.state.myCat){
+                    this.setGameState(res);
                 }
                 else{
                     console.log("No response");
@@ -160,7 +165,7 @@ class FrontendGameStateController extends Component {
     render(){
         return (
             <div>
-                <GameView state={this.state} setMyCat={this.setMyCat}/>
+                <GameView state={this.state} setGameState={this.setGameState} setMyCat={this.setMyCat}/>
             </div>
         );
     }
