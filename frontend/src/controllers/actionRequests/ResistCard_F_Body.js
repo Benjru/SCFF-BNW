@@ -1,6 +1,6 @@
-import CardBody from "./CardBody";
+import ActionBody from "./ActionBody";
 
-export default class ResistCard_F_Body extends CardBody{
+export default class ResistCard_F_Body extends ActionBody{
     cardName;
     constructor(symbol){
         super();
@@ -9,7 +9,8 @@ export default class ResistCard_F_Body extends CardBody{
     }
 
     getBody(state){
-        let cat = state.cats[state.currTurn];
+        // let cat = state.cats[state.currTurn];
+        let cat = state.myCat;
         let body = {
             playerId: cat.playerId,
             planetPosition: -1,

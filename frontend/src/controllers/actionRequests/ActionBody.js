@@ -1,6 +1,6 @@
-export default class CardBody{
+export default class ActionBody{
     constructor(){
-        if (this.constructor == CardBody) {
+        if (this.constructor == ActionBody) {
             throw new Error("Abstract classes can't be instantiated.");
         } 
     }
@@ -8,6 +8,5 @@ export default class CardBody{
     getBody(state){
         throw new Error("Method getBody() must be implemented");
     }
-
 
 }

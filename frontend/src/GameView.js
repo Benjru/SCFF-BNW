@@ -23,6 +23,10 @@ class GameView extends Component {
     this.props.useCard(cardFromDeck)
   }
 
+  useAction = (actionName) => {
+    this.props.useAction(actionName);
+  } 
+
   selectPlanet = (planetPosition) => {
     this.props.selectPlanet(planetPosition);
   }

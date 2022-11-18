@@ -8,28 +8,22 @@ import { allPlanets, allResistCards } from "../constants";
 class GameBoard extends Component{ // with backend: remove planets from state variable and then in componentDidMount make API call to get planets, add to setState
 
     selectPlanet = (planetPosition) => {
-        this.props.selectPlanet(planetPosition);
+        if (this.props.state.currTurn === this.props.state.myCat.playerId){
+            this.props.selectPlanet(planetPosition);
+        }
     }
 
     render() {
         return (
             <div className="gameBoard">
-                {console.log("travelling? -> " + this.props.state.travelling)}
+                {console.log("travelling? -> " + this.props.state.myCat.travelling)}
                 {
                     this.props.state.planets.map(planet => (
-                        
-                        this.props.state.travelling?
                         <div className="boardSquare" key={planet} onClick={()=>{this.selectPlanet(planet.position)}}>
                             <p className="planetLabel">{allPlanets[planet.number-1]}</p> 
                             {/* component should take board square */}
                             <Planet state={this.props.state} planet={planet} planetName={allPlanets[planet.number-1]}/>
                             {console.log("planet.fascismLevel (in GameBoard): " + planet.fascismLevel)}
-                            <FascismBar fascismLevel={planet.fascismLevel}/>
-                        </div>:
-                        <div className="boardSquare" key={planet}>
-                            <p className="planetLabel">{allPlanets[planet.number-1]}</p> 
-                            {/* component should take board square */}
-                            <Planet state={this.props.state} planet={planet} planetName={allPlanets[planet.number-1]}/>
                             <FascismBar fascismLevel={planet.fascismLevel}/>
                         </div>
 
@@ -52,57 +46,9 @@ class TurnDisplay extends Component { // Knows current turn and renders current 
 //     // }
 
 //     // Uses an action, if 3 have been used, update turn by calling function from parent
-    useAction = () => {
-        // this.actionCount++;
-        // if (this.actionCount===3){ // Max actions per turn
-        //     this.props.updateTurn();
-        //     this.actionCount = 0;
-        //     if (this.currTurn === 1){ //Figure out a better way to check turn
-        //         this.currTurn = 2;
-        //     }
-        //     else{
-        //         this.currTurn = 1;
-        //     }
-        //     this.hand = this.props.cats[this.currTurn-1].hand;
-        //     this.props.updateTurn(this.currTurn); // not that important
-        // }
-        this.props.useAction();
+    useAction = (actionName) => {
+        this.props.useAction(actionName);
     }
-
-    
-//     // // Uses a card, and then uses an action using function above
-//     // useCard = (card) => {
-//     //     //map card to appropriate card handling function. 
-//     //     if (this.hand.length === 0){
-//     //         alert("Your hand is empty!");
-//     //     }
-//     //     else{
-//     //         console.log("used: " + card)
-//     //         this.hand = this.removeItemFromArray(this.hand, card);
-//     //         this.props.updateHand(this.currTurn-1, this.hand);
-//     //         const cat = this.props.cats[this.currTurn-1];
-//     //         if (card === '+1 liberation'){
-//     //             this.props.boardSquares.map((boardSquare, i) => {
-//     //                 if (boardSquare.catOnSquare.currPlanet === cat.currPlanet){
-//     //                     // Then update fascism level
-//     //                     this.updateFascismLevel(i, boardSquare.fascismLevel - 1);
-//     //                 }
-//     //                 return 0;
-//     //             });
-//     //         }
-//     //         else if (card === 'ears' || card === 'paw' || card === 'tail' || card === 'whiskers'){
-//     //             this.props.boardSquares.map((boardSquare, i) => {
-//     //                 if (boardSquare.catOnSquare.currPlanet === cat.currPlanet){
-//     //                     // Then update fascism level
-//     //                     this.updateFascismLevel(i, boardSquare.fascismLevel - 2);
-//     //                 }
-//     //                 return 0;
-//     //             });
-//     //         }
-//     //         console.log(this.hand)
-//     //     }
-//     //     this.useAction();
-//     // }
 
     checkPlanetSelected = () => {
         if (!this.props.state.planetSelected){
@@ -121,6 +67,7 @@ class TurnDisplay extends Component { // Knows current turn and renders current 
                 this.props.useCard(cardFromDeck);
             }
         }
+        this.props.useCard(cardFromDeck);
     }
 
 
@@ -129,7 +76,7 @@ class TurnDisplay extends Component { // Knows current turn and renders current 
         console.log("myCat hand (in TurnDisplay): " +  JSON.stringify(this.props.state.myCat[0].hand));
         const myCat = this.props.state.myCat[0];
         return(
-            this.props.state.travelling?
+            this.props.state. myCat.travelling?
             <div>
                 <h1 className="turnText">Select planet to travel to</h1>
             </div>:

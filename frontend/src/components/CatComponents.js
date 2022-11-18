@@ -61,26 +61,23 @@ class SelectCat extends Component{
 class RestockAction extends Component{
 
     restock = () => { // change to API call
-        let hand = this.props.cats[this.props.catIndex].hand;
+        let hand = this.props.state.myCat.hand;
         if (hand.length === 4){
             alert("You cannot restock");
         }
         else{
-            while (hand.length < 4){
-                const randomPosition = Math.floor(Math.random() * allResistCards.length);
-                console.log(randomPosition)
-                const card = allResistCards[randomPosition];
-                hand.push(card);
-                this.props.updateHand(this.props.catIndex, hand)
-            }
-            this.props.useAction();
+            this.props.useAction('restock');
         }
     }
 
     render(){
         return(
+            this.props.state.currTurn === this.props.state.myCat.playerId?
             <div>
                 <button onClick={this.restock} className="actionButton">Restock</button>
+            </div>:
+            <div>
+                <button className="actionButton">Restock</button>
             </div>
         );
     }
@@ -90,13 +87,17 @@ class TravelAction extends Component{
 
     travel = () => { // change to API call
         console.log("traveling");
-        this.props.useAction();
+        this.props.useAction('travel');
     }
 
     render(){
         return(
+            this.props.state.currTurn === this.props.state.myCat.playerId?
             <div>
                 <button onClick={this.travel} className="actionButton">Travel</button>
+            </div>:
+            <div>
+                <button className="actionButton">Travel</button>
             </div>
         );
     }
@@ -106,29 +107,17 @@ class FightFascismAction extends Component{
 
     fightFascism = () => { // change to API call
         console.log("fighting fascism");
-        const cat = this.props.cats[this.props.catIndex]; // add curr planet property to cat
-        this.props.boardSquares.map((boardSquare, i) => {
-            console.log(boardSquare.catOnSquare.currPlanet)
-            console.log(cat.currPlanet);
-            if (boardSquare.catOnSquare.currPlanet === cat.currPlanet){
-                // Then update fascism level
-                console.log("boardSquare position: " + i)
-                if (boardSquare.fascismLevel > 0){
-                    this.props.updateFascismLevel(i, boardSquare.fascismLevel - 1);
-                    this.props.useAction();
-                }
-                else{
-                    alert("There is no fascism to fight on this planet!")
-                }
-            }
-            return 0;
-        });
+        this.props.useAction('fightFascism');
     }
 
     render(){
         return(
+            this.props.state.currTurn === this.props.state.myCat.playerId?
             <div>
                 <button onClick={this.fightFascism} className="actionButton">Fight Fascism</button>
+            </div>:
+            <div>
+                <button className="actionButton">Fight Fascism</button>
             </div>
         );
     }

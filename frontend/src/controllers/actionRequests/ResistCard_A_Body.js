@@ -1,6 +1,6 @@
-import CardBody from "./CardBody";
+import ActionBody from "./ActionBody";
 
-export default class ResistCard_A_Body extends CardBody{
+export default class ResistCard_A_Body extends ActionBody{
     cardName;
     constructor(){
         super();
@@ -8,7 +8,8 @@ export default class ResistCard_A_Body extends CardBody{
     }
 
     getBody(state){
-        let cat = state.cats[state.currTurn]
+        // let cat = state.cats[state.currTurn]
+        let cat = state.myCat;
         let planet = state.planets.filter(aPlanet => aPlanet.position === cat.currPlanet);
         let body = {
             playerId: cat.playerId,
