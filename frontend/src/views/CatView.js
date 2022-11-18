@@ -8,7 +8,7 @@ class CatView extends Component{
         this.props.setCat(cat)
     }
 
-    createHand = () => { // change to get hand from backend
+    createHand = () => { 
         this.props.createHand();
     }
 

@@ -53,6 +53,7 @@ class FrontendGameStateController extends Component {
         });
     }
 
+    // takes action, maps to correct request body, sends post request with correct body to update backend
     useAction = (action) => {
         let body;
         if (action.cardId){
@@ -78,7 +79,6 @@ class FrontendGameStateController extends Component {
     }
 
     travel = (travelType) => {
-        // this.setState({travelling: true, planetSelected: false});
         console.log("traveling with travelType: " + travelType);
         this.setState(prevState => {
             return{
@@ -93,6 +93,7 @@ class FrontendGameStateController extends Component {
         })
     }
 
+    // maps each possible action to its corresponding Body object, returns correct action body using object
     getActionRequestBody = (actionName, planetPosition) => {
         const actionMap = new Map();
         actionMap.set('+1 liberation', new ResistCard_A_Body());

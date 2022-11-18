@@ -8,6 +8,8 @@ import GlobablFascismScale from '../components/GlobalFascismScale';
 
 class GameView extends Component {
 
+  // This syntax is necessary to pass methods down to child components, but the view is not calling these
+
   setMyCat = (cat) => {
     this.props.setMyCat(cat);
   }
