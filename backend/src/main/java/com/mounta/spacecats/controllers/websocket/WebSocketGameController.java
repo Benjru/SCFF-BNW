@@ -22,10 +22,10 @@ import com.mounta.spacecats.models.gamestate.GameStateModel;
 public class WebSocketGameController {
 
     @Autowired
-    SimpMessagingTemplate template;
+    private SimpMessagingTemplate template;
 
     @Autowired
-    GameStateController gameStateController;
+    private GameStateController gameStateController;
 
     @PostMapping("/join")
 	public ResponseEntity<Void> joinGame(@RequestBody CatInfo catName) {
@@ -45,7 +45,7 @@ public class WebSocketGameController {
 	}
 
     @SendTo("/game/catinfo")
-    public CatInfo broadcastCatModle(@Payload CatInfo catName){
+    public CatInfo broadcastCatModel(@Payload CatInfo catName){
         return catName;
     }
 
