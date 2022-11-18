@@ -113,6 +113,10 @@ class FrontendGameStateController extends Component {
                 if (res.body){
                     const resBody = JSON.parse(res.body);
                     console.log("/game/gameState sent: " + resBody);
+                    resBody.planets.forEach(planet => {
+                        const cats = resBody.cats.filter(cat => cat.currPlanet == planet.position);
+                        planet.cats = cats;
+                    })
                     this.setState({
                         resistCardDiscard: resBody.resistCardDiscard,
                         galaxyNewsDiscard: resBody.galaxyNewsDiscard,
@@ -123,10 +127,6 @@ class FrontendGameStateController extends Component {
                         globalFascismScale: resBody.globalFascismScale,
                         gameStarted: true
                     }, () => {
-                        this.state.planets.forEach(planet => {
-                            const cats = this.state.cats.filter(cat => cat.currPlanet == planet.position);
-                            planet.cats = cats;
-                        })
                     }) // need a planet to know if a cat is on it
                 }
                 else{
