@@ -26,8 +26,6 @@ const GlobablFascismScale = (props) => { // with backend: remove planets from st
     messageMap.set('GalaxyCard_D', '+1 to the fascism scale, +1 fascist to the planet you are on, every cat there takes one scratch.');
     messageMap.set('GalaxyCard_E', 'You take 2 scratches and return to your home planet.');
 
-    console.log("galaxyNewsType: " + JSON.stringify(galaxyNewsType));
-    console.log("galaxyNewsMap gives: " + messageMap.get(galaxyNewsType));
 
     return(
         <React.Fragment>
@@ -36,7 +34,11 @@ const GlobablFascismScale = (props) => { // with backend: remove planets from st
             </div>
             {
                 galaxyNewsType?
-                <p className="galaxyNewsMessage">{`Galaxy News Card: ${messageMap.get(galaxyNewsType)}`}</p>:
+                <div className="galaxyNewsMessage">
+                    <p>Galaxy News Card:</p>
+                    <div className="break"></div>
+                    <p>{`${messageMap.get(galaxyNewsType)}`}</p>
+                </div>:
                 <React.Fragment/>
             }
         </React.Fragment>

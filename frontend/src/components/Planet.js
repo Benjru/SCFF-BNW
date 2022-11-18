@@ -17,7 +17,7 @@ const Planet = (props) => ( // Planet image + cat image on top
                     <div className="planetSymbolContainer">
                         <img
                             className="planetSymbol"
-                            src={`/resist_cards/${props.planetSymbol}-symbol.jpg`}
+                            src={`/resist_cards/${props.planetSymbol}.jpg`}
                             alt={props.planetName}
                         />
                     </div>
@@ -41,7 +41,7 @@ const Planet = (props) => ( // Planet image + cat image on top
                         }
                         <img
                             className="planetSymbolWithCat"
-                            src={`/resist_cards/${props.planetSymbol}-symbol.jpg`}
+                            src={`/resist_cards/${props.planetSymbol}.jpg`}
                             alt={props.planetName}
                         />
                     </div>

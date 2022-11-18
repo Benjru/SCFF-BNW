@@ -4,6 +4,7 @@ import {RestockAction, TravelAction, FightFascismAction} from './CatComponents';
 import Planet from "./Planet";
 import FascismBar from "./FascismBar";
 import { allPlanets, allResistCards } from "../constants";
+import ScratchBar from "./ScratchBar";
 
 class GameBoard extends Component{ // with backend: remove planets from state variable and then in componentDidMount make API call to get planets, add to setState
 
@@ -21,8 +22,7 @@ class GameBoard extends Component{ // with backend: remove planets from state va
                     this.props.state.planets.map(planet => (
                         <div className="boardSquare" key={planet} onClick={()=>{this.selectPlanet(planet.position)}}>
                             <p className="planetLabel">{`#${planet.number}`} {allPlanets[planet.number-1].name}</p> 
-                            {/* component should take board square */}
-                            <Planet state={this.props.state} planet={planet} planetSymbol={allPlanets[planet.number-1].symbol} planetName={allPlanets[planet.number-1].name}/>
+                            <Planet state={this.props.state} planet={planet} planetSymbol={planet.symbol} planetName={allPlanets[planet.number-1].name}/>
                             {console.log("planet.fascismLevel (in GameBoard): " + planet.fascismLevel)}
                             <FascismBar fascismLevel={planet.fascismLevel}/>
                         </div>
@@ -97,6 +97,7 @@ class TurnDisplay extends Component { // Knows current turn and renders current 
                     <TravelAction state={this.props.state} travel={this.travel}/>
                     <FightFascismAction state={this.props.state} useAction={this.useAction}/>
                 </div>
+                <ScratchBar state={this.props.state}/>
             </div>
         );
     }

@@ -8,8 +8,7 @@ import java.util.HashSet;
 
 @JsonIgnoreProperties(value = {
     "adjacentPlanets",
-    "isStronghold",
-    "symbol"
+    "isStronghold"
 })
 public class PlanetModel {
     private int number;
