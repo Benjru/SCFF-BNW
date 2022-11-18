@@ -27,25 +27,26 @@ class FrontendCatController extends Component{
                     alert("Another player has already selected this cat!");
                 }
                 else if (response.status === 200){
-                    this.setState((prevState) => { 
-                        return {
-                            allCats: removeItemFromArray(prevState.allCats, inCat),
-                            catSelected: true,
-                            currCatSelecting: prevState.currCatSelecting + 1,
-                            cats: [
-                                ...prevState.cats, 
-                                {
-                                    name: inCat.name,
-                                    playerId: prevState.currCatSelecting,
-                                    homePlanet: inCat.homePlanet,
-                                    currPlanet: inCat.homePlanet
-                                }
-                            ],
-                            readyToStart: prevState.currCatSelecting === 2 ? true: false
-                        }
-                    });
                     fetch(`http://localhost:8080/cat/${inCat.name}`).then(thisCat => {
                         this.setMyCat(thisCat);
+                    }).then(resp => {
+                        this.setState((prevState) => { 
+                            return {
+                                allCats: removeItemFromArray(prevState.allCats, inCat),
+                                catSelected: true,
+                                currCatSelecting: prevState.currCatSelecting + 1,
+                                cats: [
+                                    ...prevState.cats, 
+                                    {
+                                        name: inCat.name,
+                                        playerId: prevState.currCatSelecting,
+                                        homePlanet: inCat.homePlanet,
+                                        currPlanet: inCat.homePlanet
+                                    }
+                                ],
+                                readyToStart: prevState.currCatSelecting === 2 ? true: false
+                            }
+                        });
                     })
                 }
             })
