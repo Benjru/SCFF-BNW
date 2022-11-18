@@ -15,7 +15,8 @@ const Planet = (props) => ( // Planet image + cat image on top
                 <div className="ppiContainer">
 
                     <div className="catPlanetIndicator">
-                        <h1>{props.planet.catOnPlanet.name}</h1>
+                        {/* <h1>{props.planet.catOnPlanet.name}</h1> */}
+                        <h1>catOnPlanet</h1>
                     </div>
 
                     <img className="planetImage"

@@ -11,6 +11,10 @@ class FrontendCatController extends Component{
         currCatSelecting: 1
     };
 
+    setMyCat = (cat) => {
+        this.props.setMyCat(cat);
+    }
+
     setCat = (inCat) => {
         const requestOptions = {
             method: 'POST',
@@ -32,6 +36,7 @@ class FrontendCatController extends Component{
                                 ...prevState.cats, 
                                 {
                                     name: inCat.name,
+                                    playerId: prevState.currCatSelecting,
                                     homePlanet: inCat.homePlanet,
                                     currPlanet: inCat.homePlanet
                                 }
@@ -39,6 +44,7 @@ class FrontendCatController extends Component{
                             readyToStart: prevState.currCatSelecting === 2 ? true: false
                         }
                     });
+                    this.setMyCat(inCat);
                 }
             })
         

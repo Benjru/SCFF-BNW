@@ -7,6 +7,9 @@ import FrontendCatController from './controllers/FrontendCatController';
 
 class GameView extends Component {
 
+  setMyCat = (cat) => {
+    this.props.setMyCat(cat);
+  }
 
   startGame = () => {
     this.props.startGame();
@@ -18,13 +21,14 @@ class GameView extends Component {
         {
           this.props.state.gameStarted ?
           <React.Fragment>
-              <p className='turnText'>P{this.props.state.currTurn.playerId + 1}'s turn</p>
+            {console.log("this.props.state: " + JSON.stringify(this.props.state))}
+              <p className='turnText'>P{this.props.state.currTurn+1}'s turn</p>
             <div className='gameViewContainer'>
               <GameBoard state={this.props.state}/>
-              {/* <TurnDisplay cats={this.props.state.cats} useAction={this.useAction}/> */}
+              <TurnDisplay state={this.props.state} useAction={this.useAction}/>
             </div>
           </React.Fragment>:
-          <FrontendCatController startGame={this.startGame}/>
+          <FrontendCatController setMyCat={this.setMyCat} startGame={this.startGame}/>
 
         }
       </div>

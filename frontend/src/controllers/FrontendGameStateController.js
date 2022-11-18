@@ -27,6 +27,11 @@ class FrontendGameStateController extends Component {
     //         gameStarted: true,
     //     });
     // }
+    setMyCat = (cat) => {
+        this.setState(()=>{
+            return {myCat: cat}
+        });
+    }
 
     updateTurn = (turn) => {
         this.setState((prevState) => {
@@ -113,6 +118,7 @@ class FrontendGameStateController extends Component {
                 if (res.body){
                     const resBody = JSON.parse(res.body);
                     console.log("/game/gameState sent: " + resBody);
+                    console.log("resBody.planets: " + resBody.planets)
                     resBody.planets.forEach(planet => {
                         const cats = resBody.cats.filter(cat => cat.currPlanet == planet.position);
                         planet.cats = cats;
@@ -126,8 +132,7 @@ class FrontendGameStateController extends Component {
                         actionsLeft: resBody.actionsLeft,
                         globalFascismScale: resBody.globalFascismScale,
                         gameStarted: true
-                    }, () => {
-                    }) // need a planet to know if a cat is on it
+                    }); // need a planet to know if a cat is on it
                 }
                 else{
                     console.log("No response");
@@ -153,7 +158,7 @@ class FrontendGameStateController extends Component {
     render(){
         return (
             <div>
-                <GameView state={this.state}/>
+                <GameView state={this.state} setMyCat={this.setMyCat}/>
             </div>
         );
     }

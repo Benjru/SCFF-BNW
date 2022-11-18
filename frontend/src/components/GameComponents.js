@@ -26,103 +26,125 @@ class GameBoard extends Component{ // with backend: remove planets from state va
     }
 }
 
-// class TurnDisplay extends Component { // Knows current turn and renders current cat's hand, and actions
-//     // Pass up to parent component 
-//     // updateHand = (catIndex, hand) => {
-//     //     this.props.updateHand(catIndex, hand)
-//     // }
+class TurnDisplay extends Component { // Knows current turn and renders current cat's hand, and actions
+    // Pass up to parent component 
+    // updateHand = (catIndex, hand) => {
+    //     this.props.updateHand(catIndex, hand)
+    // }
 
-//     // // Pass up to parent component
-//     // updateFascismLevel = (index, fascismLevel) => {
-//     //     this.props.updateFascismLevel(index, fascismLevel);
-//     // }
+    // // Pass up to parent component
+    // updateFascismLevel = (index, fascismLevel) => {
+    //     this.props.updateFascismLevel(index, fascismLevel);
+    // }
 
-//     // Uses an action, if 3 have been used, update turn by calling function from parent
-//     useAction = () => {
-//         // this.actionCount++;
-//         // if (this.actionCount===3){ // Max actions per turn
-//         //     this.props.updateTurn();
-//         //     this.actionCount = 0;
-//         //     if (this.currTurn === 1){ //Figure out a better way to check turn
-//         //         this.currTurn = 2;
-//         //     }
-//         //     else{
-//         //         this.currTurn = 1;
-//         //     }
-//         //     this.hand = this.props.cats[this.currTurn-1].hand;
-//         //     this.props.updateTurn(this.currTurn); // not that important
-//         // }
-//         this.props.useAction();
-//     }
+    // Uses an action, if 3 have been used, update turn by calling function from parent
+    useAction = () => {
+        // this.actionCount++;
+        // if (this.actionCount===3){ // Max actions per turn
+        //     this.props.updateTurn();
+        //     this.actionCount = 0;
+        //     if (this.currTurn === 1){ //Figure out a better way to check turn
+        //         this.currTurn = 2;
+        //     }
+        //     else{
+        //         this.currTurn = 1;
+        //     }
+        //     this.hand = this.props.cats[this.currTurn-1].hand;
+        //     this.props.updateTurn(this.currTurn); // not that important
+        // }
+        this.props.useAction();
+    }
 
     
-//     // // Uses a card, and then uses an action using function above
-//     // useCard = (card) => {
-//     //     //map card to appropriate card handling function. 
-//     //     if (this.hand.length === 0){
-//     //         alert("Your hand is empty!");
-//     //     }
-//     //     else{
-//     //         console.log("used: " + card)
-//     //         this.hand = this.removeItemFromArray(this.hand, card);
-//     //         this.props.updateHand(this.currTurn-1, this.hand);
-//     //         const cat = this.props.cats[this.currTurn-1];
-//     //         if (card === '+1 liberation'){
-//     //             this.props.boardSquares.map((boardSquare, i) => {
-//     //                 if (boardSquare.catOnSquare.currPlanet === cat.currPlanet){
-//     //                     // Then update fascism level
-//     //                     this.updateFascismLevel(i, boardSquare.fascismLevel - 1);
-//     //                 }
-//     //                 return 0;
-//     //             });
-//     //         }
-//     //         else if (card === 'ears' || card === 'paw' || card === 'tail' || card === 'whiskers'){
-//     //             this.props.boardSquares.map((boardSquare, i) => {
-//     //                 if (boardSquare.catOnSquare.currPlanet === cat.currPlanet){
-//     //                     // Then update fascism level
-//     //                     this.updateFascismLevel(i, boardSquare.fascismLevel - 2);
-//     //                 }
-//     //                 return 0;
-//     //             });
-//     //         }
-//     //         console.log(this.hand)
-//     //     }
-//     //     this.useAction();
-//     // }
+    // // Uses a card, and then uses an action using function above
+    // useCard = (card) => {
+    //     //map card to appropriate card handling function. 
+    //     if (this.hand.length === 0){
+    //         alert("Your hand is empty!");
+    //     }
+    //     else{
+    //         console.log("used: " + card)
+    //         this.hand = this.removeItemFromArray(this.hand, card);
+    //         this.props.updateHand(this.currTurn-1, this.hand);
+    //         const cat = this.props.cats[this.currTurn-1];
+    //         if (card === '+1 liberation'){
+    //             this.props.boardSquares.map((boardSquare, i) => {
+    //                 if (boardSquare.catOnSquare.currPlanet === cat.currPlanet){
+    //                     // Then update fascism level
+    //                     this.updateFascismLevel(i, boardSquare.fascismLevel - 1);
+    //                 }
+    //                 return 0;
+    //             });
+    //         }
+    //         else if (card === 'ears' || card === 'paw' || card === 'tail' || card === 'whiskers'){
+    //             this.props.boardSquares.map((boardSquare, i) => {
+    //                 if (boardSquare.catOnSquare.currPlanet === cat.currPlanet){
+    //                     // Then update fascism level
+    //                     this.updateFascismLevel(i, boardSquare.fascismLevel - 2);
+    //                 }
+    //                 return 0;
+    //             });
+    //         }
+    //         console.log(this.hand)
+    //     }
+    //     this.useAction();
+    // }
 
-//     render(){
-//         const cat = this.props.cats[this.currTurn-1];
-//         return(
-//             <div className="turnContainer">
-//                 <p className="centeredText">P{cat.catNum}</p>
-//                 <img
-//                     className="currentTurnCat"
-//                     src={`/cats/${cat.name}-cat.png`}
-//                     alt={cat}
-//                 />
-//                 <div className="turnHandContainer">
-//                     {cat.hand.map(card => (
-//                         <img
-//                             src={`/resist_cards/${card}-card.jpg`}
-//                             onClick={() => this.useCard(card)}
-//                             alt={card}
-//                             key={Math.random()}
-//                             className="card"
-//                         />
-//                     ))}
-//                 </div>
-//                 <div className="break"/>
-//                 <div className="turnActionContainer">
-//                     <RestockAction state={this.props.state} useAction={this.useAction}/>
-//                     <TravelAction state={this.props.state} useAction={this.useAction}/>
-//                     <FightFascismAction state={this.props.state} useAction={this.useAction} />
-//                 </div>
-//             </div>
-//         );
-//     }
 
-// }
+    render(){
+        //const cat = this.props.state.cats[this.props.state.currTurn];
+        let myCat;
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        };
+        console.log("this.props.state.myCat.name: " + this.props.state.myCat.name );
+        fetch(`http://localhost:8080/cat/${this.props.state.myCat.name}`)
+            .then(response => {
+                return response.json();
+            })
+            .then((parsedResponse) => {
+                console.log(parsedResponse);
+                myCat = parsedResponse;
+                return myCat;
+            }).then((myCat) => {
+                return(
+                    <div className="turnContainer">
+                        <p className="centeredText">P{myCat.playerId+1}</p>
+                        <img
+                            className="currentTurnCat"
+                            src={`/cats/${myCat.name}-cat.png`}
+                            alt={myCat}
+                        />
+                        <div className="turnHandContainer">
+                            {myCat.hand.map(card => (
+                                <img
+                                    src={`/resist_cards/${card}-card.jpg`}
+                                    onClick={() => this.useCard(card)}
+                                    alt={card}
+                                    key={Math.random()}
+                                    className="card"
+                                />
+                            ))}
+                        </div>
+                        <div className="break"/>
+                        <div className="turnActionContainer">
+                            <RestockAction state={this.props.state} useAction={this.useAction}/>
+                            <TravelAction state={this.props.state} useAction={this.useAction}/>
+                            <FightFascismAction state={this.props.state} useAction={this.useAction} />
+                        </div>
+                    </div>
+                );
+            });
+
+            return(
+                <React.Fragment/>
+            );
+        
+    }
+
+}
 
 export {GameBoard};
-// export {TurnDisplay};
+export {TurnDisplay};
 
