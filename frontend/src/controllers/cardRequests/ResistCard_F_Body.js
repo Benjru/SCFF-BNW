@@ -9,7 +9,6 @@ export default class ResistCard_F_Body extends CardBody{
 
     getBody(state){
         let cat = state.cats[state.currTurn];
-        let planet = state.planets.filter(aPlanet => aPlanet.position === cat.currPlanet);
         let body = {
             playerId: cat.playerId,
             planetPosition: -1,
