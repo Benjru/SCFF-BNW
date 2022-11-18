@@ -123,6 +123,8 @@ class FrontendGameStateController extends Component {
                         const cats = resBody.cats.filter(cat => cat.currPlanet == planet.position);
                         planet.cats = cats;
                     })
+                    const myCat = resBody.cats.filter(thisCat => thisCat.name == this.state.myCat.name);
+                    this.setMyCat(myCat);
                     this.setState({
                         resistCardDiscard: resBody.resistCardDiscard,
                         galaxyNewsDiscard: resBody.galaxyNewsDiscard,
