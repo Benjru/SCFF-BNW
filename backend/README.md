@@ -36,7 +36,8 @@ The action endpoint allows a player to take an action, you must provide a messag
   "planetPosition": PositionOOfPlanet(INTEGER),
   "cardName": "ID of card that has been played if applicable",
   "actionName": "fightFascism"/"playCard"/"travel"/"restock",
-  "symbol": "Symbol of the played card if it is a symbol card"
+  "symbol": "Symbol of the played card if it is a symbol card",
+  "targetCats": ["list of names of cats"]
 }
 ```
 

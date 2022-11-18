@@ -230,7 +230,18 @@ public class GameStateController {
                                 .orElseThrow(IllegalArgumentException::new);
             }
         }
-        return new PlayStateInfo(cat, null, planet, gameState, playedCard);
+        List<CatModel> targetCats = null;
+        if(actionInfo.targetCats() != null){
+            targetCats = actionInfo.targetCats()
+            .stream()
+            .map(catName -> gameState.getCats()
+                                     .stream()
+                                     .filter(modelCat -> modelCat.getName().equals(catName))
+                                     .findFirst()
+                                     .orElseThrow(IllegalArgumentException::new))
+            .toList();
+        }
+        return new PlayStateInfo(cat, targetCats, planet, gameState, playedCard);
     }
 
 /**
