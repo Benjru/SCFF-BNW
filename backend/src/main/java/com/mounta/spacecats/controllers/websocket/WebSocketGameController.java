@@ -7,6 +7,7 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -66,6 +67,21 @@ public class WebSocketGameController {
         catch(Exception e){
             System.out.println("Error: " + e.toString());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/cat/{catName}")
+    public ResponseEntity<CatModel> getCat(@PathVariable(value = "catName") String catName){
+        GameStateModel gameState = gameStateController.getGameState();
+        if(gameState == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        try{
+            CatModel cat = gameState.getCats().stream().filter(thisCat -> thisCat.getName().equals(catName)).findFirst().orElseThrow(IllegalArgumentException::new);
+            return ResponseEntity.ok().body(cat);
+        }
+        catch(IllegalArgumentException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
     
