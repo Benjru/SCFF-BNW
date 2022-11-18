@@ -14,7 +14,7 @@ This will install the necessary packages, and then run the start script specifie
 
 ***************************************************************************             INFO                 ******************************************************************
 
-A lot has changed in the frontend from MS2, since React uses Components to render its view. Additionally, the abstract ActionBody class is implemented by every other class in the actionRequests folder, in order to eliminate a large switch statement that was being used to build a request body depending on a given action. (More on this in FrontendGameStateController section).
+A lot has changed in the frontend from MS2, since React uses Components to render its view. We were not really specifying these components in our UML previously. Additionally, the abstract ActionBody class was created and implemented by every other class in the actionRequests folder (all new), in order to eliminate a large switch statement that was being used to build a request body depending on a given action. (More on this in FrontendGameStateController section).
 
 The frontend is written in Javascript, using the React library. 
 
