@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import './App.css';
-import {GameBoard, TurnDisplay} from './components/GameComponents';
-import FrontendCatController from './controllers/FrontendCatController';
-import GlobablFascismScale from './components/GlobalFascismScale';
+import '../App.css';
+import {GameBoard, TurnDisplay} from '../components/GameComponents';
+import FrontendCatController from '../controllers/FrontendCatController';
+import GlobablFascismScale from '../components/GlobalFascismScale';
 
 // get state from fe gamestate controller?
 

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import CatView from "../CatView";
+import CatView from "../views/CatView";
 import { allCats, allResistCards } from "../constants";
 import {removeItemFromArray} from "../util/helpers";
 

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import Cats from "./components/Cats";
-import { SelectCat } from "./components/CatComponents";
+import Cats from "../components/Cats";
+import { SelectCat } from "../components/CatComponents";
 
 class CatView extends Component{
 

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import GameView from "../GameView";
+import GameView from "../views/GameView";
 import {Client} from '@stomp/stompjs';
 import { allPlanets } from "../constants";
 import ResistCard_A_Body from "./actionRequests/ResistCard_A_Body";
