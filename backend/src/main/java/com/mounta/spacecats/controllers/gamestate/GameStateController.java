@@ -103,7 +103,6 @@ public class GameStateController {
  
  * @return A gamestatemodel
  *
- * @docauthor Trelent
  */
     public void setupGame(){
         if(gameState == null){
