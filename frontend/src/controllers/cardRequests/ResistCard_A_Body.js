@@ -4,7 +4,7 @@ export default class ResistCard_A_Body extends CardBody{
     cardName;
     constructor(){
         super();
-        this.cardName = '+1 Liberation';
+        this.cardName = 'ResistCard_A';
     }
 
     getBody(state){
@@ -15,7 +15,8 @@ export default class ResistCard_A_Body extends CardBody{
             planetPosition: planet.position,
             cardName: this.cardName,
             actionName: 'playCard',
-            targetCats: null
+            targetCats: null,
+            symbol: null
         };
         return JSON.stringify(body);;
     }

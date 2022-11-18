@@ -6,7 +6,7 @@ export default class ResistCard_E_Body extends CardBody{
     constructor(travelDestination){
         super();
         this.travelDestination = travelDestination;
-        this.cardName = '-2 Fascists';
+        this.cardName = 'ResistCard_E';
     }
 
     getBody(state){
@@ -17,7 +17,8 @@ export default class ResistCard_E_Body extends CardBody{
             planetPosition: this.travelDestination,
             cardName: this.cardName,
             actionName: 'playCard',
-            targetCats: null
+            targetCats: null,
+            symbol: null
         };
         return JSON.stringify(body);;
     }
