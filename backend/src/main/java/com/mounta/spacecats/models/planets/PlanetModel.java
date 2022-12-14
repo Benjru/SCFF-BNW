@@ -23,17 +23,24 @@ public class PlanetModel {
 
     private boolean isStronghold;
 
-    private PlanetModel(int number, int fascismLevel, Symbol symbol, HashSet<PlanetModel> adjacentPlanets, int position, boolean isStronghold) {
+    private int secretAgents;
+
+    private PlanetModel(int number, int fascismLevel, Symbol symbol, HashSet<PlanetModel> adjacentPlanets, int position, boolean isStronghold, int secretAgents) {
         this.number = number;
         this.fascismLevel = fascismLevel;
         this.symbol = symbol;
         this.adjacentPlanets = adjacentPlanets;
         this.position = position;
         this.isStronghold = isStronghold;
+        this.secretAgents = secretAgents;
+    }
+
+    public PlanetModel clone(){
+        return new PlanetModel(this.number, this.fascismLevel, this.symbol, this.adjacentPlanets, this.position, this.isStronghold, this.secretAgents);
     }
 
     public static PlanetModel create(int number, Symbol symbol, boolean isStronghold){
-        return new PlanetModel(number, 1 - (number % 2), symbol, new HashSet<>(), -1, isStronghold);
+        return new PlanetModel(number, 1 - (number % 2), symbol, new HashSet<>(), -1, isStronghold, 0);
     }
 
     public int getNumber() {
@@ -50,6 +57,17 @@ public class PlanetModel {
 
     public HashSet<PlanetModel> getAdjacentPlanets() {
         return this.adjacentPlanets;
+    }
+
+    public int getSecretAgents(){
+        return secretAgents;
+    }
+
+    public void updateSecretAgents(int val){
+        if(val > secretAgents && secretAgents < 0){
+            throw new IllegalArgumentException("Cannot remove " + val + " secret agents from planet " + this.number + " as it only has " + secretAgents + " agents present");
+        }
+        secretAgents += val;
     }
 
     public boolean getIsStronghold(){ return this.isStronghold; }

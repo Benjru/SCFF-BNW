@@ -7,6 +7,7 @@ import com.mounta.spacecats.controllers.actions.RestockAction;
 import com.mounta.spacecats.controllers.actions.TravelAction;
 import com.mounta.spacecats.controllers.websocket.DTOs.ActionInfo;
 import com.mounta.spacecats.mappers.SymbolMapper;
+import com.mounta.spacecats.models.actions.ActionLog;
 import com.mounta.spacecats.models.cards.GalaxyNewsCard;
 import com.mounta.spacecats.models.cards.ResistCard;
 import com.mounta.spacecats.models.cats.CatModel;
@@ -71,11 +72,7 @@ public class GameStateController {
  */
     public String drawFromNewsDeck(PlayStateInfo playStateInfo){
         GalaxyNewsCard card = gameState.drawGalaxyNewsCard();
-        if(gameState.getGalaxyNewsDeck().isEmpty()){
-            gameState.refillNewsDeck();
-        }
         card.getCardEffect().resolve(playStateInfo);
-        gameState.discardCard(card);
         return card.getCardId();
     }
 
@@ -91,9 +88,6 @@ public class GameStateController {
  */
     public String drawFromResistDeck(CatModel cat){
         ResistCard card = gameState.drawResistCard(cat);
-        if(gameState.getResistCardDeck().isEmpty()){
-            gameState.refillResistDeck();
-        }
         return card.getCardId();
     }
 
@@ -146,7 +140,7 @@ public class GameStateController {
  * @param actionInfo Pass in the action that was taken by the player
  *
  */
-    public void takeAction(ActionInfo actionInfo){
+    public Map<String, Integer> takeAction(ActionInfo actionInfo){
         PlayStateInfo playStateInfo = makePlayStateInfo(actionInfo);
 
         Map<String, Action> actions = Map.of("playCard", new PlayCardAction(),
@@ -161,7 +155,10 @@ public class GameStateController {
             Action action = actions.get(actionInfo.actionName());
             if(action.condition(playStateInfo)){
                 action.resolveAction(playStateInfo);
-                gameState.takeAction(actionInfo.actionName());
+                ActionLog actionLog = new ActionLog(actionInfo.actionName(), playStateInfo.cat().getCurrPlanet().clone(), playStateInfo.targetCats());
+                gameState.takeAction(actionLog);
+                if(playStateInfo.cat().getCurrPlanet().getSecretAgents() > 0 && gameState.getMeowssion().condition(gameState)){
+                }
                 if(gameState.getActionsLeft() <= 0){
                     endTurn(playStateInfo);
                 }
@@ -173,7 +170,7 @@ public class GameStateController {
         else{
             throw new IllegalArgumentException(actionInfo.actionName() + " is not a valid action");
         }
-
+        return Map.of();
     }
 
 /**

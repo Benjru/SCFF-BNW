@@ -3,11 +3,22 @@ package com.mounta.spacecats.util;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import com.mounta.spacecats.models.cards.GalaxyNewsCard;
 import com.mounta.spacecats.models.cards.ResistCard;
 import com.mounta.spacecats.models.effects.GalaxyEffects.*;
 import com.mounta.spacecats.models.effects.ResistEffects.*;
+import com.mounta.spacecats.models.meowssions.condition.BuildANetwork;
+import com.mounta.spacecats.models.meowssions.condition.FreeTheDogs;
+import com.mounta.spacecats.models.meowssions.condition.Meowssion;
+import com.mounta.spacecats.models.meowssions.condition.RecruitAllies;
+import com.mounta.spacecats.models.meowssions.condition.StealMedicine;
+import com.mounta.spacecats.models.meowssions.rewards.MeowssionReward;
+import com.mounta.spacecats.models.meowssions.rewards.RiseOfBunnies;
+import com.mounta.spacecats.models.meowssions.rewards.TakeTime;
+import com.mounta.spacecats.models.meowssions.rewards.Turmoil;
+import com.mounta.spacecats.models.meowssions.rewards.WelcomedAsHeroes;
 import com.mounta.spacecats.models.planets.Symbol;
 
 public class CardConstants {
@@ -109,6 +120,24 @@ public class CardConstants {
                 list.add(ResistCard_F(symbol));
             }
         }
+
+        Collections.shuffle(list);
+        return new ArrayDeque<>(list);
+    }
+
+    public static ArrayDeque<Meowssion> newMeowssionDeck(){
+        ArrayList<Meowssion> list = new ArrayList<>();
+
+        list.addAll(List.of(new BuildANetwork(), new FreeTheDogs(), new RecruitAllies(), new StealMedicine()));
+
+        Collections.shuffle(list);
+        return new ArrayDeque<>(list);
+    }
+
+    public static ArrayDeque<MeowssionReward> newMeowssionRewardDeck(){
+        ArrayList<MeowssionReward> list = new ArrayList<>();
+
+        list.addAll(List.of(new RiseOfBunnies(), new TakeTime(), new Turmoil(), new WelcomedAsHeroes()));
 
         Collections.shuffle(list);
         return new ArrayDeque<>(list);
