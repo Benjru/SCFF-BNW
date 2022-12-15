@@ -30,9 +30,17 @@ class GameView extends Component {
     this.props.selectPlanet(planetPosition);
   }
 
+  selectCatToHeal = (cat) => {
+    this.props.selectCatToHeal(cat);
+  }
+
   travel = (travelType) => {
     console.log("traveling with travelType: " + travelType);
     this.props.travel(travelType);
+  }
+
+  heal = (numToHeal) => {
+    this.props.heal(numToHeal);
   }
 
   render() {
@@ -46,7 +54,7 @@ class GameView extends Component {
             <div className='gameViewContainer'>
               <GlobablFascismScale state={this.props.state}/>
               <GameBoard state={this.props.state} selectPlanet={this.selectPlanet}/>
-              <TurnDisplay state={this.props.state} useAction={this.useAction} travel={this.travel}/>
+              <TurnDisplay state={this.props.state} useAction={this.useAction} travel={this.travel} heal={this.heal} selectCatToHeal={this.selectCatToHeal}/>
             </div>
           </React.Fragment>:
           <FrontendCatController setMyCat={this.setMyCat} setGameState={this.setGameState} startGame={this.startGame}/>

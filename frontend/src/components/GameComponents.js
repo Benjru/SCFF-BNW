@@ -40,6 +40,12 @@ class TurnDisplay extends Component { // Knows current turn and renders current 
         if (cardFromDeck.name === 'teleport'){
             this.travel('teleport')
         }
+        else if (cardFromDeck.name === 'heal 1'){
+            this.heal(1);
+        }
+        else if (cardFromDeck.name === 'heal 2'){
+            this.heal(2);
+        }
         else{
             this.props.useAction(cardFromDeck);
         }
@@ -50,6 +56,13 @@ class TurnDisplay extends Component { // Knows current turn and renders current 
         this.props.travel(travelType);
     }
 
+    heal = (numToHeal) => {
+        this.props.heal(numToHeal);
+    }
+
+    selectCatToHeal = (cat) => {
+        this.props.selectCatToHeal(cat);
+    }
 
     render(){
         console.log(this.props.state.myCat);
@@ -59,6 +72,29 @@ class TurnDisplay extends Component { // Knows current turn and renders current 
             this.props.state.myCat.travelling?
             <div>
                 <h1 className="turnText">Select planet to travel to</h1>
+            </div>:
+            this.props.state.myCat.healing?
+            <div>
+                <h1 className="turnText">Select {myCat.numToHeal} to heal</h1>
+                {
+                    this.props.state.cats.map(cat => {
+                        if (cat.currPlanet === this.props.state.myCat.currPlanet){
+                            return(
+                                <div key={cat.catNum}>
+                                    <img 
+                                        className="selectedCat"
+                                        src={`/cats/${cat.name}-cat.png`} 
+                                        onClick={() => this.selectCatToHeal(cat)}
+                                        alt={cat.name}
+                                    />
+                                </div>
+                            )
+                        }
+                        return (
+                            <React.Fragment/>
+                        )
+                    })
+                }
             </div>:
             <div className="turnContainer">
                 <p className="centeredText">P{myCat.playerId+1}</p>
