@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -12,6 +13,9 @@ import com.mounta.spacecats.models.cards.ResistCard;
 import com.mounta.spacecats.models.effects.ConditionalEffect;
 import com.mounta.spacecats.models.planets.PlanetModel;
 
+@JsonIgnoreProperties(value = {
+    "abilities"
+})
 public class CatModel {
 
     public static final int MAX_CARDS = 3;
@@ -31,6 +35,8 @@ public class CatModel {
     private long playerId;
 
     private ArrayList<ResistCard> hand;
+
+    private int holdingAgents;
 
     private static final int MAX_SCRATCHES = 2;
 
@@ -53,8 +59,6 @@ public class CatModel {
         
     }
 
-
-
     private CatModel(String name, ArrayList<ConditionalEffect> abilities, int scratches, PlanetModel homePlanet, PlanetModel currPlanet, long playerId, ArrayList<ResistCard> hand) {
         this.name = name;
         this.abilities = abilities;
@@ -63,6 +67,7 @@ public class CatModel {
         this.currPlanet = currPlanet;
         this.playerId = playerId;
         this.hand = hand;
+        this.holdingAgents = 0;
     }
 
     public static CatModel create(String name, long playerId){
@@ -118,7 +123,10 @@ public class CatModel {
     }
 
     public void moveToPlanet(PlanetModel planet){
+        this.currPlanet.updateSecretAgents(-holdingAgents);
         this.currPlanet = planet;
+        this.currPlanet.updateSecretAgents(holdingAgents);
+
     }
 
     public void removeAbility(ConditionalEffect ability){
@@ -132,7 +140,19 @@ public class CatModel {
             this.scratches = MAX_SCRATCHES;
             return rollover;
         }
+        else if(this.scratches < 0){
+            this.scratches = 0;
+        }
         return 0;
+    }
+
+    public void updateAgents(int agents){
+        if((agents > 0 && currPlanet.getSecretAgents() - holdingAgents >= agents) || (agents <= 0 && holdingAgents + agents >= 0)){
+            this.holdingAgents += agents;
+        }
+        else{
+            throw new IllegalArgumentException("Cannot update agents (agents=" + agents + ") (holdingAgents=" + holdingAgents + ")");
+        }
     }
 
     public void setHomePlanet(PlanetModel planet){
