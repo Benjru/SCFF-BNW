@@ -39,7 +39,7 @@ export default class WelcomedAsHeroes extends BonusEffect{
             heal: state.heal
         }
         return (
-            body
+            JSON.stringify(body)
         )
     }
 }

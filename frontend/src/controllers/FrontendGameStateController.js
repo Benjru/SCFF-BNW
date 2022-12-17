@@ -250,7 +250,7 @@ class FrontendGameStateController extends Component {
         const body = {
             playerId: this.state.myCat.playerId
         }
-        this.sendPostRequest("/grabAgent", body);
+        this.sendPostRequest("/grabAgent", JSON.stringify(body));
     }
 
     // maps each possible action to its corresponding Body object, returns correct action body using object
@@ -286,7 +286,8 @@ class FrontendGameStateController extends Component {
                 ...prevState,
                 resistCardDiscard: resBody.resistCardDiscard,
                 galaxyNewsDiscard: resBody.galaxyNewsDiscard,
-                bonusCardDiscard: [],
+                meowssionAwardDiscard: resBody.meowssionAwardDiscard,
+                currMeowssion:resBody.meowssion,
                 cats: resBody.cats,
                 planets: resBody.planets,
                 currTurn: resBody.currTurn,
@@ -306,8 +307,8 @@ class FrontendGameStateController extends Component {
                 
             }
         }, () => {
-            if (this.state.bonusCardDiscard.length > 0){
-                this.toggleBonusEffect(this.state.bonusCardDiscard[this.state.bonusCardDiscard.length-1]);
+            if (this.state.meowssionAwardDiscard.length > 0){
+                this.toggleBonusEffect(this.state.meowssionAwardDiscard[this.state.meowssionAwardDiscard.length-1]);
             }
             console.log(this.state);
         }); 

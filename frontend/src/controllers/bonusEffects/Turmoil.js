@@ -37,7 +37,7 @@ export default class Turmoil extends BonusEffect{
             heal: null
         }
         return (
-            body
+            JSON.stringify(body)
         )
     }
 }

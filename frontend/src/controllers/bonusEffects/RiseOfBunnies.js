@@ -37,7 +37,7 @@ export default class RiseOfBunnies extends BonusEffect{
             heal: null
         }
         return (
-            body
+            JSON.stringify(body)
         )
     }
 }

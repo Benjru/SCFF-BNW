@@ -72,7 +72,7 @@ class GameView extends Component {
               <div className='messages'>
                 <GalaxyNews state={this.props.state}/>
                 <BonusCard state={this.props.state} toggleBonusEffect={this.toggleBonusEffect}/>
-                <Meowssion/>
+                <Meowssion state={this.props.state}/>
               </div>
               <GameBoard state={this.props.state} selectPlanet={this.selectPlanet}/>
               <TurnDisplay state={this.props.state} useAction={this.useAction} grabAgent={this.grabAgent} travel={this.travel} heal={this.heal} teleportSelect={this.teleportSelect} selectCatToHeal={this.selectCatToHeal}/>
