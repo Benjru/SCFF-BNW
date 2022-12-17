@@ -87,13 +87,13 @@ public class WebSocketGameController {
     }
 
     @PostMapping("/grabAgent")
-    public ResponseEntity<Void> pickupAgent(@RequestBody PlayerInfo playerInfo){
+    public ResponseEntity<Void> grabAgent(@RequestBody PlayerInfo playerInfo){
         try{
             gameStateController.pickupAgent(playerInfo.playerId());
-            return ResponseEntity.ok().build();
+            return new ResponseEntity<>(HttpStatus.OK);
         }
-        catch(IllegalArgumentException e){
-            return ResponseEntity.badRequest().build();
+        catch(Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
