@@ -12,15 +12,20 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.mounta.spacecats.models.actions.ActionLog;
 import com.mounta.spacecats.models.cards.GalaxyNewsCard;
+import com.mounta.spacecats.models.cards.MeowssionRewardCard;
 import com.mounta.spacecats.models.cards.ResistCard;
 import com.mounta.spacecats.models.cats.CatModel;
+import com.mounta.spacecats.models.meowssions.condition.Meowssion;
 import com.mounta.spacecats.models.planets.PlanetModel;
 import com.mounta.spacecats.util.CardConstants;
 
 @JsonIgnoreProperties(value = {
     "galaxyNewsDeck",
-    "resistCardDeck"
+    "resistCardDeck",
+    "meowssionDeck",
+    "meowssionAwardDeck"
 })
 public class GameStateModel {
     private ArrayDeque<GalaxyNewsCard> galaxyNewsDeck;
@@ -30,6 +35,14 @@ public class GameStateModel {
     private ArrayList<ResistCard> resistCardDiscard;
 
     private ArrayList<GalaxyNewsCard> galaxyNewsDiscard;
+
+    private ArrayList<Meowssion> meowssionDiscard;
+
+    private ArrayDeque<Meowssion> meowssionDeck;
+
+    private ArrayList<MeowssionRewardCard> meowssionAwardDiscard;
+
+    private ArrayDeque<MeowssionRewardCard> meowssionAwardDeck;
 
     private ArrayList<CatModel> cats;
 
@@ -42,9 +55,13 @@ public class GameStateModel {
 
     private int globalFascismScale;
 
-    private ArrayList<String> actionsTaken;
+    private ArrayList<ActionLog> actionsTaken;
 
     private String gameStatus;
+
+    private Meowssion meowssion;
+
+    private int agentsCompleted;
 
     private static class CatSerializer extends JsonSerializer<CatModel> {
 
@@ -58,6 +75,8 @@ public class GameStateModel {
 
     private GameStateModel(ArrayDeque<GalaxyNewsCard> galaxyNewsDeck,
                            ArrayDeque<ResistCard> resistCardDeck,
+                           ArrayDeque<Meowssion> meowssionDeck,
+                           ArrayDeque<MeowssionRewardCard> meowssionAwardDeck,
                            ArrayList<CatModel> cats,
                            ArrayList<PlanetModel> planets,
                            CatModel currTurn,
@@ -65,6 +84,8 @@ public class GameStateModel {
                            int globalFascismScale) {
         this.galaxyNewsDeck = galaxyNewsDeck;
         this.resistCardDeck = resistCardDeck;
+        this.meowssionDeck = meowssionDeck;
+        this.meowssionAwardDeck = meowssionAwardDeck;
         this.cats = cats;
         this.planets = planets;
         this.currTurn = currTurn;
@@ -72,8 +93,12 @@ public class GameStateModel {
         this.globalFascismScale = globalFascismScale;
         this.resistCardDiscard = new ArrayList<>();
         this.galaxyNewsDiscard = new ArrayList<>();
+        this.meowssionDiscard = new ArrayList<>();
+        this.meowssionAwardDiscard = new ArrayList<>();
         this.actionsTaken = new ArrayList<>();
         this.gameStatus = "inProgress";
+        this.meowssion = null;
+        this.agentsCompleted = 0;
     }
 
     public static GameStateModel create(ArrayList<CatModel> cats){
@@ -88,6 +113,8 @@ public class GameStateModel {
         });
         return new GameStateModel(CardConstants.newGalaxyDeck(),
                 CardConstants.newResistDeck(),
+                CardConstants.newMeowssionDeck(),
+                CardConstants.newMeowssionRewardDeck(),
                 cats,
                 planets,
                 cats.get(ThreadLocalRandom.current().nextInt(0, cats.size())),
@@ -100,7 +127,14 @@ public class GameStateModel {
         return this.galaxyNewsDeck;
     }
 
-    public GalaxyNewsCard drawGalaxyNewsCard() { return galaxyNewsDeck.pop(); }
+    public GalaxyNewsCard drawGalaxyNewsCard() { 
+        GalaxyNewsCard card = galaxyNewsDeck.pop();
+        discardCard(card);
+        if(galaxyNewsDeck.size() == 0){
+            refillNewsDeck();
+        }
+        return galaxyNewsDeck.pop(); 
+    }
 
     public ArrayDeque<ResistCard> getResistCardDeck() {
         return this.resistCardDeck;
@@ -134,8 +168,33 @@ public class GameStateModel {
         return this.galaxyNewsDiscard;
     }
 
-    public List<String> getActionsTaken(){
+    public ArrayList<MeowssionRewardCard> getMeowssionAwardDiscard(){
+        return this.meowssionAwardDiscard;
+    }
+
+    public List<ActionLog> getActionsTaken(){
         return actionsTaken;
+    }
+
+    public Meowssion getMeowssion(){
+        return meowssion;
+    }
+
+    public int getAgentsCompleted() {
+        return this.agentsCompleted;
+    }
+
+    public void setAgentsCompleted(int agentsCompleted) {
+        this.agentsCompleted = agentsCompleted;
+    }
+
+
+    public void moveSecretAgent(PlanetModel origin, PlanetModel target, int numberOfAgents){
+        if(numberOfAgents < 0){
+            throw new IllegalArgumentException("Number of agents cannot be negative!");
+        }
+        origin.updateSecretAgents(-numberOfAgents);
+        target.updateSecretAgents(numberOfAgents);
     }
 
     public void setCurrTurn(CatModel cat){
@@ -169,6 +228,48 @@ public class GameStateModel {
         galaxyNewsDiscard.add(card);
     }
 
+    private void discardMeowssion(){
+        meowssionDiscard.add(meowssion);
+    }
+
+    public void drawMeowssion(){
+        discardMeowssion();
+        this.meowssion = this.meowssionDeck.pop();
+        if(meowssionDeck.isEmpty()){
+            refillMeowssionDeck();
+        }
+    }
+
+    public void discardCard(MeowssionRewardCard meowssionReward){
+        this.meowssionAwardDiscard.add(meowssionReward);
+    }
+
+    public void refillMeowssionDeck(){
+        if(meowssionDeck.isEmpty()){
+            Collections.shuffle(meowssionDiscard);
+            meowssionDeck = new ArrayDeque<>(meowssionDiscard);
+            meowssionDiscard = new ArrayList<>();
+        }
+        else{
+            throw new IllegalStateException("Cannot reshuffle a meowssion deck that has things in it");
+        }
+    }
+
+    public MeowssionRewardCard drawMeowssionAward(){
+        return this.meowssionAwardDeck.pop();
+    }
+
+    public void refillMeowssionAwardDeck(){
+        if(meowssionAwardDeck.isEmpty()){
+            Collections.shuffle(meowssionAwardDiscard);
+            meowssionAwardDeck = new ArrayDeque<>(meowssionAwardDiscard);
+            meowssionDiscard = new ArrayList<>();
+        }
+        else{
+            throw new IllegalStateException("Cannot reshuffle a meowssion award deck that has things in it");
+        }
+    }
+
     
 /**
  * The drawResistCard function draws a card from the resistCardDeck and gives it to the cat.
@@ -183,6 +284,9 @@ public ResistCard drawResistCard(CatModel cat) {
     ResistCard card = resistCardDeck.pop();
     try{
         cat.giveCard(card);
+        if(resistCardDeck.size() == 0){
+            refillResistDeck();
+        }
         return card;
     }
     catch(IllegalStateException e){
@@ -228,7 +332,7 @@ public ResistCard drawResistCard(CatModel cat) {
         }
     }
 
-    public void takeAction(String actionName){
+    public void takeAction(ActionLog actionName){
         if(this.actionsLeft > 0){
             actionsTaken.add(actionName);
             this.actionsLeft--;
@@ -253,5 +357,35 @@ public ResistCard drawResistCard(CatModel cat) {
             ", globalFascismScale='" + getGlobalFascismScale() + "'" +
             "}";
     }
+    public void setGalaxyNewsDeck(ArrayDeque<GalaxyNewsCard> galaxyNewsDeck) {
+        this.galaxyNewsDeck = galaxyNewsDeck;
+    }
+    public void setResistCardDeck(ArrayDeque<ResistCard> resistCardDeck) {
+        this.resistCardDeck = resistCardDeck;
+    }
+    public void setResistCardDiscard(ArrayList<ResistCard> resistCardDiscard) {
+        this.resistCardDiscard = resistCardDiscard;
+    }
+    public void setGalaxyNewsDiscard(ArrayList<GalaxyNewsCard> galaxyNewsDiscard) {
+        this.galaxyNewsDiscard = galaxyNewsDiscard;
+    }
+
+    public ArrayList<Meowssion> getMeowssionDiscard() {
+        return this.meowssionDiscard;
+    }
+
+    public ArrayDeque<Meowssion> getMeowssionDeck() {
+        return this.meowssionDeck;
+    }
+
+    public ArrayDeque<MeowssionRewardCard> getMeowssionAwardDeck() {
+        return this.meowssionAwardDeck;
+    }
+
+
+    public String getGameStatus() {
+        return this.gameStatus;
+    }
+
     
 }
