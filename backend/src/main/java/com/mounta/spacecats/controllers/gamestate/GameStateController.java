@@ -218,15 +218,20 @@ public class GameStateController {
                 System.out.println("there");
                 gameState.takeAction(actionLog);
                 System.out.println("where");
-                if(gameState.getMeowssion().condition(gameState)){
-                    int numAgents = gameState.getCurrTurn().getCurrPlanet().getSecretAgents();
-                    gameState.getCurrTurn().getCurrPlanet().updateSecretAgents(-numAgents);
-                    gameState.setAgentsCompleted(gameState.getAgentsCompleted() + numAgents);
-                    if(gameState.getAgentsCompleted() == 3){
-                        gameState.setAgentsCompleted(0);
-                        meowssionRewardCard = gameState.drawMeowssionAward();
-                        resolvingMeowssion = true;
+                try{
+                    if(gameState.getMeowssion().condition(gameState)){
+                        int numAgents = gameState.getCurrTurn().getCurrPlanet().getSecretAgents();
+                        gameState.getCurrTurn().getCurrPlanet().updateSecretAgents(-numAgents);
+                        gameState.setAgentsCompleted(gameState.getAgentsCompleted() + numAgents);
+                        if(gameState.getAgentsCompleted() == 3){
+                            gameState.setAgentsCompleted(0);
+                            meowssionRewardCard = gameState.drawMeowssionAward();
+                            resolvingMeowssion = true;
+                        }
                     }
+                }
+                catch(NullPointerException e){
+                    System.out.println("Error checking condition for Meowssion");
                 }
                 if(gameState.getActionsLeft() <= 0 && !resolvingMeowssion){
                     endTurn(playStateInfo);
