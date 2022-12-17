@@ -19,7 +19,6 @@ export default class Turmoil extends BonusEffect{
     }
 
     checkConditions(state){
-        console.log("***********************CHECKING CONDITIONS************************")
         console.log(state.meowssion);
         if (state.meowssion.removeFascism.length === 1 && state.meowssion.teleport.catName && state.meowssion.teleport.planetPosition){
             console.log("returning true");

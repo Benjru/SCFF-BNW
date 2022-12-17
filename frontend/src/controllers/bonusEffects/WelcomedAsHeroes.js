@@ -33,9 +33,9 @@ export default class WelcomedAsHeroes extends BonusEffect{
 
     getRequestBody(state){
         let body = {
-            removeFascism: null,
+            removeFascism: [],
             liberate: state.liberate,
-            teleport: null,
+            teleport: {},
             heal: state.heal
         }
         return (

@@ -18,7 +18,6 @@ export default class RiseOfBunnies extends BonusEffect{
     }
 
     checkConditions(state){
-        console.log("***********************CHECKING CONDITIONS************************")
         console.log(state.meowssion.removeFascism);
         if (state.meowssion.removeFascism.length === 2){
             console.log("returning true");
@@ -29,7 +28,6 @@ export default class RiseOfBunnies extends BonusEffect{
     }
 
     getRequestBody(state){
-        console.log("***********************GETTING REQUEST BODY************************")
         let body = {
             removeFascism: state.removeFascism,
             liberate: [],

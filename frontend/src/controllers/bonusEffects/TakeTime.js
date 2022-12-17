@@ -18,7 +18,6 @@ export default class TakeTime extends BonusEffect{
     }
 
     checkConditions(state){
-        console.log("***********************CHECKING CONDITIONS************************")
         console.log(state.meowssion);
         if (state.meowssion.heal.length === 2){
             console.log("returning true");
