@@ -155,6 +155,10 @@ public class CatModel {
         }
     }
 
+    public void clearAgents(){
+        this.holdingAgents = 0;
+    }
+
     public void setHomePlanet(PlanetModel planet){
         this.homePlanet = planet;
     }

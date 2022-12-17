@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.mounta.spacecats.models.cards.GalaxyNewsCard;
+import com.mounta.spacecats.models.cards.MeowssionRewardCard;
 import com.mounta.spacecats.models.cards.ResistCard;
 import com.mounta.spacecats.models.effects.GalaxyEffects.*;
 import com.mounta.spacecats.models.effects.ResistEffects.*;
@@ -134,10 +135,14 @@ public class CardConstants {
         return new ArrayDeque<>(list);
     }
 
-    public static ArrayDeque<MeowssionReward> newMeowssionRewardDeck(){
-        ArrayList<MeowssionReward> list = new ArrayList<>();
+    public static ArrayDeque<MeowssionRewardCard> newMeowssionRewardDeck(){
+        ArrayList<MeowssionRewardCard> list = new ArrayList<>();
 
-        list.addAll(List.of(new RiseOfBunnies(), new TakeTime(), new Turmoil(), new WelcomedAsHeroes()));
+        list.addAll(List.of(
+            new MeowssionRewardCard("RiseOfBunnies", new RiseOfBunnies()), 
+            new MeowssionRewardCard("TakeTime", new TakeTime()), 
+            new MeowssionRewardCard("Turmoil", new Turmoil()), 
+            new MeowssionRewardCard("WelcomedAsHeroes", new WelcomedAsHeroes())));
 
         Collections.shuffle(list);
         return new ArrayDeque<>(list);

@@ -5,6 +5,6 @@ import java.util.List;
 import com.mounta.spacecats.models.cats.CatModel;
 import com.mounta.spacecats.models.planets.PlanetModel;
 
-public record ActionLog(String action, PlanetModel planet, List<CatModel> targetCats) {
+public record ActionLog(String action, PlanetModel planet, List<CatModel> targetCats, String cardName) {
     
 }

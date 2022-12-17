@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.mounta.spacecats.models.actions.ActionLog;
 import com.mounta.spacecats.models.cards.GalaxyNewsCard;
+import com.mounta.spacecats.models.cards.MeowssionRewardCard;
 import com.mounta.spacecats.models.cards.ResistCard;
 import com.mounta.spacecats.models.cats.CatModel;
 import com.mounta.spacecats.models.meowssions.condition.Meowssion;
@@ -38,9 +39,9 @@ public class GameStateModel {
 
     private ArrayDeque<Meowssion> meowssionDeck;
 
-    private ArrayList<MeowssionReward> meowssionAwardDiscard;
+    private ArrayList<MeowssionRewardCard> meowssionAwardDiscard;
 
-    private ArrayDeque<MeowssionReward> meowssionAwardDeck;
+    private ArrayDeque<MeowssionRewardCard> meowssionAwardDeck;
 
     private ArrayList<CatModel> cats;
 
@@ -72,7 +73,7 @@ public class GameStateModel {
     private GameStateModel(ArrayDeque<GalaxyNewsCard> galaxyNewsDeck,
                            ArrayDeque<ResistCard> resistCardDeck,
                            ArrayDeque<Meowssion> meowssionDeck,
-                           ArrayDeque<MeowssionReward> meowssionAwardDeck,
+                           ArrayDeque<MeowssionRewardCard> meowssionAwardDeck,
                            ArrayList<CatModel> cats,
                            ArrayList<PlanetModel> planets,
                            CatModel currTurn,
@@ -222,7 +223,7 @@ public class GameStateModel {
         }
     }
 
-    public void discardCard(MeowssionReward meowssionReward){
+    public void discardCard(MeowssionRewardCard meowssionReward){
         this.meowssionAwardDiscard.add(meowssionReward);
     }
 
@@ -237,7 +238,7 @@ public class GameStateModel {
         }
     }
 
-    public MeowssionReward drawMeowssionAward(){
+    public MeowssionRewardCard drawMeowssionAward(){
         return this.meowssionAwardDeck.pop();
     }
 

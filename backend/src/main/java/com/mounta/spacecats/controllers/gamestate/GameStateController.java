@@ -155,7 +155,7 @@ public class GameStateController {
             Action action = actions.get(actionInfo.actionName());
             if(action.condition(playStateInfo)){
                 action.resolveAction(playStateInfo);
-                ActionLog actionLog = new ActionLog(actionInfo.actionName(), playStateInfo.cat().getCurrPlanet().clone(), playStateInfo.targetCats());
+                ActionLog actionLog = new ActionLog(actionInfo.actionName(), playStateInfo.cat().getCurrPlanet(), playStateInfo.targetCats(), actionInfo.cardName());
                 gameState.takeAction(actionLog);
                 if(playStateInfo.cat().getCurrPlanet().getSecretAgents() > 0 && gameState.getMeowssion().condition(gameState)){
                 }
@@ -290,6 +290,7 @@ public class GameStateController {
         rollFascistDice(playStateInfo);
         gameState.clearActions();
         gameState.setActionsLeft(3);
+        gameState.getCurrTurn().clearAgents();
         List<CatModel> cats = gameState.getCats();
         int currTurnPos = cats.indexOf(gameState.getCurrTurn()) + 1;
         gameState.setCurrTurn(cats.get(currTurnPos % cats.size()));
