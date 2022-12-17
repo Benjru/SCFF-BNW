@@ -39,7 +39,7 @@ public abstract class CardModel {
         return cardId;
     }
     
-    private static class EffectSerializer extends JsonSerializer<EffectModel> {
+    protected static class EffectSerializer extends JsonSerializer<EffectModel> {
 
         @Override
         public void serialize(EffectModel value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
