@@ -7,10 +7,10 @@ class BonusCard extends Component{
         let meowssionAwardType;
 
         if (this.props.state.meowssionAwardDiscard.length > 0){
-            meowssionAwardType = this.props.state.meowssionAwardDiscard[this.props.state.meowssionAwardDiscard.length-1];
+            meowssionAwardType = this.props.state.meowssionAwardDiscard[this.props.state.meowssionAwardDiscard.length-1].cardId;
         }
 
-        console.log("BONUS CARD DISCARD: " + this.props.state.meowssionAwardDiscard);
+        console.log("BONUS CARD DISCARD: " + JSON.stringify(this.props.state.meowssionAwardDiscard));
         console.log("BONUS CARD TYPE: " + meowssionAwardType);
 
         const messageMap = new Map();
