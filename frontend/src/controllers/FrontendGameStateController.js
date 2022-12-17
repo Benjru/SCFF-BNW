@@ -2,16 +2,8 @@ import React, { Component } from "react";
 import GameView from "../views/GameView";
 import {Client} from '@stomp/stompjs';
 import { allPlanets } from "../constants";
-import ResistCard_A_Body from "./actionRequests/ResistCard_A_Body";
-import ResistCard_B_Body from "./actionRequests/ResistCard_B_Body";
-import ResistCard_C_Body from "./actionRequests/ResistCard_C_Body";
-import ResistCard_D_Body from "./actionRequests/ResistCard_D_Body";
-import ResistCard_E_Body from "./actionRequests/ResistCard_E_Body";
-import ResistCard_F_Body from "./actionRequests/ResistCard_F_Body";
 import BonusEffectFactory from "./bonusEffects/BonusEffectFactory"
-import FightFascismBody from "./actionRequests/FightFascismBody";
-import RestockBody from "./actionRequests/RestockBody";
-import TravelBody from "./actionRequests/TravelBody";
+import ActionBodyFactory from "./actionRequests/ActionBodyFactory";
 
 const SOCKET_URL = 'ws://localhost:8080/ws-message';
 
@@ -253,22 +245,10 @@ class FrontendGameStateController extends Component {
         this.sendPostRequest("/grabAgent", JSON.stringify(body));
     }
 
-    // maps each possible action to its corresponding Body object, returns correct action body using object
+    // Factory maps each possible action to its corresponding Body object, returns correct action body using object
     getActionRequestBody = (actionName, requiredInfo) => {
-        const actionMap = new Map();
-        actionMap.set('+1 liberation', new ResistCard_A_Body());
-        actionMap.set('heal 1', new ResistCard_B_Body(requiredInfo));
-        actionMap.set('heal 2', new ResistCard_C_Body(requiredInfo));
-        actionMap.set('-2 fascists', new ResistCard_D_Body());
-        actionMap.set('teleport', new ResistCard_E_Body(requiredInfo));
-        actionMap.set('ears', new ResistCard_F_Body('Ears'));
-        actionMap.set('paw', new ResistCard_F_Body('Paw'));
-        actionMap.set('tail', new ResistCard_F_Body('Tail'));
-        actionMap.set('whiskers', new ResistCard_F_Body('Whiskers'));
-        actionMap.set('restock', new RestockBody());
-        actionMap.set('travel', new TravelBody(requiredInfo));
-        actionMap.set('fightFascism', new FightFascismBody());
-        return actionMap.get(actionName).getBody(this.state);
+        const actionBodyFactory = new ActionBodyFactory();
+        return actionBodyFactory.createActionBody(actionName, requiredInfo).getBody(this.state);
     }
 
     setGameState = (resBody) => {

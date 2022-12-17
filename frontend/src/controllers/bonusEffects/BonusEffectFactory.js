@@ -6,10 +6,10 @@ import WelcomedAsHeroes from "./WelcomedAsHeroes";
 export default class BonusEffectFactory {
     createBonusEffect = (bonusCardType) => {
         const bonusEffectMap = new Map();
-        bonusEffectMap.set("BonusCard_A", new RiseOfBunnies());
-        bonusEffectMap.set("BonusCard_B", new WelcomedAsHeroes());
-        bonusEffectMap.set("BonusCard_C", new Turmoil());
-        bonusEffectMap.set("BonusCard_D", new TakeTime());
+        bonusEffectMap.set("RiseOfBunnies", new RiseOfBunnies());
+        bonusEffectMap.set("WelcomedAsHeroes", new WelcomedAsHeroes());
+        bonusEffectMap.set("Turmoil", new Turmoil());
+        bonusEffectMap.set("TakeTime", new TakeTime());
         return bonusEffectMap.get(bonusCardType);
     }
 }
