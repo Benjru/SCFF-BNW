@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mounta.spacecats.controllers.gamestate.GameStateController;
 import com.mounta.spacecats.controllers.websocket.DTOs.ActionInfo;
 import com.mounta.spacecats.controllers.websocket.DTOs.CatInfo;
+import com.mounta.spacecats.controllers.websocket.DTOs.PlayerInfo;
+import com.mounta.spacecats.controllers.websocket.DTOs.ResolveMeowssion;
 import com.mounta.spacecats.models.cats.CatModel;
 import com.mounta.spacecats.models.gamestate.GameStateModel;
 
@@ -82,6 +84,28 @@ public class WebSocketGameController {
         }
     }
 
+    @PostMapping("/grabAgent")
+    public ResponseEntity<Void> pickupAgent(@RequestBody PlayerInfo playerInfo){
+        try{
+            gameStateController.pickupAgent(playerInfo.playerId());
+            return ResponseEntity.ok().build();
+        }
+        catch(IllegalArgumentException e){
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PostMapping("/meowssionTargets")
+    public ResponseEntity<Void> meowssionTargets(@RequestBody ResolveMeowssion resolveMeowssion){
+        try{
+            gameStateController.resolveMeowssion(resolveMeowssion);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @GetMapping("/cat/{catName}")
     public ResponseEntity<CatModel> getCat(@PathVariable(value = "catName") String catName){
         try{
@@ -92,5 +116,7 @@ public class WebSocketGameController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+
     
 }

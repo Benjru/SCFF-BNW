@@ -8,4 +8,8 @@ public class MeowssionRewardCard extends CardModel {
         super(id, meowssionReward);
     }
 
+    public MeowssionReward getEffect(){
+        return (MeowssionReward)this.getEffect();
+    }
+
 }

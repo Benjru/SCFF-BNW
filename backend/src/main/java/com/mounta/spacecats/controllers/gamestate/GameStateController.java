@@ -6,9 +6,11 @@ import com.mounta.spacecats.controllers.actions.PlayCardAction;
 import com.mounta.spacecats.controllers.actions.RestockAction;
 import com.mounta.spacecats.controllers.actions.TravelAction;
 import com.mounta.spacecats.controllers.websocket.DTOs.ActionInfo;
+import com.mounta.spacecats.controllers.websocket.DTOs.ResolveMeowssion;
 import com.mounta.spacecats.mappers.SymbolMapper;
 import com.mounta.spacecats.models.actions.ActionLog;
 import com.mounta.spacecats.models.cards.GalaxyNewsCard;
+import com.mounta.spacecats.models.cards.MeowssionRewardCard;
 import com.mounta.spacecats.models.cards.ResistCard;
 import com.mounta.spacecats.models.cats.CatModel;
 import com.mounta.spacecats.models.effects.ResistEffects.ResistEffect_F;
@@ -22,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
@@ -35,9 +39,14 @@ public class GameStateController {
 
     private LobbyModel lobby;
 
+    private boolean resolvingMeowssion;
+
+    private MeowssionRewardCard meowssionRewardCard;
+
     public GameStateController(){
         this.lobby = new LobbyModel();
         this.symbolMapper = Mappers.getMapper(SymbolMapper.class);
+        this.resolvingMeowssion = false;
     }
 
     public ArrayList<CatModel> getPlayers(){
@@ -134,13 +143,62 @@ public class GameStateController {
         return null;
     }
 
+    public void resolveMeowssion(ResolveMeowssion resolveMeowssion){
+        if(!meowssionRewardCard.getEffect().condition(resolveMeowssion)){
+            throw new IllegalArgumentException("Invalid input for meowssion!");
+        }
+        if(!resolvingMeowssion){
+            throw new IllegalStateException("Cannot resolve meowssion if no meowssion needs to be resolved!");
+        }
+            if(resolveMeowssion.removeFascism() != null){
+                removeFascism(resolveMeowssion.removeFascism());
+            }
+            if(resolveMeowssion.heal() != null){
+                heal(resolveMeowssion.heal());
+            }
+            if(resolveMeowssion.liberate() != null){
+                liberate(resolveMeowssion.liberate());
+            }
+            if(resolveMeowssion.teleport() != null){
+                teleport(resolveMeowssion.teleport());
+            }
+    }
+
+    private void removeFascism(List<Integer> planetPositions){
+        List<PlanetModel> planets = planetPositions.stream()
+        .map(planetPosition -> gameState.getPlanets().stream().filter(planet -> planet.getPosition() == planetPosition).findFirst().orElseThrow(IllegalArgumentException::new))
+        .toList();
+        Map<PlanetModel, Integer> planetUpdateVals = planets.stream().collect(Collectors.toMap(Function.identity(), planet -> planets.stream().filter(thisPlanet -> planet.equals(thisPlanet)).toList().size()));
+        planetUpdateVals.keySet().forEach(planet -> planet.updateFascismLevel(-Math.min(planet.getFascismLevel(), planetUpdateVals.get(planet))));
+    }
+
+    private void heal(List<String> catNames){
+        List<CatModel> cats = catNames.stream().map(catName -> gameState.getCats().stream().filter(cat -> cat.getName().equals(catName)).findFirst().orElseThrow(IllegalArgumentException::new)).toList();
+        cats.forEach(cat -> cat.updateScratches(-1));
+    }
+
+    private void liberate(List<Integer> planetPositions){
+        List<PlanetModel> planets = planetPositions.stream()
+        .map(planetPosition -> gameState.getPlanets().stream().filter(planet -> planet.getPosition() == planetPosition).findFirst().orElseThrow(IllegalArgumentException::new))
+        .toList();
+        planets.stream().filter(planet -> planet.getFascismLevel() <= 0).forEach(planet -> planet.updateFascismLevel(-1));
+    }
+
+    private void teleport(Map<String, Integer> teleInfo){
+        List<CatModel> cats = teleInfo.keySet().stream().map(catName -> gameState.getCats().stream().filter(cat -> cat.getName().equals(catName))).findFirst().orElseThrow(IllegalArgumentException::new).toList();
+        cats.forEach(cat -> cat.moveToPlanet(gameState.getPlanets().stream().filter(planet -> planet.getPosition() == teleInfo.get(cat.getName())).findFirst().orElseThrow(IllegalArgumentException::new)));
+    }
+
 /**
  * The takeAction function takes an ActionInfo object and uses it to take the appropriate action.
  *
  * @param actionInfo Pass in the action that was taken by the player
  *
  */
-    public Map<String, Integer> takeAction(ActionInfo actionInfo){
+    public void takeAction(ActionInfo actionInfo){
+        if(resolvingMeowssion){
+            throw new IllegalStateException("Resolving a meowssion! Cannot take an action");
+        }
         PlayStateInfo playStateInfo = makePlayStateInfo(actionInfo);
 
         Map<String, Action> actions = Map.of("playCard", new PlayCardAction(),
@@ -157,9 +215,17 @@ public class GameStateController {
                 action.resolveAction(playStateInfo);
                 ActionLog actionLog = new ActionLog(actionInfo.actionName(), playStateInfo.cat().getCurrPlanet(), playStateInfo.targetCats(), actionInfo.cardName());
                 gameState.takeAction(actionLog);
-                if(playStateInfo.cat().getCurrPlanet().getSecretAgents() > 0 && gameState.getMeowssion().condition(gameState)){
+                if(gameState.getMeowssion().condition(gameState)){
+                    int numAgents = gameState.getCurrTurn().getCurrPlanet().getSecretAgents();
+                    gameState.getCurrTurn().getCurrPlanet().updateSecretAgents(-numAgents);
+                    gameState.setAgentsCompleted(gameState.getAgentsCompleted() + numAgents);
+                    if(gameState.getAgentsCompleted() == 3){
+                        gameState.setAgentsCompleted(0);
+                        meowssionRewardCard = gameState.drawMeowssionAward();
+                        resolvingMeowssion = true;
+                    }
                 }
-                if(gameState.getActionsLeft() <= 0){
+                if(gameState.getActionsLeft() <= 0 && !resolvingMeowssion){
                     endTurn(playStateInfo);
                 }
             }
@@ -170,7 +236,6 @@ public class GameStateController {
         else{
             throw new IllegalArgumentException(actionInfo.actionName() + " is not a valid action");
         }
-        return Map.of();
     }
 
 /**
@@ -312,5 +377,16 @@ public class GameStateController {
     
     public GameStateModel getGameState(){
         return gameState;
+    }
+
+    public void pickupAgent(int playerId){
+        CatModel cat = gameState.getCats().stream().filter(thisCat -> thisCat.getPlayerId() == playerId).findFirst().orElseThrow(IllegalArgumentException::new);
+
+        if(cat.equals(gameState.getCurrTurn())){
+            cat.updateAgents(1);
+        }
+        else{
+            throw new IllegalArgumentException("It is not this cat's turn! (playerId=" + playerId + ")");
+        }
     }
 }

@@ -61,6 +61,8 @@ public class GameStateModel {
 
     private Meowssion meowssion;
 
+    private int agentsCompleted;
+
     private static class CatSerializer extends JsonSerializer<CatModel> {
 
         @Override
@@ -96,6 +98,7 @@ public class GameStateModel {
         this.actionsTaken = new ArrayList<>();
         this.gameStatus = "inProgress";
         this.meowssion = null;
+        this.agentsCompleted = 0;
     }
 
     public static GameStateModel create(ArrayList<CatModel> cats){
@@ -176,6 +179,15 @@ public class GameStateModel {
     public Meowssion getMeowssion(){
         return meowssion;
     }
+
+    public int getAgentsCompleted() {
+        return this.agentsCompleted;
+    }
+
+    public void setAgentsCompleted(int agentsCompleted) {
+        this.agentsCompleted = agentsCompleted;
+    }
+
 
     public void moveSecretAgent(PlanetModel origin, PlanetModel target, int numberOfAgents){
         if(numberOfAgents < 0){
