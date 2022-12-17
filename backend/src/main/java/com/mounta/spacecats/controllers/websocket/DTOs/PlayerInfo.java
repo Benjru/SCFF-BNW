@@ -1,5 +1,5 @@
 package com.mounta.spacecats.controllers.websocket.DTOs;
 
-public record PlayerInfo(int playerId) {
+public record PlayerInfo(Integer playerId) {
     
 }
