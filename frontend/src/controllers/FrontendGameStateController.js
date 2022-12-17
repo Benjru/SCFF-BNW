@@ -102,7 +102,7 @@ class FrontendGameStateController extends Component {
         const bonusEffect = bonusEffectFactory.createBonusEffect(this.state.bonusEffect);
         if (bonusEffect.checkConditions(this.state)){
             let body = bonusEffect.getRequestBody(this.state);
-            this.sendPostRequest("/meowssion", body);
+            this.sendPostRequest("/meowssionTargets", body);
             this.setState({
                 bonusEffect: undefined,
                 meowssion: {
