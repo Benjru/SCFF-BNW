@@ -32,9 +32,9 @@ export default class Turmoil extends BonusEffect{
     getRequestBody(state){
         let body = {
             removeFascism: state.removeFascism,
-            liberate: null,
+            liberate: [],
             teleport: state.teleport,
-            heal: null
+            heal: []
         }
         return (
             JSON.stringify(body)

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 export default class RestockAction extends Component{
 
-    restock = () => { // change to API call
+    restock = () => { 
         this.props.useAction('restock');
     }
 

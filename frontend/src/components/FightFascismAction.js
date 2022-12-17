@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 export default class FightFascismAction extends Component{
 
-    fightFascism = () => { // change to API call
+    fightFascism = () => { 
         console.log("fighting fascism");
         this.props.useAction('fightFascism');
     }

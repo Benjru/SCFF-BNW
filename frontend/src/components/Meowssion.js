@@ -1,7 +1,7 @@
 import React from "react";
 import NewlineText from "./NewlineText";
 
-const Meowssion = (props) => { // with backend: remove planets from state variable and then in componentDidMount make API call to get planets, add to setState
+const Meowssion = (props) => { 
     
     let currentMeowssion = props.state.currMeowssion.id;
 

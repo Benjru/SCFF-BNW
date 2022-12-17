@@ -1,4 +1,4 @@
-//FrontendCatController 
+
 import React, { Component } from "react";
 
 export default class GrabAgent extends Component{

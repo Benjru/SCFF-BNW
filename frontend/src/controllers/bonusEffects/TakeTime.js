@@ -30,9 +30,9 @@ export default class TakeTime extends BonusEffect{
 
     getRequestBody(state){
         let body = {
-            removeFascism: null,
-            liberate: null,
-            teleport: null,
+            removeFascism: [],
+            liberate: [],
+            teleport: {},
             heal: state.meowssion.heal
         }
         return (

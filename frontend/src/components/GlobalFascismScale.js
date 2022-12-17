@@ -1,6 +1,6 @@
 import React from "react";
 
-const GlobablFascismScale = (props) => { // with backend: remove planets from state variable and then in componentDidMount make API call to get planets, add to setState
+const GlobablFascismScale = (props) => { 
     console.log("GlobalFascismScale props: " + props.state.globalFascismScale)
     const barSquares = [];
     if (props.state.globalFascismScale > 0){

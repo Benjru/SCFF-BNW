@@ -32,9 +32,9 @@ export default class RiseOfBunnies extends BonusEffect{
         console.log("***********************GETTING REQUEST BODY************************")
         let body = {
             removeFascism: state.removeFascism,
-            liberate: null,
-            teleport: null,
-            heal: null
+            liberate: [],
+            teleport: {},
+            heal: []
         }
         return (
             JSON.stringify(body)

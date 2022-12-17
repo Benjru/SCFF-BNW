@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import NewlineText from "./NewlineText";
 
-class BonusCard extends Component{ // with backend: remove planets from state variable and then in componentDidMount make API call to get planets, add to setState
+class BonusCard extends Component{
 
     render(){
         let meowssionAwardType;

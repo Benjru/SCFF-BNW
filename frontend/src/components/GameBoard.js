@@ -3,7 +3,7 @@ import Planet from "./Planet";
 import FascismBar from "./FascismBar";
 import { allPlanets } from "../constants";
 
-export default class GameBoard extends Component{ // with backend: remove planets from state variable and then in componentDidMount make API call to get planets, add to setState
+export default class GameBoard extends Component{ 
 
     selectPlanet = (planetPosition) => {
         if (this.props.state.currTurn === this.props.state.myCat.playerId){
