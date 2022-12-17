@@ -213,8 +213,11 @@ public class GameStateController {
             Action action = actions.get(actionInfo.actionName());
             if(action.condition(playStateInfo)){
                 action.resolveAction(playStateInfo);
+                System.out.println("here");
                 ActionLog actionLog = new ActionLog(actionInfo.actionName(), playStateInfo.cat().getCurrPlanet(), playStateInfo.targetCats(), actionInfo.cardName());
+                System.out.println("there");
                 gameState.takeAction(actionLog);
+                System.out.println("where");
                 if(gameState.getMeowssion().condition(gameState)){
                     int numAgents = gameState.getCurrTurn().getCurrPlanet().getSecretAgents();
                     gameState.getCurrTurn().getCurrPlanet().updateSecretAgents(-numAgents);
