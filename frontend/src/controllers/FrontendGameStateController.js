@@ -8,6 +8,7 @@ import ResistCard_C_Body from "./actionRequests/ResistCard_C_Body";
 import ResistCard_D_Body from "./actionRequests/ResistCard_D_Body";
 import ResistCard_E_Body from "./actionRequests/ResistCard_E_Body";
 import ResistCard_F_Body from "./actionRequests/ResistCard_F_Body";
+import BonusEffectFactory from "./bonusEffects/BonusEffectFactory"
 import FightFascismBody from "./actionRequests/FightFascismBody";
 import RestockBody from "./actionRequests/RestockBody";
 import TravelBody from "./actionRequests/TravelBody";
@@ -20,74 +21,182 @@ class FrontendGameStateController extends Component {
         cats: [],
         gameStarted: false,
     };
-    
-    
-    setMyCat = (cat) => {
-        this.setState({myCat: cat});
-    }
 
-    selectPlanet = (planetPosition) => {
-        console.log("selected planet at position: " + planetPosition)
-        let body = this.getActionRequestBody(this.state.myCat.travelType, planetPosition);
-        console.log("in selectPlanet. Request body: "  + body);
+    sendPostRequest = (endpoint, body) => {
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body
         };
         console.log("request body: " + body);
-        fetch("http://localhost:8080/action", requestOptions)
+        fetch(`http://localhost:8080${endpoint}`, requestOptions)
             .then(res => {
                 if (res.status === 400){
                     console.log(res)
                 }
             })
-        this.setState((prevState) => {
+    }
+
+    setMyCat = (cat) => {
+        this.setState({myCat: cat});
+    }
+
+    selectPlanet = (planetPosition) => {
+        console.log("selected planet at position: " + planetPosition)
+        let body;
+        if (this.state.myCat.travelling){
+            body = this.getActionRequestBody(this.state.myCat.travelType, planetPosition);
+            console.log("in selectPlanet. Request body: "  + body);
+            this.setState((prevState) => {
+                return{
+                    myCat: {
+                        ...prevState.myCat,
+                        travelling: false
+                    },
+                    planetSelected: planetPosition
+                }
+            });
+            this.sendPostRequest("/action", body);
+        }
+        else if (this.state.meowssion.numToRemoveFascismFrom !== 0){
+            console.log("2");
+            console.log("*********" + JSON.stringify(this.state.meowssion));
+            this.setState((prevState) => {
+                return {
+                    meowssion: {
+                        ...prevState.meowssion,
+                        numToRemoveFascismFrom: prevState.meowssion.numToRemoveFascismFrom - 1,
+                        removeFascism: [...prevState.meowssion.removeFascism, planetPosition]
+                    }
+                }
+            }, () => {
+                this.resolveBonusEffect();
+            });
+        }
+        else if (this.state.meowssion.teleport.catName){
+            this.setState((prevState) => {
+                return {
+                    meowssion: {
+                        ...prevState.meowssion,
+                        anyCatTeleport: false,
+                        teleport:{
+                            ...prevState.meowssion.teleport,
+                            planetPosition: planetPosition
+                        }
+                    }
+                }
+            }, () => {
+                this.resolveBonusEffect();
+            });
+        }
+        else if (this.state.meowssion.numToAddLiberationTo !== 0){
+            console.log("3");
+            this.setState((prevState) => {
+                return {
+                    meowssion: {
+                        ...prevState.meowssion,
+                        numToAddLiberationTo: prevState.meowssion.numToAddLiberationTo - 1,
+                        liberate: [...prevState.meowssion.liberate, planetPosition]
+                    }
+                }
+            }, () => {
+                this.resolveBonusEffect();
+            });
+        }
+    }
+
+    resolveBonusEffect = () => {
+        const bonusEffectFactory = new BonusEffectFactory();
+        const bonusEffect = bonusEffectFactory.createBonusEffect(this.state.bonusEffect);
+        if (bonusEffect.checkConditions(this.state)){
+            let body = bonusEffect.getRequestBody(this.state);
+            this.sendPostRequest("/meowssion", body);
+            this.setState({
+                bonusEffect: undefined,
+                meowssion: {
+                    numToHeal: 0,
+                    heal: [],
+                    numToAddLiberationTo: 0,
+                    liberate: [],
+                    numToRemoveFascismFrom: 0,
+                    removeFascism: [],
+                    anyCatTeleport: false,
+                    teleport: []
+                }
+            })
+        } 
+    }
+
+    teleportSelect = (cat) => {
+        this.setState(prevState => {
             return{
-                myCat: {
-                    ...prevState.myCat,
-                    travelling: false
-                },
-                planetSelected: planetPosition
+                meowssion: {
+                    ...prevState.meowssion,
+                    anyCatTeleport: false,
+                    teleport: {
+                        catName: cat.name
+                    }
+                }
             }
         });
     }
 
     selectCatToHeal = (cat) => {
         console.log("HEALING");
+        if (this.state.meowssion.numToHeal !== 0){
+            this.setState((prevState) => {
+                return {
+                    meowssion: {
+                        ...prevState.meowssion,
+                        numToHeal: prevState.meowssion.numToHeal - 1,
+                        heal: [...prevState.meowssion.heal, cat]
+                    }
+                }
+            }, () => {
+                this.resolveBonusEffect();
+            }); 
+        }
+        else{
+            this.setState((prevState) => {
+                return {
+                    myCat: {
+                        ...prevState.myCat,
+                        targets: [...prevState.myCat.targets, cat.name]
+                    }
+                }
+            }, () => {
+                if (this.state.myCat.targets.length === this.state.myCat.numToHeal){
+                    let body = this.getActionRequestBody("heal " + this.state.myCat.numToHeal, this.state.myCat.targets);
+                    this.sendPostRequest("/action", body);
+    
+                    this.setState((prevState) => {
+                        return{
+                            myCat: {
+                                ...prevState.myCat,
+                                healing: false
+                            }
+                        }
+                    });
+                }   
+            })
+        }
+    }
 
+    toggleBonusEffect = (bonusCardType) => {
+        const bonusEffectFactory = new BonusEffectFactory();
+        console.log("BONUS CARD TYPE: " + bonusCardType);
+        console.log("CREATING BONUS EFFECT gives " + bonusEffectFactory.createBonusEffect(bonusCardType));
+        let state = bonusEffectFactory.createBonusEffect(bonusCardType).toggleEffect(this.state);
         this.setState((prevState) => {
             return {
-                myCat: {
-                    ...prevState.myCat,
-                    targets: [...prevState.myCat.targets, cat.name]
-                }
+                ...prevState,
+                bonusEffect: bonusCardType,
+                myCat: state.myCat,
+                meowssion: state.meowssion
             }
         }, () => {
-            if (this.state.myCat.targets.length === this.state.myCat.numToHeal){
-                let body = this.getActionRequestBody("heal " + this.state.myCat.numToHeal, this.state.myCat.targets);
-
-                const requestOptions = {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body
-                };
-                console.log("request body: " + body);
-                fetch("http://localhost:8080/action", requestOptions)
-                    .then(res => {
-                        if (res.status === 400){
-                            console.log(res)
-                        }
-                    })
-                this.setState((prevState) => {
-                    return{
-                        myCat: {
-                            ...prevState.myCat,
-                            healing: false
-                        }
-                    }
-                });
-            }   
+            console.log("STATE: " + JSON.stringify(state));
+            console.log(JSON.stringify(this.state));
         })
     }
 
@@ -147,6 +256,27 @@ class FrontendGameStateController extends Component {
         })
     }
 
+    grabAgent = () => {
+        console.log("grabbing agent");
+        const body = {
+            num: 1,
+            playerId: this.state.myCat.playerId
+        }
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body
+        };
+        console.log("request body: " + body);
+        fetch("http://localhost:8080/action", requestOptions)
+            .then(res => {
+                if (res.status === 400){
+                    console.log(res)
+                }
+            })
+        
+    }
+
     // maps each possible action to its corresponding Body object, returns correct action body using object
     getActionRequestBody = (actionName, requiredInfo) => {
         const actionMap = new Map();
@@ -166,13 +296,13 @@ class FrontendGameStateController extends Component {
     }
 
     setGameState = (resBody) => {
-        console.log("/game/gameState sent: " + resBody);
-        console.log("resBody.planets: " + resBody.planets)
+        // console.log("/game/gameState sent: " + resBody);
+        // console.log("resBody.planets: " + resBody.planets)
         resBody.planets.forEach(planet => {
             const cats = resBody.cats.filter(cat => cat.currPlanet === planet.position);
             planet.cats = cats;
         })
-        console.log("myCat name before setting: " + this.state.myCat.name);
+        // console.log("myCat name before setting: " + this.state.myCat.name);
         const myCat = resBody.cats.filter(thisCat => thisCat.name === this.state.myCat.name);
         this.setMyCat(myCat[0]);
         this.setState((prevState) => {
@@ -180,14 +310,29 @@ class FrontendGameStateController extends Component {
                 ...prevState,
                 resistCardDiscard: resBody.resistCardDiscard,
                 galaxyNewsDiscard: resBody.galaxyNewsDiscard,
+                bonusCardDiscard: [],
                 cats: resBody.cats,
                 planets: resBody.planets,
                 currTurn: resBody.currTurn,
                 actionsLeft: resBody.actionsLeft,
                 globalFascismScale: resBody.globalFascismScale,
-                gameStarted: true
+                meowssion: {
+                    numToHeal: 0,
+                    heal: [],
+                    numToAddLiberationTo: 0,
+                    liberate: [],
+                    numToRemoveFascismFrom: 0,
+                    removeFascism: [],
+                    anyCatTeleport: false,
+                    teleport: {}
+                },
+                gameStarted: true,
+                
             }
         }, () => {
+            if (this.state.bonusCardDiscard.length > 0){
+                this.toggleBonusEffect(this.state.bonusCardDiscard[this.state.bonusCardDiscard.length-1]);
+            }
             console.log(this.state);
         }); 
     }
@@ -223,7 +368,18 @@ class FrontendGameStateController extends Component {
     render(){
         return (
             <div>
-                <GameView state={this.state} setGameState={this.setGameState} useAction={this.useAction} selectPlanet={this.selectPlanet} selectCatToHeal={this.selectCatToHeal} setMyCat={this.setMyCat} travel={this.travel} heal={this.heal}/>
+                <GameView 
+                    state={this.state} 
+                    setGameState={this.setGameState} 
+                    useAction={this.useAction} 
+                    toggleBonusEffect={this.toggleBonusEffect}
+                    grabAgent={this.grabAgent}
+                    selectPlanet={this.selectPlanet} 
+                    teleportSelect={this.teleportSelect}
+                    selectCatToHeal={this.selectCatToHeal} 
+                    setMyCat={this.setMyCat} 
+                    travel={this.travel} 
+                    heal={this.heal}/>
             </div>
         );
     }

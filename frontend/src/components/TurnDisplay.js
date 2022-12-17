@@ -1,40 +1,13 @@
 //FrontendGameStateController 
 import React, { Component } from "react";
-import {RestockAction, TravelAction, FightFascismAction} from './CatComponents';
-import Planet from "./Planet";
-import FascismBar from "./FascismBar";
-import { allPlanets, allResistCards } from "../constants";
+import {allResistCards } from "../constants";
+import RestockAction from "./RestockAction";
+import TravelAction from "./TravelAction";
+import FightFascismAction from "./FightFascismAction";
+import GrabAgent from "./GrabAgent";
 import ScratchBar from "./ScratchBar";
 
-class GameBoard extends Component{ // with backend: remove planets from state variable and then in componentDidMount make API call to get planets, add to setState
-
-    selectPlanet = (planetPosition) => {
-        if (this.props.state.currTurn === this.props.state.myCat.playerId){
-            this.props.selectPlanet(planetPosition);
-        }
-    }
-
-    render() {
-        return (
-            <div className="gameBoard">
-                {console.log("travelling? -> " + this.props.state.myCat.travelling)}
-                {
-                    this.props.state.planets.map(planet => (
-                        <div className="boardSquare" key={planet} onClick={()=>{this.selectPlanet(planet.position)}}>
-                            <p className="planetLabel">{`#${planet.number}`} {allPlanets[planet.number-1].name}</p> 
-                            <Planet state={this.props.state} planet={planet} planetSymbol={planet.symbol} planetName={allPlanets[planet.number-1].name}/>
-                            {console.log("planet.fascismLevel (in GameBoard): " + planet.fascismLevel)}
-                            <FascismBar fascismLevel={planet.fascismLevel}/>
-                        </div>
-
-                    ))
-                }
-            </div>
-        );
-    }
-}
-
-class TurnDisplay extends Component { // Knows current turn and renders current cat's hand, and actions
+export default class TurnDisplay extends Component { // Knows current turn and renders current cat's hand, and actions
 
     useAction = (cardFromDeck) => {
         if (cardFromDeck.name === 'teleport'){
@@ -51,9 +24,16 @@ class TurnDisplay extends Component { // Knows current turn and renders current 
         }
     }
 
+    grabAgent = () => {
+        this.props.grabAgent();
+    }
 
     travel = (travelType) => {
         this.props.travel(travelType);
+    }
+
+    teleportSelect = (cat) => {
+        this.props.teleportSelect(cat)
     }
 
     heal = (numToHeal) => {
@@ -61,7 +41,9 @@ class TurnDisplay extends Component { // Knows current turn and renders current 
     }
 
     selectCatToHeal = (cat) => {
-        this.props.selectCatToHeal(cat);
+        if (this.props.state.currTurn === this.props.state.myCat.playerId){
+            this.props.selectCatToHeal(cat);
+        }
     }
 
     render(){
@@ -96,6 +78,55 @@ class TurnDisplay extends Component { // Knows current turn and renders current 
                     })
                 }
             </div>:
+            this.props.state.meowssion.numToRemoveFascismFrom !== 0?
+            <div>
+                <h1 className="turnText">Select a planet to remove fascism from</h1>
+            </div>:
+            this.props.state.meowssion.anyCatTeleport?
+            <div>
+                <h1 className="turnText">Select a cat to teleport</h1>
+                {
+                    this.props.state.cats.map(cat => {
+                        console.log(JSON.stringify(this.props.state.meowssion));
+                        return(
+                            <div key={cat.catNum}>
+                                <img 
+                                    className="selectedCat"
+                                    src={`/cats/${cat.name}-cat.png`} 
+                                    onClick={() => this.teleportSelect(cat)}
+                                    alt={cat.name}
+                                />
+                            </div>
+                        )
+                    })
+                }
+            </div>:
+            this.props.state.meowssion.teleport.catName?
+            <div>
+                <h1 className="turnText">Select a planet to travel to</h1>
+            </div>:
+            this.props.state.meowssion.numToHeal !== 0?
+            <div>
+                <h1 className="turnText">Select {this.props.state.meowssion.numToHeal} to heal</h1>
+                {
+                    this.props.state.cats.map(cat => {
+                        console.log("Here");
+                        console.log(JSON.stringify(this.props.state.meowssion));
+                        return(
+                            <div key={cat.catNum}>
+                                <img 
+                                    className="selectedCat"
+                                    src={`/cats/${cat.name}-cat.png`} 
+                                    onClick={() => this.selectCatToHeal(cat)}
+                                    alt={cat.name}
+                                />
+                            </div>
+                        )
+                    })
+                }
+            </div>:
+            this.props.state.bonusEffect?
+            <React.Fragment/>:
             <div className="turnContainer">
                 <p className="centeredText">P{myCat.playerId+1}</p>
                 <img
@@ -133,13 +164,11 @@ class TurnDisplay extends Component { // Knows current turn and renders current 
                     <TravelAction state={this.props.state} travel={this.travel}/>
                     <FightFascismAction state={this.props.state} useAction={this.useAction}/>
                 </div>
+                <GrabAgent state={this.props.state} grabAgent={this.grabAgent}/>
                 <ScratchBar state={this.props.state}/>
             </div>
         );
     }
 
 }
-
-export {GameBoard};
-export {TurnDisplay};
 

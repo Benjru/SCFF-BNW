@@ -234,13 +234,6 @@
   /* outline: 3px solid black; */
 }
 
-.galaxyNewsMessage{
-  margin-top:15%;
-  color: white;
-  font-size: 20px;
-  
-}
-
 
 .fascismLevelBar{
   /* margin-left: 29.5%; */
@@ -303,8 +296,8 @@
   display: flex;
   flex-direction: row;
   /* outline: 3px solid black; */
-  padding-top: 1%;
-  padding-bottom: 20%;
+  padding-top:5px;
+  padding-bottom: 40px;
   justify-content: space-between;
 }
 
@@ -386,11 +379,11 @@
 
 .fascismLevelBar{
   /* margin-left: 29.5%; */
-  margin-left: 35%;
-  margin-top: 5%;
+  margin-left: 65px;
+  margin-top: 8px;
   display: grid;
-  width: 10%;
-  height: 4%;
+  width: 20px;
+  height: 10px;
   grid-template-columns: repeat(8, 1fr);
   grid-column-gap: 2px;
 }
@@ -417,4 +410,39 @@
 .emptyGlobal{
   height:30px;
   width:30px
+}
+
+.galaxyNewsTitle{
+  text-align: center;
+  color: red;
+  font-size: 30px;
+}
+
+.galaxyNewsMessage{
+  margin-top:15%;
+  color: white;
+  font-size: 20px;
+  
+}
+
+.bonusCardTitle{
+  text-align: center;
+  font-size: 30px;
+  color: rgb(68, 189, 230);
+}
+
+.meowssionTitle{
+  color: orange;
+  font-size: 30px;
+  text-align: center;
+
+}
+
+.meowssion{
+  font-size: 20px;
+  color: white;
+}
+
+.messages{
+  outline: 2px solid black;
 }

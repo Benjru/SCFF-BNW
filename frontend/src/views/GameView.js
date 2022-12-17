@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 import '../App.css';
-import {GameBoard, TurnDisplay} from '../components/GameComponents';
+import TurnDisplay from '../components/TurnDisplay';
+import GameBoard from '../components/GameBoard';
 import FrontendCatController from '../controllers/FrontendCatController';
 import GlobablFascismScale from '../components/GlobalFascismScale';
+import GalaxyNews from '../components/GalaxyNewsCard';
+import BonusCard from '../components/BonusCard';
+import Meowssion from '../components/Meowssion';
 
 // get state from fe gamestate controller?
 
@@ -39,8 +43,20 @@ class GameView extends Component {
     this.props.travel(travelType);
   }
 
+  teleportSelect = (cat) => {
+    this.props.teleportSelect(cat);
+  }
+
   heal = (numToHeal) => {
     this.props.heal(numToHeal);
+  }
+
+  grabAgent = () => {
+    this.props.grabAgent();
+  }
+
+  toggleBonusEffect = (bonusCardType) => {
+    this.props.toggleBonusEffect(bonusCardType);
   }
 
   render() {
@@ -49,12 +65,17 @@ class GameView extends Component {
         {
           this.props.state.gameStarted ?
           <React.Fragment>
-            {console.log("this.props.state: " + JSON.stringify(this.props.state))}
+            {/* {console.log("this.props.state: " + JSON.stringify(this.props.state))} */}
               <p className='turnText'>{this.props.state.cats[this.props.state.currTurn].name.toUpperCase()}'S TURN</p>
             <div className='gameViewContainer'>
               <GlobablFascismScale state={this.props.state}/>
+              <div className='messages'>
+                <GalaxyNews state={this.props.state}/>
+                <BonusCard state={this.props.state} toggleBonusEffect={this.toggleBonusEffect}/>
+                <Meowssion/>
+              </div>
               <GameBoard state={this.props.state} selectPlanet={this.selectPlanet}/>
-              <TurnDisplay state={this.props.state} useAction={this.useAction} travel={this.travel} heal={this.heal} selectCatToHeal={this.selectCatToHeal}/>
+              <TurnDisplay state={this.props.state} useAction={this.useAction} grabAgent={this.grabAgent} travel={this.travel} heal={this.heal} teleportSelect={this.teleportSelect} selectCatToHeal={this.selectCatToHeal}/>
             </div>
           </React.Fragment>:
           <FrontendCatController setMyCat={this.setMyCat} setGameState={this.setGameState} startGame={this.startGame}/>
