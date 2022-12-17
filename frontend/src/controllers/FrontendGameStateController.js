@@ -177,12 +177,12 @@ class FrontendGameStateController extends Component {
     toggleBonusEffect = (bonusCardType) => {
         const bonusEffectFactory = new BonusEffectFactory();
         console.log("BONUS CARD TYPE: " + bonusCardType);
-        console.log("CREATING BONUS EFFECT gives " + bonusEffectFactory.createBonusEffect(bonusCardType));
-        let state = bonusEffectFactory.createBonusEffect(bonusCardType).toggleEffect(this.state);
+        console.log("CREATING BONUS EFFECT gives " + bonusEffectFactory.createBonusEffect(bonusCardType.cardId));
+        let state = bonusEffectFactory.createBonusEffect(bonusCardType.cardId).toggleEffect(this.state);
         this.setState((prevState) => {
             return {
                 ...prevState,
-                bonusEffect: bonusCardType,
+                bonusEffect: bonusCardType.cardId,
                 myCat: state.myCat,
                 meowssion: state.meowssion
             }
