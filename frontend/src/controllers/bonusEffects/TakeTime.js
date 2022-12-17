@@ -36,7 +36,7 @@ export default class TakeTime extends BonusEffect{
             heal: state.meowssion.heal
         }
         return (
-            body
+            JSON.stringify(body)
         )
     }
 }

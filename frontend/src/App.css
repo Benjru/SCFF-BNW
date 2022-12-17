@@ -440,10 +440,15 @@
   
 }
 
-.bonusCardTitle{
+.meowssionAwardTitle{
   text-align: center;
   font-size: 30px;
   color: rgb(68, 189, 230);
+}
+
+.meowssionAwardMessage{
+  font-size: 20px;
+  color: white;
 }
 
 .meowssionTitle{
