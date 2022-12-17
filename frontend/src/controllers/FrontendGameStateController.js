@@ -28,7 +28,7 @@ class FrontendGameStateController extends Component {
             headers: { 'Content-Type': 'application/json' },
             body
         };
-        console.log("request body: " + body);
+        console.log("request body: " + JSON.stringify(body));
         fetch(`http://localhost:8080${endpoint}`, requestOptions)
             .then(res => {
                 if (res.status === 400){
@@ -259,22 +259,9 @@ class FrontendGameStateController extends Component {
     grabAgent = () => {
         console.log("grabbing agent");
         const body = {
-            num: 1,
             playerId: this.state.myCat.playerId
         }
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body
-        };
-        console.log("request body: " + body);
-        fetch("http://localhost:8080/action", requestOptions)
-            .then(res => {
-                if (res.status === 400){
-                    console.log(res)
-                }
-            })
-        
+        this.sendPostRequest("/grabAgent", body);
     }
 
     // maps each possible action to its corresponding Body object, returns correct action body using object
@@ -296,7 +283,7 @@ class FrontendGameStateController extends Component {
     }
 
     setGameState = (resBody) => {
-        // console.log("/game/gameState sent: " + resBody);
+        console.log("/game/gameState sent: " + JSON.stringify(resBody));
         // console.log("resBody.planets: " + resBody.planets)
         resBody.planets.forEach(planet => {
             const cats = resBody.cats.filter(cat => cat.currPlanet === planet.position);
