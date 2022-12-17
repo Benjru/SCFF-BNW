@@ -63,6 +63,8 @@ public class GameStateModel {
 
     private int agentsCompleted;
 
+    private int missionsCompleted;
+
     private static class CatSerializer extends JsonSerializer<CatModel> {
 
         @Override
@@ -99,6 +101,7 @@ public class GameStateModel {
         this.gameStatus = "inProgress";
         this.meowssion = null;
         this.agentsCompleted = 0;
+        this.missionsCompleted = 0;
         drawMeowssion();
     }
 
@@ -237,6 +240,9 @@ public class GameStateModel {
     }
 
     public void drawMeowssion(){
+        if(meowssion != null){
+            missionsCompleted++;
+        }
         discardMeowssion();
         this.meowssion = this.meowssionDeck.pop();
         this.planets.stream().filter(planet -> meowssion.getStartLocations().contains(planet.getNumber())).forEach(planet -> planet.updateSecretAgents(1));
