@@ -13,7 +13,7 @@ import com.mounta.spacecats.models.gamestate.GameStateModel;
 public class StealMedicine extends Meowssion {
 
     public StealMedicine(){
-        super(List.of(1, 2, 3));
+        super(List.of(1, 2, 3), "StealMedicine");
     }
 
     @Override

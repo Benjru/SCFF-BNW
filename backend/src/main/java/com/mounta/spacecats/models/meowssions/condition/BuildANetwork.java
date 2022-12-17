@@ -9,7 +9,7 @@ import com.mounta.spacecats.models.gamestate.GameStateModel;
 public class BuildANetwork extends Meowssion {
 
     public BuildANetwork(){
-        super(List.of(7, 8, 9));
+        super(List.of(7, 8, 9), "BuildANetwork");
     }
 
     @Override

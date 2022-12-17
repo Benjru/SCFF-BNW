@@ -1,7 +1,6 @@
 package com.mounta.spacecats.models.meowssions.rewards;
 
-import com.mounta.spacecats.models.gamestate.GameStateModel;
+import com.mounta.spacecats.models.effects.EffectModel;
 
-public interface MeowssionReward {
-    public void reward(GameStateModel gameStateModel);
+public interface MeowssionReward extends EffectModel{
 }

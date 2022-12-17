@@ -18,13 +18,14 @@ import com.mounta.spacecats.models.cards.MeowssionRewardCard;
 import com.mounta.spacecats.models.cards.ResistCard;
 import com.mounta.spacecats.models.cats.CatModel;
 import com.mounta.spacecats.models.meowssions.condition.Meowssion;
-import com.mounta.spacecats.models.meowssions.rewards.MeowssionReward;
 import com.mounta.spacecats.models.planets.PlanetModel;
 import com.mounta.spacecats.util.CardConstants;
 
 @JsonIgnoreProperties(value = {
     "galaxyNewsDeck",
-    "resistCardDeck"
+    "resistCardDeck",
+    "meowssionDeck",
+    "meowssionAwardDeck"
 })
 public class GameStateModel {
     private ArrayDeque<GalaxyNewsCard> galaxyNewsDeck;
@@ -162,6 +163,10 @@ public class GameStateModel {
 
     public ArrayList<GalaxyNewsCard> getGalaxyNewsDiscard() {
         return this.galaxyNewsDiscard;
+    }
+
+    public ArrayList<MeowssionRewardCard> getMeowssionAwardDiscard(){
+        return this.meowssionAwardDiscard;
     }
 
     public List<ActionLog> getActionsTaken(){
@@ -340,5 +345,35 @@ public ResistCard drawResistCard(CatModel cat) {
             ", globalFascismScale='" + getGlobalFascismScale() + "'" +
             "}";
     }
+    public void setGalaxyNewsDeck(ArrayDeque<GalaxyNewsCard> galaxyNewsDeck) {
+        this.galaxyNewsDeck = galaxyNewsDeck;
+    }
+    public void setResistCardDeck(ArrayDeque<ResistCard> resistCardDeck) {
+        this.resistCardDeck = resistCardDeck;
+    }
+    public void setResistCardDiscard(ArrayList<ResistCard> resistCardDiscard) {
+        this.resistCardDiscard = resistCardDiscard;
+    }
+    public void setGalaxyNewsDiscard(ArrayList<GalaxyNewsCard> galaxyNewsDiscard) {
+        this.galaxyNewsDiscard = galaxyNewsDiscard;
+    }
+
+    public ArrayList<Meowssion> getMeowssionDiscard() {
+        return this.meowssionDiscard;
+    }
+
+    public ArrayDeque<Meowssion> getMeowssionDeck() {
+        return this.meowssionDeck;
+    }
+
+    public ArrayDeque<MeowssionRewardCard> getMeowssionAwardDeck() {
+        return this.meowssionAwardDeck;
+    }
+
+
+    public String getGameStatus() {
+        return this.gameStatus;
+    }
+
     
 }

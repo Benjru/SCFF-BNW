@@ -9,7 +9,7 @@ import com.mounta.spacecats.models.gamestate.GameStateModel;
 public class FreeTheDogs extends Meowssion {
 
     public FreeTheDogs(){
-        super(List.of(10, 11, 12));
+        super(List.of(10, 11, 12), "FreeTheDogs");
     }
 
     @Override

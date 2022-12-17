@@ -9,7 +9,7 @@ import com.mounta.spacecats.models.planets.PlanetModel;
 public class RecruitAllies extends Meowssion {
 
     public RecruitAllies(){
-        super(List.of(4, 5, 6));
+        super(List.of(4, 5, 6), "RecruitAllies");
     }
 
     @Override

@@ -123,7 +123,12 @@ public class CatModel {
     }
 
     public void moveToPlanet(PlanetModel planet){
-        this.currPlanet.updateSecretAgents(-holdingAgents);
+        try{
+            this.currPlanet.updateSecretAgents(-holdingAgents);
+        }
+        catch(Exception e){
+
+        }
         this.currPlanet = planet;
         this.currPlanet.updateSecretAgents(holdingAgents);
 
@@ -174,6 +179,32 @@ public class CatModel {
             ", playerId='" + getPlayerId() + "'" +
             ", hand='" + getHand() + "'" +
             "}";
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public void setAbilities(ArrayList<ConditionalEffect> abilities) {
+        this.abilities = abilities;
+    }
+    public void setScratches(int scratches) {
+        this.scratches = scratches;
+    }
+    public void setCurrPlanet(PlanetModel currPlanet) {
+        this.currPlanet = currPlanet;
+    }
+    public void setPlayerId(long playerId) {
+        this.playerId = playerId;
+    }
+    public void setHand(ArrayList<ResistCard> hand) {
+        this.hand = hand;
+    }
+
+    public int getHoldingAgents() {
+        return this.holdingAgents;
+    }
+
+    public void setHoldingAgents(int holdingAgents) {
+        this.holdingAgents = holdingAgents;
     }
 
 

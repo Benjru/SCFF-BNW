@@ -1,10 +1,10 @@
 package com.mounta.spacecats.models.meowssions.rewards;
 
-import com.mounta.spacecats.models.gamestate.GameStateModel;
+import com.mounta.spacecats.util.PlayStateInfo;
 
 public class WelcomedAsHeroes implements MeowssionReward {
     @Override
-    public void reward(GameStateModel gameStateModel){
+    public void resolve(PlayStateInfo playStateInfo){
         
     }
 }
