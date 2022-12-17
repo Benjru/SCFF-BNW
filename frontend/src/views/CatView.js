@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Cats from "../components/Cats";
-import { SelectCat } from "../components/CatComponents";
+import SelectCat from "../components/SelectCat";
 
 class CatView extends Component{
 
@@ -17,7 +17,7 @@ class CatView extends Component{
     }
 
     render(){
-        console.log("CatView is getting props: " + JSON.stringify(this.props.state))
+        // console.log("CatView is getting props: " + JSON.stringify(this.props.state))
         return(
             <React.Fragment>
                 <SelectCat state={this.props.state} setCat={this.setCat} startGame={this.startGame}/> 

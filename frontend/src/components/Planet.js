@@ -30,10 +30,21 @@ const Planet = (props) => ( // Planet image + cat image on top
                     <div className="catPlanetIndicator">
                         {/* <h1>catOnPlanet</h1> */}
                         {
-                            props.planet.cats.map(catOnPlanet => (
+                            props.planet.cats.map(catOnPlanet => {
                                 // console.log("Inside Planet component. catOnPlant: " + catOnPlanet.name)
-                                <h1>{catOnPlanet.name}</h1>
-                            ))
+                                let elements = [];
+                                elements.push(<h1>{catOnPlanet.name}</h1>);
+                                for (let i = 0; i < catOnPlanet.holdingAgents; i++){
+                                    elements.push(
+                                        <img 
+                                            className="agent"
+                                            src="/secret_agents/secret-agent.jpg"
+                                            alt={i}
+                                        />
+                                    );
+                                }
+                                return elements;
+                            })
                         }
                         <img
                             className="planetSymbolWithCat"
