@@ -210,18 +210,7 @@ class FrontendGameStateController extends Component {
             body = this.getActionRequestBody(action);
         }
         if (action.name !== 'teleport' || action !== 'travel'){
-            const requestOptions = {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body
-            };
-            console.log("request body: " + body);
-            fetch("http://localhost:8080/action", requestOptions)
-                .then(res => {
-                    if (res.status === 400){
-                        console.log(res)
-                    }
-                })
+            this.sendPostRequest("/action", body);
         }
     }
 
