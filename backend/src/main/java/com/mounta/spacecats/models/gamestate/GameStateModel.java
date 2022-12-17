@@ -99,6 +99,7 @@ public class GameStateModel {
         this.gameStatus = "inProgress";
         this.meowssion = null;
         this.agentsCompleted = 0;
+        drawMeowssion();
     }
 
     public static GameStateModel create(ArrayList<CatModel> cats){
@@ -120,6 +121,7 @@ public class GameStateModel {
                 cats.get(ThreadLocalRandom.current().nextInt(0, cats.size())),
                 3,
                 1);
+
     }
 
 
@@ -229,12 +231,15 @@ public class GameStateModel {
     }
 
     private void discardMeowssion(){
-        meowssionDiscard.add(meowssion);
+        if(meowssion != null){
+            meowssionDiscard.add(meowssion);
+        }
     }
 
     public void drawMeowssion(){
         discardMeowssion();
         this.meowssion = this.meowssionDeck.pop();
+        this.planets.stream().filter(planet -> meowssion.getStartLocations().contains(planet.getNumber())).forEach(planet -> planet.updateSecretAgents(1));
         if(meowssionDeck.isEmpty()){
             refillMeowssionDeck();
         }
@@ -256,7 +261,9 @@ public class GameStateModel {
     }
 
     public MeowssionRewardCard drawMeowssionAward(){
-        return this.meowssionAwardDeck.pop();
+        var reward = this.meowssionAwardDeck.pop();
+        discardCard(reward);
+        return reward;
     }
 
     public void refillMeowssionAwardDeck(){
