@@ -15,7 +15,7 @@ public class FreeTheDogs extends Meowssion {
     @Override
     public boolean condition(GameStateModel gameState){
         Map<String, Integer> pointVals = Map.of("ResistEffect_A", 1, "ResistEffect_F", 2);
-        return gameState.getActionsTaken().stream().filter(action -> pointVals.containsKey(action.cardName())).mapToInt(action -> pointVals.get(action.cardName())).sum() >= 3 
+        return gameState.getActionsTaken().stream().filter(action -> action.action().equals("playCard")).filter(action -> pointVals.containsKey(action.cardName())).mapToInt(action -> pointVals.get(action.cardName())).sum() >= 3 
         && gameState.getCurrTurn().getCurrPlanet().getSecretAgents() > 0;
     }
 }

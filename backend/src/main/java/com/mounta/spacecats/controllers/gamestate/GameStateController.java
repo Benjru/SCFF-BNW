@@ -150,16 +150,16 @@ public class GameStateController {
         if(!resolvingMeowssion){
             throw new IllegalStateException("Cannot resolve meowssion if no meowssion needs to be resolved!");
         }
-            if(resolveMeowssion.removeFascism() != null){
+            if(resolveMeowssion.removeFascism().size() > 0){
                 removeFascism(resolveMeowssion.removeFascism());
             }
-            if(resolveMeowssion.heal() != null){
+            if(resolveMeowssion.heal().size() > 0){
                 heal(resolveMeowssion.heal());
             }
-            if(resolveMeowssion.liberate() != null){
+            if(resolveMeowssion.liberate().size() > 0){
                 liberate(resolveMeowssion.liberate());
             }
-            if(resolveMeowssion.teleport() != null){
+            if(resolveMeowssion.teleport().size() > 0){
                 teleport(resolveMeowssion.teleport());
             }
     }

@@ -19,7 +19,7 @@ public class StealMedicine extends Meowssion {
     @Override
     public boolean condition(GameStateModel gameState){
         List<String> healCards = List.of("ResistCard_B", "ResistCard_C");
-        List<ActionLog> healActions = gameState.getActionsTaken().stream().filter(action -> healCards.contains(action.cardName())).toList();
+        List<ActionLog> healActions = gameState.getActionsTaken().stream().filter(action -> action.action().equals("playCard")).filter(action -> healCards.contains(action.cardName())).toList();
         List<CatModel> healedCats = healActions.stream().flatMap(action -> action.targetCats().stream()).toList();
         Map<CatModel, Integer> heals = healedCats.stream().collect(Collectors.toMap(Function.identity(),
         cat -> healActions.stream().flatMap(action -> action.targetCats().stream()).filter(targetCat -> targetCat.equals(cat)).toList().size()));
