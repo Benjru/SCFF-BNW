@@ -1,4 +1,4 @@
-﻿# Space Cats Fight Fascism
+# 🌌 Space Cats Fight Fascism
 
 
 This is a multiplayer web-based implementation of the game Space Cats Fight Fascism. The backend uses Spring Boot and the frontend uses React. Under the UML directory, you will find diagrams for both the frontend and the backend. Similarly, under the Use-case-specifications directory, you will find detailed use cases describing user interactions and the flow of events. Documentation for running both the frontend and the backend is available in the READMEs of those respective directories.
@@ -13,6 +13,3 @@ This is a multiplayer web-based implementation of the game Space Cats Fight Fasc
 
 ### Main game screen
 ![scff3](https://user-images.githubusercontent.com/95383688/210273224-be85f9be-b64c-4b06-850f-1159e86615bc.png)
-
-### Travel selection screen
-![scff4](https://user-images.githubusercontent.com/95383688/210273227-83fa836c-8c5f-4374-a9a6-8f9f83cfe9dd.png)
